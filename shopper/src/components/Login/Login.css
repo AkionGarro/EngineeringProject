@@ -1,0 +1,23 @@
+
+.container__form{
+    margin: 5rem auto;
+    width: 20rem;
+    height: 20rem;
+    background-color: #afafaf;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.5rem 0.1rem #000000;
+    color: white;
+
+}
+
+.container__login{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
