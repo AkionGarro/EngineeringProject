@@ -1,6 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { memo, useEffect, useState } from 'react'
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination} from '@mui/material'
+
+//MUI Components
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Box, IconButton} from '@mui/material'
+//MUI Icons
+import {ThreeDRotation } from '@mui/icons-material';
 
 import { firestore } from '../../firebase'
 import { collection, getDocs } from "firebase/firestore";
@@ -55,6 +59,7 @@ const AdminProductsTableComponent = memo((props) => {
               <TableCell>Precio</TableCell>
               <TableCell>Estado</TableCell>
               <TableCell>Campos</TableCell>
+              <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
           
@@ -71,6 +76,19 @@ const AdminProductsTableComponent = memo((props) => {
                   <TableCell>{item.price}</TableCell>
                   <TableCell>{item.status}</TableCell>
                   <TableCell>Campos Personalizados</TableCell>
+                  <TableCell>
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    <IconButton aria-label="delete">
+                      <ThreeDRotation />
+                    </IconButton>
+
+                    <Button size="sm" variant="contained" color="error">
+                      Delete
+                    </Button>
+                  </Box>
+                </TableCell>
+
+
                 </TableRow>
               ))
             )}
