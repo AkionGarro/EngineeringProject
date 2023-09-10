@@ -6,9 +6,7 @@ import {firestore} from "../../firebase";
 import { addDoc,collection } from "firebase/firestore";
 
 function Login() {
-
     const ref =  collection(firestore, "users");
-
 
     const handleData = async(event) => {
         console.log(event);
