@@ -1,19 +1,18 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Login from "./components/Login/Login";
 import PedidoOnline from "./Pages/PedidoOnline/PedidoOnline";
+import Login from "./Pages/Login/Login";
+import HomePageAdmin from "./Pages/HomePageAdmin/HomePageAdmin";
 
 function App() {
   return (
-    <Router className="App">
-      <Routes>
-        {/*Acá van las rutas en este estilo:
-<Route path="/" element={<MainPage />}/>
-*/}
-        <Route path="/" element={<Login />} />
-        <Route path="/PedidoOnline" element={<PedidoOnline />} />
-      </Routes>
-    </Router>
+      <Router className="App">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
+          <Route path="/PedidoOnline" element={<PedidoOnline />} />
+        </Routes>
+      </Router>
   );
 }
 
