@@ -13,6 +13,9 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SellIcon from "@mui/icons-material/Sell";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import CategoryIcon from "@mui/icons-material/Category";
+
+
+
 import { Link } from "react-router-dom";
 
 const categories = [
@@ -24,8 +27,8 @@ const categories = [
         icon: <SellIcon />,
         route: "/orders",
       },
-      { id: "Products", icon: <InventoryIcon />, route: "/products" },
-      { id: "Categories", icon: <CategoryIcon />, route: "/categories" },
+      { id: "Products", icon: <InventoryIcon />, route: "/adminProducts" },
+      { id: "Categories", icon: <CategoryIcon />, route: "/adminCategories" },
     ],
   },
   {

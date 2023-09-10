@@ -4,10 +4,10 @@ import PedidoOnline from "./Pages/PedidoOnline/PedidoOnline";
 import Login from "./Pages/Login/Login";
 import HomePageAdmin from "./Pages/HomePageAdmin/HomePageAdmin";
 
-{/* Paginas de Categorias y Productos del Administrador - Josue US08 */}
+/* Paginas de Categorias y Productos del Administrador - Josue US08 */
 import AdminCategoriesContainer from "./components/AdminProducts/Containers/AdminCategoriesContainer";
 import AdminProductsContainer from "./components/AdminProducts/Containers/AdminProductsContainer";
-{/* ---------------------------------------------------------------- */}
+/* ---------------------------------------------------------------- */
 
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
           <Route path="/adminCategories" element={<AdminCategoriesContainer />} />
           <Route path="/adminProducts" element={<AdminProductsContainer />} />
           {/* ---------------------------------------------------------------- */}
-          
+
         </Routes>
       </Router>
   );

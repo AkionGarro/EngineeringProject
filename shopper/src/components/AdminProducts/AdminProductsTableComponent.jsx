@@ -29,7 +29,7 @@ const AdminProductsTableComponent = memo((props) => {
     }
 
     fetchData()
-  }, [collectionRef])
+  }, [])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -67,16 +67,14 @@ const AdminProductsTableComponent = memo((props) => {
               products.slice(startIndex, endIndex).map((item, index) => (
                 <TableRow key={index}>
                   <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.category}</TableCell>
+                  <TableCell>Categoria</TableCell>
                   <TableCell>{item.price}</TableCell>
                   <TableCell>{item.status}</TableCell>
-                  <TableCell>{item.personalizedFields}</TableCell>
+                  <TableCell>Campos Personalizados</TableCell>
                 </TableRow>
               ))
             )}
           </TableBody>
-
-
 
         </Table>
       </TableContainer>
