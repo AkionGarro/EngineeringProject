@@ -1,5 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 /* Material imports */
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -43,6 +45,13 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Login() {
+
+  const navigate = useNavigate();
+
+  const goToHomePageAdmin = () => {
+    navigate("/HomePageAdmin");
+  };
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
@@ -65,6 +74,7 @@ export default function Login() {
       console.log("Document written with ID: ", docRef.id);
       setEmail('');
       setPassword('');
+      goToHomePageAdmin();
     } catch (e) {
       console.error("Error adding document: ", e);
     }
