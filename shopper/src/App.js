@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Login from "./components/Login/Login";
 import PedidoOnline from "./Pages/PedidoOnline/PedidoOnline";
+import Login from "./Pages/Login/Login";
+import HomePageAdmin from "./Pages/HomePageAdmin/HomePageAdmin";
 
 {/* Paginas de Categorias y Productos del Administrador - Josue US08 */}
 import AdminCategoriesContainer from "./components/AdminProducts/Containers/AdminCategoriesContainer";
@@ -11,25 +12,19 @@ import AdminProductsContainer from "./components/AdminProducts/Containers/AdminP
 
 function App() {
   return (
-    <Router className="App">
-      <Routes>
-        {/*Acá van las rutas en este estilo:
-<Route path="/" element={<MainPage />}/>
-*/}
-        <Route path="/" element={<Login />} />
-        <Route path="/PedidoOnline" element={<PedidoOnline />} />
-        <Route path="/PedidoOnline" element={<PedidoOnline />} />
-        
-        {/* Paginas de Categorias y Productos del Administrador - Josue US08 */}
-        //Route for adminCategoriesContainer
-        <Route path="/adminCategories" element={<AdminCategoriesContainer />} />
-        //Route for adminProductsContainer
-        <Route path="/adminProducts" element={<AdminProductsContainer />} />
-        {/* ---------------------------------------------------------------- */}
+      <Router className="App">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
+          <Route path="/PedidoOnline" element={<PedidoOnline />} />
 
-
-      </Routes>
-    </Router>
+          {/* Paginas de Categorias y Productos del Administrador - Josue US08 */}
+          <Route path="/adminCategories" element={<AdminCategoriesContainer />} />
+          <Route path="/adminProducts" element={<AdminProductsContainer />} />
+          {/* ---------------------------------------------------------------- */}
+          
+        </Routes>
+      </Router>
   );
 }
 
