@@ -10,6 +10,7 @@ import {
 import "./PedidoOnline.css";
 
 const PedidoOnline = () => {
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("mando data");
@@ -42,7 +43,6 @@ const PedidoOnline = () => {
 
   const handleDirectionOnSelect = (event) => {
     setDirection(event.target.value);
-    console.log(event.target.value);
   };
 
   return (
