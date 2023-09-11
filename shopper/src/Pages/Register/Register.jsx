@@ -65,6 +65,10 @@ export default function Register() {
             await auth.register(data.email, data.password);
             console.log("User registered");
             console.log(data);
+            setEmail("");
+            setPassword("");
+            setFullname("");
+            setPhone("");
             goToLogin();
 
           } catch (e) {
