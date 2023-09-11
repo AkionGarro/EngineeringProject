@@ -217,6 +217,7 @@ export default function HomePageAdmin(props) {
   const navigatorOptions = (route, tittle) => {
     setComponentToRender(route);
     setTittle(tittle);
+    handleDrawerToggle();
   };
  
   return (
@@ -233,11 +234,12 @@ export default function HomePageAdmin(props) {
               variant="temporary"
               open={mobileOpen}
               onClose={handleDrawerToggle}
+              navigatorOptions1={navigatorOptions}
             />
           )}
 
           <Navigator
-            PaperProps={{ style: { width: drawerWidth }}} navigatorOptions={navigatorOptions}
+            PaperProps={{ style: { width: drawerWidth }}} navigatorOptions1={navigatorOptions}
             sx={{ display: { sm: "block", xs: "none" } }}
           />
         </Box>

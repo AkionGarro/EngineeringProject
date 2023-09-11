@@ -54,7 +54,7 @@ const itemCategory = {
 };
 
 export default function Navigator(props) {
-  const { navigatorOptions } = props;
+  const { navigatorOptions1 } = props;
 
   const handleOptions = (data) => {
     props.onSaveRoute(data);
@@ -62,7 +62,7 @@ export default function Navigator(props) {
 
   const handleNavigatorOptions = (route, title) => {
     // Llama a la función navigatorOptions pasando los parámetros
-    navigatorOptions(route, title);
+    navigatorOptions1(route, title);
   };
 
   return (
