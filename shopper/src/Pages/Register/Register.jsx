@@ -1,28 +1,36 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import './Register.css';
+import * as React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import "./Register.css";
 import logoVeroShop from "../../images/logo.png";
+import { useAuth } from "../../context/AuthContext";
+
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         VeroCamShop
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
@@ -32,13 +40,36 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Register() {
-  const handleSubmit = (event) => {
+  const auth = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullname, setFullname] = useState("");
+  const [phone, setPhone] = useState("");
+  const navigate = useNavigate();
+
+  const goToLogin = () => {
+    navigate("/");
+  };
+
+  const handleSubmit = async(event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const dataForm = new FormData(event.currentTarget);
+
+    const data = {
+        email: dataForm.get("email"),
+        password: dataForm.get("password"),
+        fullname: dataForm.get("fullName"),
+        phone: dataForm.get("phone")}
+
+        try {
+            await auth.register(data.email, data.password);
+            console.log("User registered");
+            console.log(data);
+            goToLogin();
+
+          } catch (e) {
+            console.error("Error adding document: ", e);
+          }
   };
 
   return (
@@ -48,9 +79,9 @@ export default function Register() {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
           <img
@@ -61,27 +92,23 @@ export default function Register() {
           <Typography component="h1" variant="h5">
             Registro
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} >
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="fullName"
                   required
                   fullWidth
-                  id="firstName"
-                  label="Nombre"
+                  id="fullName"
+                  label="Nombre Completo"
                   autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Apellido"
-                  name="lastName"
-                  autoComplete="family-name"
+                    onChange={(e) => setFullname(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -92,6 +119,7 @@ export default function Register() {
                   label="Correo Electrónico"
                   name="email"
                   autoComplete="email"
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -103,9 +131,21 @@ export default function Register() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
-
+              <Grid item xs={12} >
+                <TextField
+                  required
+                  fullWidth
+                  id="phone"
+                  label="Telefono"
+                  name="phone"
+                  type="number"
+                  autoComplete="phone"
+                    onChange={(e) => setPhone(e.target.value)}
+                />
+              </Grid>
             </Grid>
             <Button
               type="submit"
@@ -116,9 +156,9 @@ export default function Register() {
               Registrarse
             </Button>
             <Grid container justifyContent="flex-end">
-              <Grid item className='login__info'>
+              <Grid item className="login__info">
                 <Link href="/" variant="body2">
-                ¿Ya tienes cuenta? ¡Inicia Sesión!
+                  ¿Ya tienes cuenta? ¡Inicia Sesión!
                 </Link>
               </Grid>
             </Grid>
