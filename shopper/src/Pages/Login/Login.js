@@ -17,7 +17,6 @@ import { useAuth } from "../../context/AuthContext";
 import logoVeroShop from "../../images/logo.png";
 import "./Login.css";
 
-
 function Copyright(props) {
   return (
     <Typography
@@ -41,7 +40,6 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Login() {
-
   const navigate = useNavigate();
   const auth = useAuth();
 
@@ -49,9 +47,22 @@ export default function Login() {
     navigate("/HomePageAdmin");
   };
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleGoogle = async (e) => {
+    e.preventDefault();
+    try {
+      await auth.loginWithGoogle();
+      if (auth.user) {
+        goToHomePageAdmin();
+      }
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const dataForm = new FormData(event.currentTarget);
@@ -64,11 +75,10 @@ export default function Login() {
     try {
       await auth.login(data.email, data.password);
       if (auth.user) {
-        setEmail('');
-        setPassword('');
+        setEmail("");
+        setPassword("");
         goToHomePageAdmin();
       }
-
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -110,7 +120,7 @@ export default function Login() {
               value={email}
               autoComplete="email"
               autoFocus
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -122,7 +132,7 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
-              onChange={(e)=>setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             <Button
@@ -135,9 +145,27 @@ export default function Login() {
             </Button>
             <Grid container>
               <Grid item className="register__info">
-                <Link href="/Register" variant="body2" >
+                <Link href="/Register" variant="body2">
                   {"¿No tienes cuenta? ¡Regístrate!"}
                 </Link>
+              </Grid>
+            </Grid>
+
+            <Grid container>
+              <Grid item className="google__container">
+                <div onClick={(e)=>{handleGoogle(e)}}>
+                  <div className="google-btn">
+                    <div className="google-icon-wrapper">
+                      <img
+                        className="google-icon"
+                        src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                      />
+                    </div>
+                    <p className="btn-text">
+                      <b>Sign in with google</b>
+                    </p>
+                  </div>
+                </div>
               </Grid>
             </Grid>
           </Box>
