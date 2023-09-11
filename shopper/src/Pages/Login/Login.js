@@ -140,9 +140,9 @@ export default function Login() {
               Iniciar sesión
             </Button>
             <Grid container>
-              <Grid item className="container__register--info">
-                <Link href="#" variant="body2">
-                  {"No tines cuenta? ¡Registrate!"}
+              <Grid item className="register__info">
+                <Link href="/Register" variant="body2" >
+                  {"¿No tienes cuenta? ¡Regístrate!"}
                 </Link>
               </Grid>
             </Grid>

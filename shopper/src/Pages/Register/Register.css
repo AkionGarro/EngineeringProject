@@ -1,8 +1,4 @@
-.container__logo{
-    max-width: 70%;
-}
-
-.register__info{
+.login__info{
     display: flex;
     align-items: center;
     width: 100%;
