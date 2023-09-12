@@ -16,6 +16,7 @@ import { useAuth } from "../../context/AuthContext";
 /* Styles imports */
 import logoVeroShop from "../../images/logo.png";
 import "./Login.css";
+import Swal from "sweetalert2";
 
 function Copyright(props) {
   return (
@@ -42,6 +43,7 @@ const defaultTheme = createTheme();
 export default function Login() {
   const navigate = useNavigate();
   const auth = useAuth();
+
 
   const goToHomePageAdmin = () => {
     navigate("/HomePageAdmin");
@@ -80,6 +82,11 @@ export default function Login() {
         goToHomePageAdmin();
       }
     } catch (e) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Usuario o contraseña incorrectos",
+      });
       console.error("Error adding document: ", e);
     }
   };

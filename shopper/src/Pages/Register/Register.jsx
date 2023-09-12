@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./Register.css";
 import logoVeroShop from "../../images/logo.png";
 import { useAuth } from "../../context/AuthContext";
-
+import Swal from "sweetalert2";
 function Copyright(props) {
   return (
     <Typography
@@ -51,29 +51,40 @@ export default function Register() {
     navigate("/");
   };
 
-  const handleSubmit = async(event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const dataForm = new FormData(event.currentTarget);
 
     const data = {
-        email: dataForm.get("email"),
-        password: dataForm.get("password"),
-        fullname: dataForm.get("fullName"),
-        phone: dataForm.get("phone")}
+      email: dataForm.get("email"),
+      password: dataForm.get("password"),
+      fullname: dataForm.get("fullName"),
+      phone: dataForm.get("phone"),
+    };
 
-        try {
-            await auth.register(data.email, data.password);
-            console.log("User registered");
-            console.log(data);
-            setEmail("");
-            setPassword("");
-            setFullname("");
-            setPhone("");
-            goToLogin();
+    try {
+      await auth.register(data.email, data.password);
 
-          } catch (e) {
-            console.error("Error adding document: ", e);
-          }
+      Swal.fire({
+        icon: "success",
+        title: "¡Registrado!",
+        text: "Se ha registrado correctamente",
+      });
+
+      setEmail("");
+      setPassword("");
+      setFullname("");
+      setPhone("");
+
+      goToLogin();
+    } catch (e) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "No se ha registrado correctamente",
+      });
+      console.error("Error adding document: ", e);
+    }
   };
 
   return (
@@ -103,7 +114,7 @@ export default function Register() {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} >
+              <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
                   name="fullName"
@@ -112,7 +123,7 @@ export default function Register() {
                   id="fullName"
                   label="Nombre Completo"
                   autoFocus
-                    onChange={(e) => setFullname(e.target.value)}
+                  onChange={(e) => setFullname(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -138,7 +149,7 @@ export default function Register() {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12} >
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -147,7 +158,7 @@ export default function Register() {
                   name="phone"
                   type="number"
                   autoComplete="phone"
-                    onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
               </Grid>
             </Grid>
