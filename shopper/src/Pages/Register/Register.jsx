@@ -16,6 +16,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./Register.css";
 import logoVeroShop from "../../images/logo.png";
 import { useAuth } from "../../context/AuthContext";
+import { useFirebase } from "../../context/DatabaseContext";
+
 import Swal from "sweetalert2";
 function Copyright(props) {
   return (
@@ -41,6 +43,8 @@ const defaultTheme = createTheme();
 
 export default function Register() {
   const auth = useAuth();
+  const firebase = useFirebase();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullname, setFullname] = useState("");
@@ -65,11 +69,21 @@ export default function Register() {
     try {
       await auth.register(data.email, data.password);
 
-      Swal.fire({
-        icon: "success",
-        title: "¡Registrado!",
-        text: "Se ha registrado correctamente",
-      });
+      try {
+        await firebase.registerDataUser(
+          data.fullname,
+          data.email,
+          data.password,
+          data.phone
+        );
+        Swal.fire({
+          icon: "success",
+          title: "¡Registrado!",
+          text: "Se ha registrado correctamente",
+        });
+      } catch (e) {
+        console.error("Error adding user: ", e);
+      }
 
       setEmail("");
       setPassword("");
