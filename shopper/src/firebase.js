@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, addDoc } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -15,7 +15,7 @@ const firebaseConfig = {
   storageBucket: "veroshopper-cbeb1.appspot.com",
   messagingSenderId: "1055503157847",
   appId: "1:1055503157847:web:76aec16ae376c9f3333112",
-  measurementId: "G-GPB84QJMTF"
+  measurementId: "G-GPB84QJMTF",
 };
 
 // Initialize Firebase
@@ -23,4 +23,13 @@ const app = initializeApp(firebaseConfig);
 export const firestore = getFirestore(app);
 const analytics = getAnalytics(app);
 
- 
+//Firebase Cruds
+
+export const addDocument = async (ref, data) => {
+  try {
+    const docRef = await addDoc(ref, data);
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};
