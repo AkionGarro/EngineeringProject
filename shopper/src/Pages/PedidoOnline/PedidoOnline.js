@@ -14,7 +14,7 @@ import "./PedidoOnline.css";
 
 const PedidoOnline = () => {
   const ref = collection(firestore, "pedidosOnline");
-  const [linkFields, setLinkFields] = useState([{ link: "", comentario: "" }]);
+  const [linkFields, setLinkFields] = useState([{ link: "", description: "" }]);
   const [direction, setDirection] = useState("");
 
   const handleSubmit = async (e) => {
@@ -53,7 +53,6 @@ const PedidoOnline = () => {
 
   const handleDirectionOnSelect = (event) => {
     setDirection(event.target.value);
-    console.log(event.target.value);
   };
 
   return (
