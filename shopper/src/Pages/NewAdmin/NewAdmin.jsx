@@ -21,6 +21,8 @@ function NewAdmin() {
   const api = useFirebase();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [flagUpdate, setFlagUpdate] = useState(false);
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -60,11 +62,7 @@ function NewAdmin() {
       if (result.isConfirmed) {
         Swal.fire("¡Usuario convertido en administrador!", "", "success");
         api.addNewAdmin(email).then(() => {
-          setUsers((prevUsers) =>
-            prevUsers.map((user) =>
-              user.email === email ? { ...user, userType: "admin" } : user
-            )
-          );
+          setFlagUpdate(true);
         });
       }
     });
@@ -87,9 +85,10 @@ function NewAdmin() {
         });
       }
     };
+    setFlagUpdate(false);
 
     fetchData();
-  }, []);
+  }, [flagUpdate]);
 
   return (
     <Paper sx={{ width: "100%", overflow: "auto" }}>
