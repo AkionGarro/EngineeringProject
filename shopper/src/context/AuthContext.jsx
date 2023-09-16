@@ -36,6 +36,8 @@ export const useAuth = () => {
           setUser("");
         } else {
           setUser(currentUser);
+          localStorage.setItem("currentUser", currentUser.email);
+          
         }
       });
       return () => subscribed();

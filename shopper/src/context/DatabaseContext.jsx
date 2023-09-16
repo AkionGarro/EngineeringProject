@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext } from "react";
+import React, {createContext, useContext } from "react";
 import { firestore } from "../firebase";
 import {
   addDoc,
@@ -49,6 +49,55 @@ export function DatabaseProvider({ children }) {
     const listUsers = snapshot.docs.map((doc) => doc.data());
     return listUsers;
   };
+
+  const getUserData = async (email) => {
+    const ref = collection(firestore, "users");
+    const q = query(ref, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.docs.length === 0) {
+      console.log("Usuario no encontrado.");
+      return;
+    }
+    const userDoc = querySnapshot.docs[0];
+    const userRef = doc(firestore, "users", userDoc.id);
+    const userData = await getDoc(userRef);
+    return userData.data();
+    
+  };
+
+  const updateUserData = async (data) => {
+    console.log(data);
+    const ref = collection(firestore, "users");
+    const q = query(ref, where("email", "==", data.email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.docs.length === 0) {
+      console.log("Usuario no encontrado.");
+      return;
+    }
+
+    const userDoc = querySnapshot.docs[0];
+    const userRef = doc(firestore, "users", userDoc.id);
+
+    try {
+      await updateDoc(userRef, {
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        identification: data.identification,
+        address: data.address,
+        userType: data.role,
+      });
+      console.log("Usuario actualizado con éxito.");
+    } catch (error) {
+      console.error("Error al actualizar el usuario:", error);
+    }
+  }
+
+
+
+
 
   const addNewAdmin = async (email) => {
     const ref = collection(firestore, "users");
@@ -103,6 +152,8 @@ export function DatabaseProvider({ children }) {
         getAllUsers,
         addNewAdmin,
         changeToUser,
+        getUserData,
+        updateUserData
       }}
     >
       {children}
