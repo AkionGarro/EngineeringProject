@@ -37,29 +37,7 @@ export default function Register() {
     navigate("/");
   };
 
-  const addUsersFake = async () => {
-    const testUsers = [];
-
-    for (let i = 1; i <= 20; i++) {
-      const user = {
-        fullname: `Usuario ${i}`,
-        email: `usuario${i}@example.com`,
-        password: `contraseña${i}`,
-        phone: `123456789${i}`,
-      };
-      testUsers.push(user);
-    }
-
-    for (const userData of testUsers) {
-      await firebase.registerDataUser(
-        userData.fullname,
-        userData.email,
-        userData.password,
-        userData.phone
-      );
-    }
-  };
-
+ 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const dataForm = new FormData(event.currentTarget);

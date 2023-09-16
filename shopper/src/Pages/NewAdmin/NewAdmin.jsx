@@ -1,8 +1,5 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -22,6 +19,7 @@ function NewAdmin() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [flagUpdate, setFlagUpdate] = useState(false);
+  const [isColumnVisible, setIsColumnVisible] = useState(true);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -30,23 +28,6 @@ function NewAdmin() {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
-  };
-
-  const updateTable = async () => {
-    try {
-      const querySnapshot = await api.getAllUsers();
-      const userData = [];
-      for (const doc in querySnapshot) {
-        userData.push(querySnapshot[doc]);
-      }
-      setUsers(userData);
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error al obtener usuarios",
-        text: error,
-      });
-    }
   };
 
   const handleNewAdmin = (email) => {
@@ -86,7 +67,7 @@ function NewAdmin() {
   };
 
   function UserPermissions(props) {
-    console.log(props.userData);  
+    console.log(props.userData);
     if (props.userData.userType === "admin") {
       return (
         <Button onClick={() => changeAdminToUser(props.userData.email)}>
@@ -124,16 +105,35 @@ function NewAdmin() {
     fetchData();
   }, [flagUpdate]);
 
+
+  useEffect(() => {
+    const handleResize = () => {
+  
+      if (window.innerWidth < 900) {
+        setIsColumnVisible(false);
+      } else {
+        setIsColumnVisible(true);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
-    <Paper sx={{ width: "100%", overflow: "auto" }}>
+    <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 500 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               <TableCell>Email</TableCell>
-              <TableCell>Nombre Completo</TableCell>
-              <TableCell>Teléfono</TableCell>
-              <TableCell>Tipo</TableCell>
+              {isColumnVisible &&<TableCell>Nombre Completo</TableCell>}
+                {isColumnVisible &&<TableCell>Teléfono</TableCell>}
+                {isColumnVisible &&<TableCell>Tipo</TableCell>}
               <TableCell>Permisos</TableCell>
             </TableRow>
           </TableHead>
@@ -141,12 +141,12 @@ function NewAdmin() {
             {users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((user, index) => (
-                <TableRow key={user.email}>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.fullName}</TableCell>
-                  <TableCell>{user.phone}</TableCell>
-                  <TableCell>{user.userType}</TableCell>
-                  <TableCell>
+                <TableRow key={user.email} hover>
+                  <TableCell className="email-cell">{user.email}</TableCell>
+                  {isColumnVisible && <TableCell className="name-cell">{user.fullName}</TableCell>}
+                  {isColumnVisible &&<TableCell className="phone-cell">{user.phone}</TableCell>}
+                  {isColumnVisible &&<TableCell className="type-cell">{user.userType}</TableCell>}
+                  <TableCell className="permissions-cell">
                     <UserPermissions userData={user}></UserPermissions>
                   </TableCell>
                 </TableRow>
