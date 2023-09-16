@@ -9,7 +9,6 @@ import {
   query,
   doc,
   updateDoc,
-  
 } from "firebase/firestore";
 
 /* Creating a context object. */
@@ -74,12 +73,36 @@ export function DatabaseProvider({ children }) {
     }
   };
 
+  const changeToUser = async (email) => {
+    const ref = collection(firestore, "users");
+    const q = query(ref, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.docs.length === 0) {
+      console.log("Usuario no encontrado.");
+      return;
+    }
+
+    const userDoc = querySnapshot.docs[0];
+    const userRef = doc(firestore, "users", userDoc.id);
+
+    try {
+      await updateDoc(userRef, {
+        userType: "user",
+      });
+      console.log("Admin actualizado a tipo 'user' con éxito.");
+    } catch (error) {
+      console.error("Error al actualizar el admin:", error);
+    }
+  };
+
   return (
     <databaseContext.Provider
       value={{
         registerDataUser,
         getAllUsers,
         addNewAdmin,
+        changeToUser,
       }}
     >
       {children}

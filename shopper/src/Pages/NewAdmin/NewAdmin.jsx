@@ -23,7 +23,6 @@ function NewAdmin() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [flagUpdate, setFlagUpdate] = useState(false);
 
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -67,6 +66,41 @@ function NewAdmin() {
       }
     });
   };
+
+  const changeAdminToUser = (email) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¡Estás a punto de convertir a este admin en usuario! ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "¡Sí, quiero hacerlo!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire("Amin convertido en usuario!", "", "success");
+        api.changeToUser(email).then(() => {
+          setFlagUpdate(true);
+        });
+      }
+    });
+  };
+
+  function UserPermissions(props) {
+    console.log(props.userData);  
+    if (props.userData.userType === "admin") {
+      return (
+        <Button onClick={() => changeAdminToUser(props.userData.email)}>
+          <AddIcon></AddIcon> Change to User
+        </Button>
+      );
+    } else {
+      return (
+        <Button onClick={() => handleNewAdmin(props.userData.email)}>
+          <AddIcon></AddIcon> New Admin
+        </Button>
+      );
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -113,9 +147,7 @@ function NewAdmin() {
                   <TableCell>{user.phone}</TableCell>
                   <TableCell>{user.userType}</TableCell>
                   <TableCell>
-                    <Button onClick={() => handleNewAdmin(user.email)}>
-                      <AddIcon></AddIcon> New Admin
-                    </Button>
+                    <UserPermissions userData={user}></UserPermissions>
                   </TableCell>
                 </TableRow>
               ))}
