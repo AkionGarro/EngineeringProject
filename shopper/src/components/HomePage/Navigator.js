@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -17,25 +17,26 @@ import CategoryIcon from "@mui/icons-material/Category";
 
 
 import { Link } from "react-router-dom";
+import Products from "../../Pages/Products/Products";
+import Categories from "../../Pages/Categories/Categories";
+import Orders from "../../Pages/Orders/Orders";
+import Account from "../../Pages/Account/Account";
+import NewAdmin from "../../Pages/NewAdmin/NewAdmin";
 
 const categories = [
   {
-    id: "Products ",
+    id: "Options:",
     children: [
-      {
-        id: "Orders",
-        icon: <SellIcon />,
-        route: "/orders",
-      },
-      { id: "Products", icon: <InventoryIcon />, route: "/adminProducts" },
-      { id: "Categories", icon: <CategoryIcon />, route: "/adminCategories" },
+      { id: "Orders", icon: <SellIcon />, route: <Orders/>, tittle: "Manage Orders"},
+      { id: "Products", icon: <InventoryIcon />, route: <Products />, tittle: "Manage Products"},
+      { id: "Categories", icon: <CategoryIcon />, route: <Categories />, tittle: "Manage Categories" },
     ],
   },
   {
     id: "Users",
     children: [
-      { id: "My Account", icon: <AccountCircleIcon />, route: "/account" },
-      { id: "New Admin", icon: <PersonAddIcon />, route: "/newadmin" },
+      { id: "My Account", icon: <AccountCircleIcon />, route: <Account />, tittle: "My Account"},
+      { id: "New Admin", icon: <PersonAddIcon />, route: <NewAdmin />, tittle: "New Admin" },
     ],
   },
 ];
@@ -56,51 +57,50 @@ const itemCategory = {
 };
 
 export default function Navigator(props) {
-  const { ...other } = props;
+  const { navigatorOptions1 } = props;
 
   const handleOptions = (data) => {
     props.onSaveRoute(data);
   };
 
+  const handleNavigatorOptions = (route, title) => {
+    // Llama a la función navigatorOptions pasando los parámetros
+    navigatorOptions1(route, title);
+  };
+
   return (
-    <Drawer variant="permanent" {...other}>
+    <Drawer variant="permanent" {...props}>
       <List disablePadding>
-        <ListItem
-          sx={{ ...item, ...itemCategory, fontSize: 22, color: "#fff" }}
-        >
+        <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: "#fff" }}>
           VeroCamShop
         </ListItem>
         <ListItem sx={{ ...item, ...itemCategory }}>
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
-          <Link
-            to="/HomePageAdmin"
-            style={{ textDecoration: "none", color: "inherit", width: "100%" }}
-          >
-            <ListItemText>Home</ListItemText>
-          </Link>
         </ListItem>
         {categories.map(({ id, children }) => (
           <Box key={id} sx={{ bgcolor: "#101F33" }}>
             <ListItem sx={{ py: 2, px: 3 }}>
               <ListItemText sx={{ color: "#fff" }}>{id}</ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active, route }) => (
+            {children.map(({ id: childId, icon, active, route, tittle }) => (
               <ListItem disablePadding key={childId}>
-                <Link
-                  to={route}
+                <button
+                  onClick={() => handleNavigatorOptions(route, tittle)}
                   style={{
                     textDecoration: "none",
                     color: "inherit",
                     width: "100%",
+                    backgroundColor: "transparent",
+                    border: "none",
                   }}
                 >
                   <ListItemButton selected={active} sx={item}>
                     <ListItemIcon>{icon}</ListItemIcon>
                     <ListItemText>{childId}</ListItemText>
                   </ListItemButton>
-                </Link>
+                </button>
               </ListItem>
             ))}
             <Divider sx={{ mt: 2 }} />

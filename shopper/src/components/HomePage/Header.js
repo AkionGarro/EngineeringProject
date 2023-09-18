@@ -58,11 +58,7 @@ function Header(props) {
         </Toolbar>
       </AppBar>
       
-      <AppBar component="div" position="static" elevation={0} sx={{ zIndex: 0 }}>
-        <Tabs value={0} textColor="inherit">
-          <Tab label="Orders" />
-        </Tabs>
-      </AppBar>
+    
 
     </React.Fragment>
   );
