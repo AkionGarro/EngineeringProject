@@ -5,7 +5,6 @@ import AdminCategoriesTableComponent from '../AdminCategoriesTableComponent'
 const AdminCategoriesContainer = memo((props) => {
 
   
-
   return (
     <div>Categorias</div>
   )

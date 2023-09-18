@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-
+import AdminProductsTableComponent from '../../components/AdminProducts/AdminProductsTableComponent';
 import './Products.css';
 
 function Products() {
     return (
-        <div className="container"> Products</div>
-    );
+        <AdminProductsTableComponent />
+        );
 }
 
 export default Products;
