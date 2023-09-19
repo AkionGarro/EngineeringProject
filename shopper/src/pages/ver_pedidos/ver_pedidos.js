@@ -73,10 +73,8 @@ function Ver_pedidos() {
         <div>
           <Stack direction="row" spacing={2}>
             <Button variant="outlined"  startIcon={<DeleteIcon />}>
-              Eliminar
             </Button>
             <Button variant="outlined"  onClick={() => handleEditar(params.row.id)} startIcon={<BorderColorRoundedIcon />}>
-              Editar
             </Button>
           </Stack>
         </div>
