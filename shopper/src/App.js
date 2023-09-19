@@ -1,6 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import PedidoOnline from "./Pages/PedidoOnline/PedidoOnline";
+
+import PedidoPersonal from "./Pages/Pedido_personal/pedido_personal";
+import VerPedidos from './Pages/ver_pedidos/ver_pedidos';
+
 import Login from "./Pages/Login/Login";
 import HomePageAdmin from "./Pages/HomePageAdmin/HomePageAdmin";
 import { AuthProvider } from "./context/AuthContext";
@@ -16,6 +20,8 @@ function App() {
             <Route path="/Register" element={<Register />} />
             <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
             <Route path="/PedidoOnline" element={<PedidoOnline />} />
+            <Route path="/PedidoPersonal" element={<PedidoPersonal />} />
+            <Route path="/VerPedidos" element={<VerPedidos />} />
           </Routes>
         </Router>
       </DatabaseProvider>
