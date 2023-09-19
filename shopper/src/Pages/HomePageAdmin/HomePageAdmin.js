@@ -279,7 +279,7 @@ export default function HomePageAdmin(props) {
                   <IconButton
                     onClick={handleLogout}
                     color="inherit"
-                    sx={{ p: 0.5 }}
+                    sx={{ p: 0.6 }}
                   >
                     <LogoutIcon></LogoutIcon>
                   </IconButton>
