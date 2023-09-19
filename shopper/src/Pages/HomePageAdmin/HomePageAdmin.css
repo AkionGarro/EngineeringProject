@@ -2,6 +2,13 @@
     background-color: #0d6efd;
 }
 
-p{
-    background-color: aliceblue;
+
+.appbar{
+    margin: 0px;
+    padding: 0px;
+}
+.box-main{
+    margin: 0px;
+    padding: 0px;
+
 }
