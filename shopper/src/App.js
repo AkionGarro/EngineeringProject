@@ -1,8 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Login from "./pages/Login/Login";
-import PedidoOnline from "./pages/PedidoOnline/PedidoOnline";
-import VerPedidosOnline from "./pages/verPedidosOnline/VerPedidoOnline";
+import PedidoOnline from "./Pages/PedidoOnline/PedidoOnline";
+import VerPedidosOnline from "./Pages/verPedidosOnline/VerPedidoOnline";
 
 function App() {
   return (
@@ -11,7 +10,6 @@ function App() {
         {/*Acá van las rutas en este estilo:
           <Route path="/" element={<MainPage />}/>
         */}
-        <Route path="/" element={<Login />} />
         <Route path="/PedidoOnline" element={<PedidoOnline />} />
         <Route path="/VerPedidosOnline" element={<VerPedidosOnline />} />
       </Routes>
