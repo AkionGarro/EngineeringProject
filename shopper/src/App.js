@@ -1,5 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
+
+import PedidoPersonal from "./Pages/Pedido_personal/pedido_personal";
+import VerPedidos from './Pages/Ver_pedidos/ver_pedidos';
 import PedidoOnline from "./Pages/PedidoOnline/PedidoOnline";
 
 import PedidoPersonal from "./Pages/Pedido_personal/pedido_personal";
@@ -10,6 +13,7 @@ import HomePageAdmin from "./Pages/HomePageAdmin/HomePageAdmin";
 import { AuthProvider } from "./context/AuthContext";
 import { DatabaseProvider } from "./context/DatabaseContext";
 import Register from "./Pages/Register/Register";
+
 function App() {
   return (
     <AuthProvider>
