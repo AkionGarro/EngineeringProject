@@ -1,0 +1,66 @@
+/* LinkForm.css */
+.container {
+  text-align: center;
+  margin-top: 5rem;
+}
+
+.container .opciones-direccion {
+  width: 50%;
+}
+@media screen and (max-width: 680px) {
+  .container .opciones-direccion {
+    width: 100%;
+  }
+}
+
+.container .opciones-direccion {
+  display: flex;
+  justify-content: center;
+}
+
+.grid-container {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.texto {
+  width: 100%;
+}
+
+.seleccionar {
+  margin-bottom: 20px;
+}
+
+.container .button-container {
+  margin-bottom: 20px;
+}
+
+.container .add-button {
+  margin-bottom: 20px;
+}
+
+.container .send-button {
+  margin-top: 20px;
+  margin-bottom: 3rem;
+}
+
+.seleccionar {
+  width: 50% !important;
+}
+
+.botones-opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.opciones-direccion {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.texto {
+  color: rgba(69, 123, 157, 1);
+}
