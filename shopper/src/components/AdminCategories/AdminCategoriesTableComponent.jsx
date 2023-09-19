@@ -1,5 +1,6 @@
-import PropTypes from "prop-types"
+import PropTypes from 'prop-types'
 import React, { memo, useEffect, useState } from "react"
+
 
 //MUI Components
 import {
@@ -20,23 +21,29 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
 
+//Categories Modal
+import AdminCategoryComponent from "./AdminCategoryComponent"
+
 import { firestore } from "../../firebase"
 import { collection, getDocs } from "firebase/firestore"
 
-const AdminProductsTableComponent = memo(props => {
-	const [page, setPage] = useState(0)
+const AdminCategoriesTableComponent = memo((props) => {
+  const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
-	const [products, setProducts] = useState([])
+	const [categories, setCategories] = useState([])
 	const [loading, setLoading] = useState(true)
 
-	const collectionRef = collection(firestore, "products")
+  const [open, setOpen] = React.useState(false)
+  const [editCategory, setEditCategory] = React.useState("")
+
+	const collectionRef = collection(firestore, "productCategories")
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				const querySnapshot = await getDocs(collectionRef)
 				const newData = querySnapshot.docs.map(doc => doc.data())
-				setProducts(newData)
+				setCategories(newData)
 				setLoading(false)
 				console.log("Datos Obtenidos de Firebase", newData)
 			} catch (error) {
@@ -56,24 +63,32 @@ const AdminProductsTableComponent = memo(props => {
 		setPage(0)
 	}
 
+  const handleOpenModal = (item) => {
+    setEditCategory(item)
+    setOpen(true)
+  };
+
 	const startIndex = page * rowsPerPage
 	const endIndex = startIndex + rowsPerPage
 
 	return (
 		<>
-			<IconButton aria-label="add">
+			<IconButton aria-label="add" onClick={() => {
+    handleOpenModal()
+  }}>
 				<AddIcon />
 			</IconButton>
+
 			<TableContainer component={Paper}>
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell>Nombre</TableCell>
-							<TableCell>Categoria</TableCell>
-							<TableCell>Precio</TableCell>
-							<TableCell>Estado</TableCell>
-							<TableCell>Campos</TableCell>
-							<TableCell>Acciones</TableCell>
+							<TableCell>Name</TableCell>
+							<TableCell>Description</TableCell>
+							<TableCell>Personalized Fields</TableCell>
+							<TableCell>Background Image</TableCell>
+							<TableCell>Icon Image</TableCell>
+							<TableCell>Actions</TableCell>
 						</TableRow>
 					</TableHead>
 
@@ -83,16 +98,20 @@ const AdminProductsTableComponent = memo(props => {
 								<TableCell colSpan={5}>Cargando...</TableCell>
 							</TableRow>
 						) : (
-							products.slice(startIndex, endIndex).map((item, index) => (
+							categories.slice(startIndex, endIndex).map((item, index) => (
 								<TableRow key={index}>
 									<TableCell>{item.name}</TableCell>
-									<TableCell>Categoria</TableCell>
-									<TableCell>{item.price}</TableCell>
-									<TableCell>{item.status}</TableCell>
-									<TableCell>Campos Personalizados</TableCell>
+									<TableCell>{item.description}</TableCell>
+									<TableCell>{item.personalizedFields.length}</TableCell>
+									<TableCell>
+                    <img src={item.backgroundImage} width={"70px"} alt="BG" />
+                  </TableCell>
+									<TableCell>
+                  <img src={item.icon} width={"70px"} alt="BG" />
+                  </TableCell>
 									<TableCell>
 										<Box sx={{ display: "flex", gap: 1 }}>
-											<IconButton aria-label="delete">
+											<IconButton aria-label="delete"  onClick={() => {handleOpenModal(item)}}>
 												<DeleteIcon />
 											</IconButton>
 											<IconButton aria-label="edit">
@@ -110,16 +129,20 @@ const AdminProductsTableComponent = memo(props => {
 			<TablePagination
 				rowsPerPageOptions={[5, 10, 25]}
 				component="div"
-				count={products.length}
+				count={categories.length}
 				rowsPerPage={rowsPerPage}
 				page={page}
 				onPageChange={handleChangePage}
 				onRowsPerPageChange={handleChangeRowsPerPage}
 			/>
+      
+      <AdminCategoryComponent open={open} setOpen={setOpen} category={editCategory}/>
 		</>
 	)
-})
+}
+  
+  )
 
-AdminProductsTableComponent.propTypes = {}
+AdminCategoriesTableComponent.propTypes = {}
 
-export default AdminProductsTableComponent
+export default AdminCategoriesTableComponent
