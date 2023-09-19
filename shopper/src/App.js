@@ -6,7 +6,7 @@ import VerPedidos from './Pages/Ver_pedidos/ver_pedidos';
 import PedidoOnline from "./Pages/PedidoOnline/PedidoOnline";
 
 import PedidoPersonal from "./Pages/Pedido_personal/pedido_personal";
-import VerPedidos from './Pages/ver_pedidos/ver_pedidos';
+import Ver_pedidos from "./Pages/Ver_pedidos/ver_pedidos";
 
 import Login from "./Pages/Login/Login";
 import HomePageAdmin from "./Pages/HomePageAdmin/HomePageAdmin";
