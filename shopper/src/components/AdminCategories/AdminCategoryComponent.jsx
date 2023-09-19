@@ -9,6 +9,8 @@ import { TextField, Button, FormControl, FormGroup, FormLabel } from '@mui/mater
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import DynamicForm from './DynamicForm';
+
 
 const style = {
   position: 'absolute',
@@ -24,34 +26,8 @@ const style = {
 
 const AdminCategoryComponent = memo((props) => {
 
-  const h = {
-    backgroundImage: "url",
-    description: "description",
-    name: "name",
-    icon: "icon",
-    personalizedFields: [{name: "name", type: "text"}, {name: "description", type: "number"}]
-  }
 
-  
-
-  const myForm = () => {
-    return (
-      <form>
-        <FormControl>
-          <TextField label="Nombre" variant="outlined" />
-        </FormControl>
-  
-        <FormControl>
-          <TextField label="Correo Electrónico" variant="outlined" />
-        </FormControl>
-  
-        <Button variant="contained" color="primary" type="submit">
-          Enviar
-        </Button>
-      </form>
-    )
-  }
-
+  const fields = [{name:'name', type:'text'}, {name:'description',type:'text'}, {name:'icon',type:'image'},{name:'backgroundImage',type:'image'} , {name:'personalizedFields',type:'arrayCategoryFields'}]
 
   const handleClose = () => props.setOpen(false);
 
@@ -68,10 +44,9 @@ const AdminCategoryComponent = memo((props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            {props.category?.name}
-          </Typography>
-          {myForm()}
+
+          <DynamicForm inputArray={fields} />
+          
         </Box>
       </Modal>
     </>
