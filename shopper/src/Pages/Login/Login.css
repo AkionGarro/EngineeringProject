@@ -1,14 +1,7 @@
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:500);
-.container{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .container__logo{
     max-width: 70%;
-    margin: 0 auto;
-    padding: 0;
 }
 
 .register__info{
@@ -65,5 +58,3 @@
       background: #1669F2;
     }
   }
-
-  

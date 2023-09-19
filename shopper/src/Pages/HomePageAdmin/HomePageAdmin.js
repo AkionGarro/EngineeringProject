@@ -255,44 +255,58 @@ export default function HomePageAdmin(props) {
           />
         </Box>
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <AppBar color="secondary" position="sticky" elevation={0} className="appbar">
-        
-        <Toolbar>
-          <Grid container spacing={1} alignItems="center">
-          
-            <Grid sx={{ display: { sm: 'none', xs: 'block' } }} item>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerToggle}
-                edge="start"
-              >
-                <MenuIcon />
-              </IconButton>
-            </Grid>
-            <Typography color="inherit" variant="h5" component="h1">
-                {tittle}
-              </Typography>
-            <Grid item xs />
+          <AppBar color="primary" position="sticky" elevation={0}>
+            <Toolbar>
+              <Grid container spacing={1} alignItems="center">
+                <Grid sx={{ display: { sm: "none", xs: "block" } }} item>
+                  <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={handleDrawerToggle}
+                    edge="start"
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                </Grid>
+                <Grid item xs />
 
-            <Grid item>
-              <IconButton color="inherit" sx={{ p: 0.5 }}>
-                <Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
-              </IconButton>
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
-      
+                <Grid item>
+                  <IconButton color="inherit" sx={{ p: 0.5 }}>
+                    <Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <IconButton
+                    onClick={handleLogout}
+                    color="inherit"
+                    sx={{ p: 0.5 }}
+                  >
+                    <LogoutIcon></LogoutIcon>
+                  </IconButton>
+                </Grid>
+              </Grid>
+            </Toolbar>
+          </AppBar>
+          <AppBar
+            component="div"
+            color="primary"
+            position="static"
+            elevation={0}
+            sx={{ zIndex: 0 }}
+          >
+            <Toolbar>
+              <Grid container alignItems="center" spacing={1}>
+                <Grid item xs>
+                  <Typography color="inherit" variant="h5" component="h1">
+                    {tittle}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Toolbar>
+          </AppBar>
           <Box
             component="main"
-            //quitar el padding de arriba
-            padding={"0px"}
-            margin={"0px"}
-            sx={{ flex: 1, py: 6, px: 4, bgcolor: "#eaeff1", marginTop: "0px", marginLeft: "0px",
-            marginRight: "0px", marginBottom: "0px", paddingLeft: "0px", paddingRight: "0px",
-            paddingBottom: "0px", paddingTop: "0px" }}
-            
+            sx={{ flex: 1, py: 6, px: 4, bgcolor: "#eaeff1" }}
           >
             {componentToRender}
           </Box>

@@ -14,9 +14,27 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useAuth } from "../../context/AuthContext";
 /* Styles imports */
+import logoVeroShop from "../../images/logo.png";
 import "./Login.css";
 import Swal from "sweetalert2";
-import LogoVeroShop from "../../components/Logo/Logo";
+
+function Copyright(props) {
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
+      <Link color="inherit" href="#">
+        VeroCampShop
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -25,6 +43,7 @@ const defaultTheme = createTheme();
 export default function Login() {
   const navigate = useNavigate();
   const auth = useAuth();
+
 
   const goToHomePageAdmin = () => {
     navigate("/HomePageAdmin");
@@ -44,6 +63,7 @@ export default function Login() {
       console.error("Error adding document: ", e);
     }
   };
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -83,56 +103,53 @@ export default function Login() {
             alignItems: "center",
           }}
         >
-          <div className="container">
-            <LogoVeroShop />
-          </div>
-
+          <img
+            className="container__logo"
+            src={logoVeroShop}
+            alt="logo.png"
+          ></img>
+          <Typography component="h1" variant="h5">
+            Iniciar sesión
+          </Typography>
           <Box
             component="form"
             onSubmit={handleSubmit}
             noValidate
-            sx={{ mt: 3 }}
+            sx={{ mt: 1 }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Correo"
-                  name="email"
-                  value={email}
-                  variant="standard"
-                  autoFocus
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  margin="dense"
-                  variant="standard"
-                  fullWidth
-                  name="password"
-                  label="Contraseña"
-                  value={password}
-                  type="password"
-                  size="medium"
-                  id="password"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Iniciar sesión
-                </Button>
-              </Grid>
-            </Grid>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Correo"
+              name="email"
+              value={email}
+              autoComplete="email"
+              autoFocus
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Contraseña"
+              value={password}
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Iniciar sesión
+            </Button>
             <Grid container>
               <Grid item className="register__info">
                 <Link href="/Register" variant="body2">
@@ -143,11 +160,7 @@ export default function Login() {
 
             <Grid container>
               <Grid item className="google__container">
-                <div
-                  onClick={(e) => {
-                    handleGoogle(e);
-                  }}
-                >
+                <div onClick={(e)=>{handleGoogle(e)}}>
                   <div className="google-btn">
                     <div className="google-icon-wrapper">
                       <img
@@ -164,6 +177,7 @@ export default function Login() {
             </Grid>
           </Box>
         </Box>
+        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );
