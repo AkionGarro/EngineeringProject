@@ -25,6 +25,8 @@ const PedidoOnline = () => {
       usuario: "Chen",
       productos: linkFields,
       direccion: direction,
+      estado: 1,
+      telefono: 85627272,
     };
     addDocument(ref, data);
   };
