@@ -1,4 +1,4 @@
-import React, {createContext, useContext } from "react";
+import React, { createContext, useContext } from "react";
 import { firestore } from "../firebase";
 import {
   addDoc,
@@ -44,10 +44,14 @@ export function DatabaseProvider({ children }) {
   };
 
   const getAllUsers = async () => {
-    const ref = collection(firestore, "users");
-    const snapshot = await getDocs(ref);
-    const listUsers = snapshot.docs.map((doc) => doc.data());
-    return listUsers;
+    try {
+      const ref = collection(firestore, "users");
+      const snapshot = await getDocs(ref);
+      const listUsers = snapshot.docs.map((doc) => doc.data());
+      return listUsers;
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const getUserData = async (email) => {
@@ -63,7 +67,6 @@ export function DatabaseProvider({ children }) {
     const userRef = doc(firestore, "users", userDoc.id);
     const userData = await getDoc(userRef);
     return userData.data();
-    
   };
 
   const updateUserData = async (data) => {
@@ -93,11 +96,7 @@ export function DatabaseProvider({ children }) {
     } catch (error) {
       console.error("Error al actualizar el usuario:", error);
     }
-  }
-
-
-
-
+  };
 
   const addNewAdmin = async (email) => {
     const ref = collection(firestore, "users");
@@ -153,7 +152,7 @@ export function DatabaseProvider({ children }) {
         addNewAdmin,
         changeToUser,
         getUserData,
-        updateUserData
+        updateUserData,
       }}
     >
       {children}
