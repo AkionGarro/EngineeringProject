@@ -1,11 +1,9 @@
 import * as React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -17,25 +15,9 @@ import "./Register.css";
 import logoVeroShop from "../../images/logo.png";
 import { useAuth } from "../../context/AuthContext";
 import { useFirebase } from "../../context/DatabaseContext";
-
+import LogoVeroShop from "../../components/Logo/Logo";
 import Swal from "sweetalert2";
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        VeroCamShop
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -55,6 +37,7 @@ export default function Register() {
     navigate("/");
   };
 
+ 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const dataForm = new FormData(event.currentTarget);
@@ -73,7 +56,6 @@ export default function Register() {
         await firebase.registerDataUser(
           data.fullname,
           data.email,
-          data.password,
           data.phone
         );
         Swal.fire({
@@ -113,14 +95,11 @@ export default function Register() {
             alignItems: "center",
           }}
         >
-          <img
-            className="container__logo"
-            src={logoVeroShop}
-            alt="logo.png"
-          ></img>
-          <Typography component="h1" variant="h5">
-            Registro
-          </Typography>
+          <div className="container">
+            <LogoVeroShop />
+          </div>
+
+
           <Box
             component="form"
             noValidate
@@ -176,6 +155,7 @@ export default function Register() {
                 />
               </Grid>
             </Grid>
+
             <Button
               type="submit"
               fullWidth
@@ -193,7 +173,7 @@ export default function Register() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
+       
       </Container>
     </ThemeProvider>
   );
