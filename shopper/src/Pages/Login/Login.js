@@ -12,15 +12,11 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import { useAuth } from "../../context/AuthContext";
 /* Styles imports */
 import logoVeroShop from "../../images/logo.png";
 import "./Login.css";
-
-/* Firebase imports */
-
-import { firestore } from "../../firebase";
-import { addDoc, collection } from "firebase/firestore";
+import Swal from "sweetalert2";
 
 function Copyright(props) {
   return (
@@ -45,37 +41,52 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Login() {
-
   const navigate = useNavigate();
+  const auth = useAuth();
+
 
   const goToHomePageAdmin = () => {
     navigate("/HomePageAdmin");
   };
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const ref = collection(firestore, "users");
+  const handleGoogle = async (e) => {
+    e.preventDefault();
+    try {
+      await auth.loginWithGoogle();
+      if (auth.user) {
+        goToHomePageAdmin();
+      }
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const dataForm = new FormData(event.currentTarget);
-    console.log(event.currentTarget);
 
     let data = {
-      user: "Akion",
       email: dataForm.get("email"),
       password: dataForm.get("password"),
     };
 
     try {
-      const docRef = await addDoc(ref, data);
-      console.log("Document written with ID: ", docRef.id);
-      setEmail('');
-      setPassword('');
-      goToHomePageAdmin();
+      await auth.login(data.email, data.password);
+      if (auth.user) {
+        setEmail("");
+        setPassword("");
+        goToHomePageAdmin();
+      }
     } catch (e) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Usuario o contraseña incorrectos",
+      });
       console.error("Error adding document: ", e);
     }
   };
@@ -116,7 +127,7 @@ export default function Login() {
               value={email}
               autoComplete="email"
               autoFocus
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -128,7 +139,7 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
-              onChange={(e)=>setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             <Button
@@ -140,10 +151,28 @@ export default function Login() {
               Iniciar sesión
             </Button>
             <Grid container>
-              <Grid item className="container__register--info">
-                <Link href="#" variant="body2">
-                  {"No tines cuenta? ¡Registrate!"}
+              <Grid item className="register__info">
+                <Link href="/Register" variant="body2">
+                  {"¿No tienes cuenta? ¡Regístrate!"}
                 </Link>
+              </Grid>
+            </Grid>
+
+            <Grid container>
+              <Grid item className="google__container">
+                <div onClick={(e)=>{handleGoogle(e)}}>
+                  <div className="google-btn">
+                    <div className="google-icon-wrapper">
+                      <img
+                        className="google-icon"
+                        src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                      />
+                    </div>
+                    <p className="btn-text">
+                      <b>Sign in with google</b>
+                    </p>
+                  </div>
+                </div>
               </Grid>
             </Grid>
           </Box>

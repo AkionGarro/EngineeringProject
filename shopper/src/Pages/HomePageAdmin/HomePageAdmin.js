@@ -11,14 +11,18 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
+import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import Avatar from "@mui/material/Avatar";
-import './HomePageAdmin.css'
-import Orders from "../Orders/Orders.jsx"
-import Products from "../Products/Products.jsx"
-import Categories from "../Categories/Categories.jsx"
+import "./HomePageAdmin.css";
+import Orders from "../Orders/Orders.jsx";
+import Products from "../Products/Products.jsx";
+import Categories from "../Categories/Categories.jsx";
 import NewAdmin from "../NewAdmin/NewAdmin.jsx";
 import Account from "../Account/Account.jsx";
+import { useAuth } from "../../context/AuthContext";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -179,29 +183,17 @@ const drawerWidth = 256;
 
 function Home() {
   // Componente para la página de inicio
-  return (
-    <div>
-      {/* Contenido de la página de inicio */}
-    </div>
-  );
+  return <div>{/* Contenido de la página de inicio */}</div>;
 }
 
 function About() {
   // Componente para la página "Acerca de"
-  return (
-    <div>
-      {/* Contenido de la página "Acerca de" */}
-    </div>
-  );
+  return <div>{/* Contenido de la página "Acerca de" */}</div>;
 }
 
 function Contact() {
   // Componente para la página de contacto
-  return (
-    <div>
-      {/* Contenido de la página de contacto */}
-    </div>
-  );
+  return <div>{/* Contenido de la página de contacto */}</div>;
 }
 
 export default function HomePageAdmin(props) {
@@ -209,9 +201,27 @@ export default function HomePageAdmin(props) {
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
   const [componentToRender, setComponentToRender] = React.useState(<Orders />);
   const [tittle, setTittle] = React.useState("Manage Orders");
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  const { displayName } = auth.user;
+
+  const goToLogin = () => {
+    navigate("/");
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await auth.logout();
+      console.log("logout");
+      goToLogin();
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   };
 
   const navigatorOptions = (route, tittle) => {
@@ -219,7 +229,7 @@ export default function HomePageAdmin(props) {
     setTittle(tittle);
     handleDrawerToggle();
   };
- 
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex", minHeight: "100vh" }}>
@@ -239,7 +249,8 @@ export default function HomePageAdmin(props) {
           )}
 
           <Navigator
-            PaperProps={{ style: { width: drawerWidth }}} navigatorOptions1={navigatorOptions}
+            PaperProps={{ style: { width: drawerWidth } }}
+            navigatorOptions1={navigatorOptions}
             sx={{ display: { sm: "block", xs: "none" } }}
           />
         </Box>
@@ -283,7 +294,7 @@ export default function HomePageAdmin(props) {
             paddingBottom: "0px", paddingTop: "0px" }}
             
           >
-          {componentToRender}
+            {componentToRender}
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>
             <Copyright />
