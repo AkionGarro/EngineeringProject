@@ -14,6 +14,7 @@ function Ver_pedidos() {
   const [pedidos, setPedidos] = useState([]);
   const [modalVisible, setModalVisible] = useState(false); 
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
+  const [idselc, setidselc] = useState(null);
   const rows = pedidos;
 
   useEffect(() => {
@@ -36,7 +37,7 @@ function Ver_pedidos() {
   }, []);
 
   const handleEditar = async (id) => {
-    console.log(id);
+    setidselc(id)
     try {
       const pedidoRef = doc(firestore, 'pedidosPersonales', id);
       const pedidoSnapshot = await getDoc(pedidoRef);
@@ -104,7 +105,7 @@ function Ver_pedidos() {
         <DetallePedidoModal
           visible={modalVisible}
           onCancel={closeModal}
-          pedidoData={pedidoSeleccionado}
+          id={idselc}
         />
       )}
       </div>

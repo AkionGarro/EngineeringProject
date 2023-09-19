@@ -1,14 +1,16 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import { DataGrid } from '@mui/x-data-grid';
 import Modal from '@mui/material/Modal';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {
     Select,
     MenuItem,
   } from "@mui/material";
-import { useState } from "react";
+import { useState , useEffect} from "react";
+import {firestore} from "../firebase";
+import { getDocs, getDoc,collection, doc } from "firebase/firestore";
 
 const style = {
   position: 'absolute',
@@ -21,14 +23,44 @@ const style = {
   p: 4,
 };
 
-export default function DetallePedidoModal({ visible,onCancel, pedidoData }) {
+export default function DetallePedidoModal({ visible,onCancel, id}) {
     const [estado, setEstado] = useState("");
     const estados = ['Pendiente de confirmación','En proceso','Pendiente de pago','Cancelado','Pagado','Enviado','Recibido'];
-    const estadoActual = pedidoData.estado;
+    const [pedido, setPedido] = useState([]);
+    const [productos, setProductos] = useState([]);
+    const rows = productos;
+    const columns = [
+        { field: 'description', headerName: 'Descripción', width: 200 },
+        { field: 'image', headerName: 'Link de la imagen', width: 250},
+    ]
 
     const handleEstadonOnSelect = (event) => {
         setEstado(event.target.value);
-      };
+    };
+
+    useEffect(() => {
+        const obtenerColeccion = async () => {
+            try {
+                const pedidoRef = doc(firestore, 'pedidosPersonales', id);
+                const pedidoSnapshot = await getDoc(pedidoRef);
+                if (pedidoSnapshot.exists()) {
+                const pedidoData = pedidoSnapshot.data();
+                const products = pedidoData.productos;
+                setPedido(pedidoData);
+                setProductos(products);
+                } else {
+                console.log('El documento no existe');
+                }
+            } catch (error) {
+                console.error('Error al obtener el documento:', error);
+            }
+        };
+        obtenerColeccion();
+    },[]);
+
+    const agregarProducto = (event) => {
+        setEstado(event.target.value);
+    };
 
   return (
     <div>
@@ -56,7 +88,7 @@ export default function DetallePedidoModal({ visible,onCancel, pedidoData }) {
                         id="seleccionar"
                         >
                         <MenuItem value="" disabled>
-                            {estados[estadoActual]}
+                            {estados[pedido.estado]}
                         </MenuItem>
                         <MenuItem value="0">Pendiente de confirmación</MenuItem>
                         <MenuItem value="1">En proceso</MenuItem>
@@ -71,7 +103,7 @@ export default function DetallePedidoModal({ visible,onCancel, pedidoData }) {
             <div style={{display: 'flex'}}>
                 <div style={{flex: 1,padding: '16px',}}>
                     <h3>Información del cliente y entrega</h3>
-                    <h4>Nombre del cliente:<p style={{ display: 'inline',margin: '0',padding: '0'}}>  {pedidoData.usuario}</p></h4>
+                    <h4>Nombre del cliente:<p style={{ display: 'inline',margin: '0',padding: '0'}}>  {pedido.usuario}</p></h4>
                     <h4>Correo:</h4>
                     <h4>Telefono: </h4>
                 </div>
@@ -80,6 +112,26 @@ export default function DetallePedidoModal({ visible,onCancel, pedidoData }) {
                 </div>
             </div>
             <h3>Productos</h3>
+            <DataGrid
+                rows={rows}
+                columns={columns}
+                getRowId={(row) => row.description}
+                initialState={{
+                pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                },
+                }}
+                pageSizeOptions={[5, 10, 15]}
+                autoHeight 
+            />
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={agregarProducto}
+                className="add-button"
+                >
+                + Agregar otro producto
+                </Button>
         </Box>
       </Modal>
     </div>

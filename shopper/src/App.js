@@ -1,9 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Login from "./pages/Login/Login";
-import PedidoOnline from "./pages/PedidoOnline/PedidoOnline";
-import PedidoPersonal from "./pages/pedido_personal/perdido_personal";
-import VerPedidos from "./pages/ver_pedidos/ver_pedidos";
+import PedidoPersonal from "./Pages/Pedido_personal/pedido_personal";
+import VerPedidos from './Pages/Ver_pedidos/ver_pedidos';
 
 function App() {
   return (
@@ -12,9 +10,7 @@ function App() {
         {/*Acá van las rutas en este estilo:
           <Route path="/" element={<MainPage />}/>
         */}
-        <Route path="/" element={<Login />} />
-        <Route path="/PedidoOnline" element={<PedidoOnline />} />
-        <Route path="/PedidoPersonal" element={<PedidoPersonal />} />
+        <Route path="/" element={<PedidoPersonal />} />
         <Route path="/VerPedidos" element={<VerPedidos />} />
       </Routes>
     </Router>
