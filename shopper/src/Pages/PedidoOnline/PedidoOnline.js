@@ -10,6 +10,7 @@ import {
 import { firestore } from "../../firebase";
 import { collection } from "firebase/firestore";
 import { addDocument } from "../../firebase";
+import DeleteIcon from "@mui/icons-material/Delete";
 import "./PedidoOnline.css";
 
 const PedidoOnline = () => {
@@ -90,13 +91,12 @@ const PedidoOnline = () => {
             />
           </Grid>
           <Grid item xs={12} className="button-container">
-            <Button
-              variant="outlined"
-              color="error"
+            <DeleteIcon
               onClick={() => removeFields(index)}
+              style={{ color: "red" }}
             >
-              Eliminar
-            </Button>
+              Icono de Eliminación
+            </DeleteIcon>
           </Grid>
         </Grid>
       ))}
@@ -107,6 +107,15 @@ const PedidoOnline = () => {
         className="add-button"
       >
         + Agregar otro producto
+      </Button>
+
+      <Button
+        variant="contained"
+        color="error"
+        onClick={addFields}
+        className="add-button"
+      >
+        Vaciar productos
       </Button>
 
       <div className="opciones-direccion">
