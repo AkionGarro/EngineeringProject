@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Paper, Button, IconButton, Hidden  } from '@mui/material';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EditIcon from '@mui/icons-material/Edit';
@@ -6,6 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { makeStyles, withStyles } from '@mui/styles';
 import TablePagination from '@mui/material/TablePagination';
 import { useState } from 'react';
+import { useFirebase } from '../context/DatabaseContext';
 
 import './OrdenesDeCompraTable.css';
 
@@ -32,93 +33,24 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-const rows = [
-  {
-    id: '1',
-    cliente: 'Cliente 1',
-    telefono: '+1234567890',
-    direccion: 'Dirección 1',
-    estado: 'Pendiente',
-  },
-  {
-    id: '2',
-    cliente: 'Cliente 2',
-    telefono: '+9876543210',
-    direccion: 'Dirección 2',
-    estado: 'En proceso',
-  },
-  {
-    id: '3',
-    cliente: 'Cliente 2',
-    telefono: '+9876543210',
-    direccion: 'Dirección 2',
-    estado: 'En proceso',
-  },
-  {
-    id: '4',
-    cliente: 'Cliente 2',
-    telefono: '+9876543210',
-    direccion: 'Dirección 2',
-    estado: 'En proceso',
-  },
-  {
-    id: '5',
-    cliente: 'Cliente 2',
-    telefono: '+9876543210',
-    direccion: 'Dirección 2',
-    estado: 'En proceso',
-  },
-  {
-    id: '6',
-    cliente: 'Cliente 2',
-    telefono: '+9876543210',
-    direccion: 'Dirección 2',
-    estado: 'En proceso',
-  },
-  {
-    id: '7',
-    cliente: 'Cliente 2',
-    telefono: '+9876543210',
-    direccion: 'Dirección 2',
-    estado: 'En proceso',
-  },
-  {
-    id: '8',
-    cliente: 'Cliente 2',
-    telefono: '+9876543210',
-    direccion: 'Dirección 2',
-    estado: 'En proceso',
-  },
-  {
-    id: '9',
-    cliente: 'Cliente 2',
-    telefono: '+9876543210',
-    direccion: 'Dirección 2',
-    estado: 'En proceso',
-  },
-  {
-    id: '10',
-    cliente: 'Cliente 2',
-    telefono: '+9876543210',
-    direccion: 'Dirección 2',
-    estado: 'En proceso',
-  },
-  {
-    id: '11',
-    cliente: 'Cliente 2',
-    telefono: '+9876543210',
-    direccion: 'Dirección 2',
-    estado: 'En proceso',
-  },
-  // Agrega más datos de ejemplo aquí
-];
-
 function OrdenesDeCompraTable(){
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [orders, setOrders] = useState([]);
+
+  const getOrders = (filtroParametro) => {
+    firebase.getAllOrders(filtroParametro).then((data) => (setOrders(data)));
+  };
+
+  const firebase = useFirebase();
+
+  firebase.getAllOrders(null).then((data) => (setOrders(data)));
+
+  //console.log("ORDERS: ", orders[0].then((data) => console.log(data)));
 
   const handleChangePage = (event, newPage) => {
+    console.log("DATA: ", orders);
     setPage(newPage);
   };
 
@@ -136,22 +68,24 @@ function OrdenesDeCompraTable(){
             <StyledTableCell>Cliente</StyledTableCell>
             <StyledTableCell>Teléfono</StyledTableCell>
             <StyledTableCell className="hide-on-mobile">Dirección</StyledTableCell>
+            <StyledTableCell className="hide-on-mobile">Estado</StyledTableCell>
             <StyledTableCell className="hide-on-mobile">Acción</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.id}</TableCell>
-              <TableCell>{row.cliente}</TableCell>
+          {orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => (
+            <TableRow key={order.pedido.id}>
+              <TableCell>{order.pedido.id}</TableCell>
+              <TableCell>{order.pedido.cliente}</TableCell>
               <TableCell>
-                <a href={`https://wa.me/${row.telefono}`} target="_blank" rel="noopener noreferrer">
+                <a href={`https://wa.me/${order.pedido.telefono}`} target="_blank" rel="noopener noreferrer">
                   <IconButton color="primary" aria-label="Chat en WhatsApp">
                     <WhatsAppIcon />
                   </IconButton>
                 </a>
               </TableCell>
-              <TableCell className="hide-on-mobile">{row.direccion}</TableCell>
+              <TableCell className="hide-on-mobile">{order.pedido.direccion}</TableCell>
+              <TableCell className="hide-on-mobile">{order.pedido.estado}</TableCell>
               <TableCell className="hide-on-mobile">
                 <IconButton color="primary" aria-label="Editar">
                   <EditIcon />
@@ -167,7 +101,7 @@ function OrdenesDeCompraTable(){
       <TablePagination
         rowsPerPageOptions={[10, 25, 50]}
         component="div"
-        count={rows.length}
+        count={orders.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
