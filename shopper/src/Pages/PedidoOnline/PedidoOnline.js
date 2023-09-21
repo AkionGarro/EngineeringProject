@@ -7,19 +7,32 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import { firestore } from "../../firebase";
+import { collection } from "firebase/firestore";
+import { addDocument } from "../../firebase";
 import "./PedidoOnline.css";
 
 const PedidoOnline = () => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("mando data");
-  };
-
-  const [linkFields, setLinkFields] = useState([{ link: "", description: "" }]);
+  const ref = collection(firestore, "pedidosOnline");
+  const [linkFields, setLinkFields] = useState([{ link: "", comentario: "" }]);
   const [direction, setDirection] = useState("");
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("mando data");
+    console.log(linkFields);
+    let data = {
+      usuario: "Chen",
+      productos: linkFields,
+      direccion: direction,
+      estado: 1,
+      telefono: 85627272,
+    };
+    addDocument(ref, data);
+  };
+
   const addFields = () => {
-    setLinkFields([...linkFields, { link: "", description: "" }]);
+    setLinkFields([...linkFields, { link: "", comentario: "" }]);
   };
 
   const handleLinkChange = (event, index) => {
@@ -28,9 +41,9 @@ const PedidoOnline = () => {
     setLinkFields(updatedFields);
   };
 
-  const handleDescriptionChange = (event, index) => {
+  const handleCommentaryChange = (event, index) => {
     const updatedFields = [...linkFields];
-    updatedFields[index].description = event.target.value;
+    updatedFields[index].comentario = event.target.value;
     setLinkFields(updatedFields);
   };
 
@@ -47,31 +60,33 @@ const PedidoOnline = () => {
 
   return (
     <Container className="container">
-      <h2>Pedido Online</h2>
-      <h4>
+      <h2 className="texto">Pedido Online</h2>
+      <h4 className="texto">
         Envía los links de los productos que deseas comprar y estos llegaran a
         tu puerta
       </h4>
       {linkFields.map((field, index) => (
         <Grid container spacing={2} key={index} className="grid-container">
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <TextField
               fullWidth
               label="Link"
               variant="outlined"
               value={field.link}
               onChange={(e) => handleLinkChange(e, index)}
-              id="link"
+              className="link"
+              autoComplete="off"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <TextField
               fullWidth
               label="Comentario"
               variant="outlined"
-              value={field.description}
-              onChange={(e) => handleDescriptionChange(e, index)}
-              id="comentario"
+              value={field.comentario}
+              onChange={(e) => handleCommentaryChange(e, index)}
+              className="comentario"
+              autoComplete="off"
             />
           </Grid>
           <Grid item xs={12} className="button-container">

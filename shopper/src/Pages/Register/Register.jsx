@@ -1,11 +1,9 @@
 import * as React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -55,6 +53,7 @@ export default function Register() {
     navigate("/");
   };
 
+ 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const dataForm = new FormData(event.currentTarget);
@@ -73,7 +72,6 @@ export default function Register() {
         await firebase.registerDataUser(
           data.fullname,
           data.email,
-          data.password,
           data.phone
         );
         
@@ -114,14 +112,11 @@ export default function Register() {
             alignItems: "center",
           }}
         >
-          <img
-            className="container__logo"
-            src={logoVeroShop}
-            alt="logo.png"
-          ></img>
-          <Typography component="h1" variant="h5">
-            Registro
-          </Typography>
+          <div className="container">
+            <LogoVeroShop />
+          </div>
+
+
           <Box
             component="form"
             noValidate
@@ -177,6 +172,7 @@ export default function Register() {
                 />
               </Grid>
             </Grid>
+
             <Button
               type="submit"
               fullWidth
@@ -194,7 +190,7 @@ export default function Register() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
+       
       </Container>
     </ThemeProvider>
   );

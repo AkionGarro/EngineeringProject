@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext } from "react";
+import React, { createContext, useContext } from "react";
 import { firestore } from "../firebase";
 import { addDoc, getDocs,collection, where, query, deleteDoc } from "firebase/firestore";
 
@@ -17,14 +17,13 @@ export const useFirebase = () => {
 };
 
 export function DatabaseProvider({ children }) {
-
-  const registerDataUser = async (fullnameF,emailF,passwordF,phoneF) => {
+  const registerDataUser = async (fullnameF, emailF, phoneF) => {
     const ref = collection(firestore, "users");
     let data = {
       fullName: fullnameF,
       email: emailF,
-      password: passwordF,
       phone: phoneF,
+      userType: "user",
     };
 
     try {
