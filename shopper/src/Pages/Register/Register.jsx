@@ -17,8 +17,8 @@ import "./Register.css";
 import logoVeroShop from "../../images/logo.png";
 import { useAuth } from "../../context/AuthContext";
 import { useFirebase } from "../../context/DatabaseContext";
-
 import Swal from "sweetalert2";
+
 function Copyright(props) {
   return (
     <Typography
@@ -76,6 +76,7 @@ export default function Register() {
           data.password,
           data.phone
         );
+        
         Swal.fire({
           icon: "success",
           title: "¡Registrado!",
