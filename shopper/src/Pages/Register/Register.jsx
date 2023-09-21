@@ -113,7 +113,7 @@ export default function Register() {
           }}
         >
           <div className="container">
-            <LogoVeroShop />
+            {/* <LogoVeroShop /> */}
           </div>
 
 
