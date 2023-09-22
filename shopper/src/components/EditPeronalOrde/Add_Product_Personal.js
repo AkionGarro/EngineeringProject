@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { firestore } from "../../firebase";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { storage } from "../../firebase";
@@ -17,6 +17,7 @@ import {
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import "./Add_Product_Personal.css";
+import Swal from "sweetalert2";
 
 
 const style = {
@@ -64,6 +65,11 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
     setFile(null);
   };
 
+  const closeModal = () => {
+    cleanData();
+    onCancelModal();
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -83,23 +89,34 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
       await updateDoc(documentoRef, {
         productos: arrayUnion(data),
       });
+      Swal.fire({
+        icon: "success",
+        title: "¡Producto agregado!",
+        text: "El producto se ha agregado al pedido.",
+        customClass: {
+          container: 'swal-custom' // Aplica la clase personalizada
+        }
+      })
       cleanData();
     } catch (e) {
-      console.error("Error adding document: ", e);
+      Swal.fire({
+        icon: "error",
+        title: "¡Error al guardar el producto!"
+      });
     }
   };
 
   return (
-    <div>
+    <Container>
       <Modal
         open={visibleModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <div style={{ textAlign: 'right' }}>
-            <Button onClick={onCancelModal} startIcon={<CancelIcon />}></Button>
-          </div>
+          <Container style={{ textAlign: 'right' }}>
+            <Button onClick={closeModal} startIcon={<CancelIcon />}></Button>
+          </Container>
           <h3 style={{ textAlign: 'center' }}>Agregar un nuevo producto al pedido</h3>
           <Grid container spacing={3} className="grid-container">
             <Grid item xs={6}>
@@ -115,16 +132,20 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
               />
             </Grid>
             <Grid item xs={4}>
-              <Button
-                component="label"
-                variant="contained"
-                startIcon={<CloudUploadIcon />}
-                href="#file-upload"
+            <Button
+              component="label"
+              variant="contained"
+              startIcon={<CloudUploadIcon />}
+              htmlFor="file-upload-input"
+            >
+              {selectedFile ? selectedFile : "Upload a file"}
+              <input
+                id="file-upload-input"
+                type="file"
+                style={{ display: 'none' }}
                 onChange={(e) => handleImageUpload(e)}
-              >
-                {selectedFile ? selectedFile : 'Upload a file'}
-                <VisuallyHiddenInput type="file" />
-              </Button>
+              />
+            </Button>
             </Grid>
             <Grid item xs={2}>
               <Button
@@ -146,6 +167,6 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
           </Container>
         </Box>
       </Modal>
-    </div>
+    </Container>
   );
 }

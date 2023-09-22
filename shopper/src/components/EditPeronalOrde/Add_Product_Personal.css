@@ -1,8 +1,14 @@
-.button_container{
+.button_container {
   text-align: center;
   margin-top: 15px;
 }
+
 .button_container .add-button {
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.swal-custom {
+  z-index: 9999 !important;
+  /* Un valor alto para estar seguro de que esté por encima de los modales */
+}

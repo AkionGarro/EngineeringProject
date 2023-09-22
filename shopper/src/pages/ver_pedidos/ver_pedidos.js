@@ -34,7 +34,7 @@ function Ver_pedidos() {
     };
 
     obtenerColeccion();
-  }, []);
+  }, [modalVisible == false]);
 
   const handleEditar = async (id) => {
     try {
