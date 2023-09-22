@@ -38,8 +38,6 @@ function Personal_Order() {
     width: 1px;
   `;
 
-  const [selectedFile, setSelectedFile] = useState(null); // Estado para almacenar el archivo seleccionado
-
 
   const handleFieldChange = (index, fieldName, value, nombre) => {
     const updatedFields = [...fields];
@@ -50,7 +48,6 @@ function Personal_Order() {
   
   const handleImageUpload = async(index, event) => {
     const archivo = event.target.files[0];
-    setSelectedFile(archivo.name);
     const refArchivo = ref(storage,`pedidosPersonales/${archivo.name}` )
     await uploadBytes(refArchivo, archivo)
     const file = await getDownloadURL(refArchivo)
