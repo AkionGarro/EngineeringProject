@@ -1,106 +1,163 @@
-.container__form__pedido{
-    margin: 5rem auto;
-    width: 60rem;
-    height: 40rem;
-    background-color: #d32525;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 0.5rem 0.1rem #000000;
-    color: white;
-}
-
-.two-column-form {
-    display: flex;
-    justify-content: space-between;
-}
-
-.column {
-    flex-basis: 48%; /* Ajusta el ancho de las columnas según tus necesidades */
-  }
-
-.button-container {
-    text-align: center;
-}
-
-
 .container {
-    text-align: center;
-    margin-top: 20px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.grid-container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  padding: 10px 10px;
+  margin-top: 2rem !important;
+  margin-bottom: 4rem;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
+}
+
+.description{
+  width: 100% !important;
+}
+
+.iconoEliminar {
+  color: red;
+  background-color: transparent;
+  transition: color 0.3s, background-color 0.3s;
+  margin-top: 1rem;
+}
+
+.iconoEliminar:hover {
+  background-color: lightgray;
+  cursor: pointer;
+}
+
+.container .opciones-direccion {
+  width: 50%;
+}
+
+.opciones-botones {
+  display: flex;
+  justify-content: space-around;
+  gap: 15px;
+  width: auto;
+  margin-bottom: 2rem;
+}
+
+@media screen and (max-width: 680px) {
+  #selecionar {
+    width: 100%;
+    white-space: normal;
   }
-  
-  .container .opciones-direccion {
-    width: 50%;
-  }
-  @media screen and (max-width: 680px) {
-    #selecionar {
-      width: 100%;
-      white-space: normal;
-    }
-    .container .opciones-direccion {
-      width: 100%;
-    }
-  
-    .container .grid-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .container .link {
-      width: 100%;
-    }
-  }
-  
-  .container .opciones-direccion {
+
+  .container {
+    padding: 40px !important;
     display: flex;
     justify-content: center;
+    align-items: center;
   }
-  
+
   .grid-container {
-    margin-top: 10px;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: auto;
+    margin-top: 2rem !important;
+    margin-bottom: 4rem !important;
   }
-  
-  .texto {
+
+  .iconoEliminar {
+    margin-top: 1rem;
+  }
+
+  .opciones-botones {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container .description {
     width: 100%;
   }
-  
-  .seleccionar {
-    margin-bottom: 10px;
+
+  .container .opciones-direccion {
+    width: 100%;
   }
-  
-  .add-button {
-    margin-top: 20px;
-  }
-  
-  .container .button-container {
-    margin-bottom: 20px;
-  }
-  
-  .container .add-button {
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .container .send-button {
-    margin-top: 10px;
-  }
-  
-  .seleccionar {
-    width: 50% !important;
-  }
-  
-  .botones-opciones {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .opciones-direccion {
-    display: flex;
-    justify-content: flex-start;
-  }
+}
+
+.container .opciones-direccion {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.grid-container {
+  margin-top: 10px;
+}
+
+.texto {
+  width: 100%;
+}
+
+.seleccionar {
+  margin-bottom: 20px;
+  width: 50% !important;
+}
+
+.container .add-button {
+  margin-bottom: 20px;
+  width: 250px;
+}
+
+.container .send-button {
+  margin-top: 20px;
+  margin-bottom: 3rem;
+  width: 250px;
+}
+
+.container .button-container {
+  margin-bottom: 20px;
+}
+
+.boton-enviar {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.container .add-button {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.opciones-direccion {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 2rem;
+}
+
+.texto {
+  color: rgba(69, 123, 157, 1);
+}
+/*
+.container .send-button {
+  margin-top: 10px;
+}
+
+.seleccionar {
+  width: 50% !important;
+}
+
+.botones-opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.opciones-direccion {
+  display: flex;
+  justify-content: flex-start;
+}
+*/

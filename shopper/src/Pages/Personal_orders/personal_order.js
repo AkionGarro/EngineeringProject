@@ -17,13 +17,13 @@ import { useState } from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { auth } from "../../firebase"; 
 import Swal from "sweetalert2";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function Personal_Order() {
 
   const [fields, setFields] = useState([{ description: '', image: null }]);
   const [direction, setDirection] = useState("");
   const referencia =  collection(firestore, "pedidosPersonales");
-
   const user = auth.currentUser;
 
   const VisuallyHiddenInput = styled('input')`
@@ -59,9 +59,35 @@ function Personal_Order() {
   };
 
   const removeFields = (index) => {
-    const updatedFields = [...fields];
-    updatedFields.splice(index, 1);
-    setFields(updatedFields);
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¡Todos tus pedidos se borrarán de la lista! ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "¡Sí, quiero eliminarlos!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedFields = [...fields];
+        updatedFields.splice(index, 1);
+        setFields(updatedFields);
+      }
+    });
+  };
+
+  const deleteAll = () => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¡Todos tus pedidos se borrarán de la lista! ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "¡Sí, quiero eliminarlos!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setFields([{ description: "", image: "" }]);
+      }
+    });
   };
   
   const handleDirectionOnSelect = (event) => {
@@ -103,19 +129,21 @@ function Personal_Order() {
       <h4>Envía la descripción e imágenes de los productos que quieras buscar</h4>
       {fields.map((field, index) => (
         <Grid container spacing={3} key={index} className="grid-container">
-          <Grid item xs={4}>
+          <Grid item xs={12}>
             <TextField
               fullWidth
               label="Descripción"
               variant="outlined"
               value={field.description}
+              className="description"
               onChange={(e) =>
                 handleFieldChange(index, 'description', e.target.value)
               }
-              id="link"
+              id="description"
+              autoComplete="off"
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={12}>
             <Button
               component="label"
               variant="contained"
@@ -128,25 +156,36 @@ function Personal_Order() {
               <VisuallyHiddenInput type="file" />
             </Button>  
           </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant="outlined"
-              color="error"
+          <Grid item xs={12} className="button-container">
+            <DeleteIcon
+              className="iconoEliminar"
               onClick={() => removeFields(index)}
             >
-              Eliminar
-            </Button>
+              Icono de Eliminación
+            </DeleteIcon>
           </Grid>
         </Grid>
         ))}
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={addFields}
-          className="add-button"
-        >
-          + Agregar otro producto
-        </Button>
+        <div className="opciones-botones">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={addFields}
+            className="add-button"
+          >
+            + Agregar otro producto
+          </Button>
+
+          <Button
+            variant="contained"
+            color="error"
+            onClick={deleteAll}
+            className="add-button"
+          >
+            Vaciar pedido
+          </Button>
+      </div>
+        
 
         <div className="opciones-direccion">
         <Select
