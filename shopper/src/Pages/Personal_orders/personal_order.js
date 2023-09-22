@@ -1,5 +1,5 @@
 import React from "react";
-import "./pedido_personal.css";
+import "./personal_order.css";
 import {firestore} from "../../firebase";
 import { addDoc,collection } from "firebase/firestore";
 import {storage} from "../../firebase";
@@ -15,12 +15,16 @@ import {
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { auth } from "../../firebase"; 
+import Swal from "sweetalert2";
 
-function Pedido_Personal() {
+function Personal_Order() {
 
   const [fields, setFields] = useState([{ description: '', image: null }]);
   const [direction, setDirection] = useState("");
   const referencia =  collection(firestore, "pedidosPersonales");
+
+  const user = auth.currentUser;
 
   const VisuallyHiddenInput = styled('input')`
     clip: rect(0 0 0 0);
@@ -72,7 +76,7 @@ function Pedido_Personal() {
     event.preventDefault();
 
     let data = {
-      usuario : 'Fiorela',
+      usuario : user.email,
       direccion : direction,
       productos : fields,
       estado : 0
@@ -80,19 +84,29 @@ function Pedido_Personal() {
 
     try {
       const docRef = await addDoc(referencia, data);
-      console.log("Document written with ID: ", docRef.id);
+      Swal.fire({
+        icon: "success",
+        title: "¡Pedido Completado!",
+        text: "Tu pedido se ha guardado de forma correcta.",
+      });
+      cleanData();
     }   catch (e) {
         console.error("Error adding document: ", e);
     }
   };
-
+  
+  const cleanData = () => {
+    setFields([{ description: '', image: null }]);
+    setDirection("");
+  }
+  
   return (
     <Container className="container">
       <h2>Pedido Personalizado</h2>
       <h4>Envía la descripción e imágenes de los productos que quieras buscar</h4>
       {fields.map((field, index) => (
-        <Grid container spacing={2} key={index} className="grid-container">
-          <Grid item xs={6}>
+        <Grid container spacing={3} key={index} className="grid-container">
+          <Grid item xs={4}>
             <TextField
               fullWidth
               label="Descripción"
@@ -104,7 +118,7 @@ function Pedido_Personal() {
               id="link"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <Button
               component="label"
               variant="contained"
@@ -117,7 +131,7 @@ function Pedido_Personal() {
               <VisuallyHiddenInput type="file" />
             </Button>  
           </Grid>
-          <Grid item xs={12} className="button-container">
+          <Grid item xs={4}>
             <Button
               variant="outlined"
               color="error"
@@ -169,4 +183,4 @@ function Pedido_Personal() {
   );
 }
 
-export default Pedido_Personal;
+export default Personal_Order;

@@ -1,0 +1,8 @@
+.button_container{
+  text-align: center;
+  margin-top: 15px;
+}
+.button_container .add-button {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
