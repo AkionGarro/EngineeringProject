@@ -125,8 +125,8 @@ function Personal_Order() {
   
   return (
     <Container className="container">
-      <h2>Pedido Personalizado</h2>
-      <h4>Envía la descripción e imágenes de los productos que quieras buscar</h4>
+      <h2 className="texto">Pedido Personalizado</h2>
+      <h4 className="texto">Envía la descripción e imágenes de los productos que quieras buscar</h4>
       {fields.map((field, index) => (
         <Grid container spacing={3} key={index} className="grid-container">
           <Grid item xs={12}>

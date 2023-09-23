@@ -12,3 +12,14 @@
   z-index: 9999 !important;
   /* Un valor alto para estar seguro de que esté por encima de los modales */
 }
+
+.grid-container2 {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  padding: 10px 10px;
+  margin-top: 2rem !important;
+  margin-bottom: 4rem;
+  width: 100%;
+  background-color: white;
+}

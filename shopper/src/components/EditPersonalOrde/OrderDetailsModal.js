@@ -91,8 +91,8 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
             await updateDoc(documentoRef, nuevosDatos);
             Swal.fire({
                 icon: "success",
-                title: "¡Producto agregado!",
-                text: "El producto se ha agregado al pedido.",
+                title: "¡Cambios guardados!",
+                text: "Los cambios se han guardado con éxito.",
                 customClass: {
                     container: 'swal-custom' // Aplica la clase personalizada
                 }
@@ -100,7 +100,7 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
         } catch (e) {
             Swal.fire({
                 icon: "error",
-                title: "¡Error al guardar el producto!"
+                title: "¡Error al guardar los cambios!"
             });
         }
     }

@@ -118,7 +118,7 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
             <Button onClick={closeModal} startIcon={<CancelIcon />}></Button>
           </Container>
           <h3 style={{ textAlign: 'center' }}>Agregar un nuevo producto al pedido</h3>
-          <Grid container spacing={3} className="grid-container">
+          <Grid container spacing={3} className="grid-container2">
             <Grid item xs={6}>
               <TextField
                 fullWidth
@@ -148,12 +148,12 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
             </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button
-                variant="outlined"
-                color="error"
-                startIcon={<DeleteIcon />}
+              <DeleteIcon
+                className="iconoEliminar"
                 onClick={cleanData}
-              ></Button>
+              >
+                Icono de Eliminación
+              </DeleteIcon>
             </Grid>
           </Grid>
           <Container className="button_container">

@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Stack from '@mui/material/Stack';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
-import DetallePedidoModal from '../../components/EditPeronalOrde/OrderDetailsModal'; 
+import DetallePedidoModal from '../../components/EditPersonalOrde/OrderDetailsModal'; 
 
 
 function Ver_pedidos() {
