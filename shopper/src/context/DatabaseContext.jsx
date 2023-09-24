@@ -144,6 +144,135 @@ export function DatabaseProvider({ children }) {
     }
   };
 
+
+
+  /********************************************************* 
+  * Categorias de productos para la Vista de Administrador *
+  *********************************************************/
+
+  //Trae los documentos de las categorias de productos
+  const getAllCategories = async() =>{
+    console.trace("Get all categories")
+    try{
+      const ref = collection(firestore, "productCategories")
+      const snapshot = await getDocs(ref)
+      const listCategories = snapshot.docs.map(doc => ({id:doc.id, ...doc.data()}))
+      return listCategories
+    } catch(e){
+      console.log(e)
+    }
+  }
+
+  //Traer todos los documentos de categorias de productos donde el status sea 1 
+  const getCategories_Status1= async() =>{
+    console.trace("Get all categories");
+    try{
+      const ref = collection(firestore, "productCategories")
+      const q = query(ref, where("status", "==", 1))
+      const querySnapshot = await getDocs(q)
+      const listCategories = querySnapshot.docs.map(doc => ({id:doc.id, ...doc.data()}))
+      return listCategories
+    } catch(e){
+      console.log(e)
+    }
+  }
+
+  //Elimina una categoria de productos por su id 
+  //Cambia el estado de la categoria de 1 a 0
+  const deactivateCategory = async(id) =>{
+    console.trace("Delete category")
+    try {
+      const ref = collection(firestore, "productCategories")
+      const q = query(ref, where("id", "==", id))
+      const querySnapshot = await getDocs(q)
+      const categoryDoc = querySnapshot.docs[0]
+      const categoryRef = doc(firestore, "productCategories", categoryDoc.id)
+      
+      await updateDoc(categoryRef, {
+        status: 0
+      })
+      
+    } catch (error) {
+      console.error("Error al eliminar la categoria:", error)
+    }
+  }
+
+  //Activa una categoria de productos por su id 
+  //Cambia el estado de la categoria de 0 a 1
+  const activateCategory = async(id) =>{
+    console.trace("Delete category")
+    try {
+      const ref = collection(firestore, "productCategories")
+      const q = query(ref, where("id", "==", id))
+      const querySnapshot = await getDocs(q)
+      const categoryDoc = querySnapshot.docs[0]
+      const categoryRef = doc(firestore, "productCategories", categoryDoc.id)
+      
+      await updateDoc(categoryRef, {
+        status: 1
+      })
+      
+    } catch (error) {
+      console.error("Error al eliminar la categoria:", error)
+    }
+  }
+
+  //Actualiza los datos de una categoria de productos
+  const updateCategoryData = async (data) => {
+    console.log(data);
+    const ref = collection(firestore, "productCategories")
+    const q = query(ref, where("id", "==", data.id))
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.docs.length === 0) {
+      console.log("Categoria no encontrada.")
+      return;
+    }
+
+    const categoryDoc = querySnapshot.docs[0]
+    const categoryRef = doc(firestore, "productCategories", categoryDoc.id)
+
+    try {
+      await updateDoc(categoryRef, {
+        name: data.name,
+        description: data.description,
+        icon: data.icon,
+        backgroundImage: data.backgroundImage,
+        personalizedFields: data.personalizedFields,
+        status: data.status,
+      });
+      console.log("Categoria actualizada con éxito.")
+    } catch (error) {
+      console.error("Error al actualizar la categoria:", error)
+    }
+  }
+
+  //Agrega una nueva categoria de productos
+  const addNewCategory = async (data) => {
+    const ref = collection(firestore, "productCategories")
+    let categoryData = {
+      name: data.name,
+      description: data.description,
+      icon: data.icon,
+      backgroundImage: data.backgroundImage,
+      personalizedFields: data.personalizedFields,
+      status: data.status,
+    };
+    
+    try {
+      const docRef = await addDoc(ref, categoryData)
+      console.log(" New Category Added: Document written with ID: ", docRef.id)
+    } catch (e) {
+      console.error("Error adding Category Document: ", e)
+    }
+  }
+
+  /**************************************************************** 
+  * FIN de Categorias de productos para la Vista de Administrador *
+  ****************************************************************/
+
+
+
   return (
     <databaseContext.Provider
       value={{
@@ -153,6 +282,10 @@ export function DatabaseProvider({ children }) {
         changeToUser,
         getUserData,
         updateUserData,
+        getAllCategories,
+        getCategories_Status1,
+        deactivateCategory,
+        activateCategory
       }}
     >
       {children}
