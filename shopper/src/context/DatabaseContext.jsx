@@ -152,7 +152,7 @@ export function DatabaseProvider({ children }) {
 
   //Trae los documentos de las categorias de productos
   const getAllCategories = async() =>{
-    console.trace("Get all categories")
+    console.log("Get all categories")
     try{
       const ref = collection(firestore, "productCategories")
       const snapshot = await getDocs(ref)
@@ -165,7 +165,7 @@ export function DatabaseProvider({ children }) {
 
   //Traer todos los documentos de categorias de productos donde el status sea 1 
   const getCategories_Status1= async() =>{
-    console.trace("Get all categories");
+    console.los("Get all categories with Status 1 ");
     try{
       const ref = collection(firestore, "productCategories")
       const q = query(ref, where("status", "==", 1))
@@ -180,14 +180,9 @@ export function DatabaseProvider({ children }) {
   //Elimina una categoria de productos por su id 
   //Cambia el estado de la categoria de 1 a 0
   const deactivateCategory = async(id) =>{
-    console.trace("Delete category")
+    console.trace("Try to delete category with id:", id)  
     try {
-      const ref = collection(firestore, "productCategories")
-      const q = query(ref, where("id", "==", id))
-      const querySnapshot = await getDocs(q)
-      const categoryDoc = querySnapshot.docs[0]
-      const categoryRef = doc(firestore, "productCategories", categoryDoc.id)
-      
+      const categoryRef = doc(firestore, "productCategories", id)
       await updateDoc(categoryRef, {
         status: 0
       })
@@ -202,12 +197,7 @@ export function DatabaseProvider({ children }) {
   const activateCategory = async(id) =>{
     console.trace("Delete category")
     try {
-      const ref = collection(firestore, "productCategories")
-      const q = query(ref, where("id", "==", id))
-      const querySnapshot = await getDocs(q)
-      const categoryDoc = querySnapshot.docs[0]
-      const categoryRef = doc(firestore, "productCategories", categoryDoc.id)
-      
+      const categoryRef = doc(firestore, "productCategories", id)
       await updateDoc(categoryRef, {
         status: 1
       })
@@ -219,18 +209,18 @@ export function DatabaseProvider({ children }) {
 
   //Actualiza los datos de una categoria de productos
   const updateCategoryData = async (data) => {
-    console.log(data);
-    const ref = collection(firestore, "productCategories")
-    const q = query(ref, where("id", "==", data.id))
-    const querySnapshot = await getDocs(q);
+    console.log("Update category data with:", data)
+    // const ref = collection(firestore, "productCategories")
+    // const q = query(ref, where("id", "==", data.id))
+    // const querySnapshot = await getDocs(q);
 
-    if (querySnapshot.docs.length === 0) {
-      console.log("Categoria no encontrada.")
-      return;
-    }
+    // if (querySnapshot.docs.length === 0) {
+    //   console.log("Categoria no encontrada.")
+    //   return;
+    // }
 
-    const categoryDoc = querySnapshot.docs[0]
-    const categoryRef = doc(firestore, "productCategories", categoryDoc.id)
+    // const categoryDoc = querySnapshot.docs[0]
+    const categoryRef = doc(firestore, "productCategories", data.id)
 
     try {
       await updateDoc(categoryRef, {
@@ -270,9 +260,6 @@ export function DatabaseProvider({ children }) {
   /**************************************************************** 
   * FIN de Categorias de productos para la Vista de Administrador *
   ****************************************************************/
-
-
-
   return (
     <databaseContext.Provider
       value={{
@@ -282,10 +269,13 @@ export function DatabaseProvider({ children }) {
         changeToUser,
         getUserData,
         updateUserData,
+        //Categorias de productos para la Vista de Administrador
         getAllCategories,
         getCategories_Status1,
         deactivateCategory,
-        activateCategory
+        activateCategory,
+        updateCategoryData,
+        addNewCategory
       }}
     >
       {children}

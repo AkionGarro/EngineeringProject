@@ -32,8 +32,8 @@ const AdminCategoriesTableComponent = props => {
 	const [categories, setCategories] = useState([])
 	const [loading, setLoading] = useState(true)
 
-	const [open, setOpen] = React.useState(false)
-	const [editCategory, setEditCategory] = React.useState("")
+	const [open, setOpen] = useState(false)
+	const [editCategory, setEditCategory] = useState(null)
 
 
 	const api = useFirebase()
@@ -43,26 +43,38 @@ const AdminCategoriesTableComponent = props => {
 		const fetchData = async () => {
 			try {
 				const querySnapshot = await api.getAllCategories()
-				console.log("querySnapshot", querySnapshot)
 				setCategories(querySnapshot)
 				setLoading(false)
 				
 			} catch (error) {
-				console.log("Error al Obtener Datos de Firebase", error)
+				console.log("Error al Obtener Datos de Catgeorias de Firebase", error)
 			}
 		}
 
 		fetchData()
-	}, [])
+	}, [loading])
 
 	//Elimina un elemento de la lista
 	// Primero busca el elemento en la lista y lo elimina 
 	// Luego actualiza la base de datos 
 	const handleDelete = item => {
-		const newCategories = categories.filter(category => category.id !== item.id)
-		setCategories(newCategories)
 
-		//firestore.collection("productCategories").doc(item.id).delete()
+		console.log("Desactivar categoria:", item);
+
+		api.deactivateCategory(item.id).then(() => {
+			setLoading(true)
+		})
+	}
+
+	const handleEdit = item => {
+		//Vamos a abrir el modal para editar la categoria seleccionada
+		setEditCategory(item)
+		setOpen(true)
+
+		// console.log("Editar categoria:", item)
+		// api.editCategory(item).then(() => {
+		// 	setLoading(true)
+		// })
 	}
 
 	const handleChangePage = (event, newPage) => {
@@ -98,6 +110,7 @@ const AdminCategoriesTableComponent = props => {
 						<TableRow>
 							<TableCell>Name</TableCell>
 							<TableCell>Description</TableCell>
+							<TableCell>Status</TableCell>
 							<TableCell>Personalized Fields</TableCell>
 							<TableCell>Background Image</TableCell>
 							<TableCell>Icon Image</TableCell>
@@ -115,6 +128,7 @@ const AdminCategoriesTableComponent = props => {
 								<TableRow key={item.id}>
 									<TableCell>{item.name}</TableCell>
 									<TableCell>{item.description}</TableCell>
+									{ item.status === 1 ? <TableCell>Active</TableCell> : <TableCell>Inactive</TableCell> }
 									<TableCell>{item.personalizedFields.length}</TableCell>
 									<TableCell>
 										<img src={item.backgroundImage} width={"70px"} alt="BG" />
@@ -134,7 +148,7 @@ const AdminCategoriesTableComponent = props => {
 											</IconButton>
 
 											<IconButton aria-label="edit" onClick={() => {
-													handleOpenModal(item)
+													handleEdit(item)
 												}}>
 												<EditIcon />
 											</IconButton>

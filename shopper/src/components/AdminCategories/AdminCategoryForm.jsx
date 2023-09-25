@@ -1,22 +1,48 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid, IconButton } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 import UploadImageInput from "./UploadImageInput"
 //Campo Personalizado en blanco
 const initialField = {
-	key: "",
-	value: "text"
+	name: "",
+	type: "text"
 }
 
 const AdminCategoryForm = props => {
 	//Guarda los datos del formulario
 	const [formData, setFormData] = useState({
+		id: "",
 		name: "",
 		description: "",
-		icon: null,
-		backgroundImage: null,
-		arrayCategoryFields: [initialField]
+		icon: "",
+		backgroundImage: "",
 	})
+
+	//Guarda los datos del icono
+	const [ iconFormData, setIconFormData ] = useState(null)
+	//Guarda los datos de la imagen de fondo
+	const [ backgroundImageFormData, setBackgroundImageFormData ] = useState(null)
+	//Guarda los datos de los campos personalizados
+	const [fieldsFormData, setFieldsFormData] = useState([initialField])
+
+	//Actualiza los datos del formulario
+	useEffect(() => {
+		if (props.category) {
+
+			setFormData({
+				id: props.category.id,
+				name: props.category.name,
+				description: props.category.description,
+				icon: props.category.icon,
+				backgroundImage: props.category.backgroundImage,
+			})
+
+			setIconFormData(props.category.icon)
+			setBackgroundImageFormData(props.category.backgroundImage)
+			setFieldsFormData(props.category.personalizedFields)
+		}
+	},[])
+
 
 	//Actualiza el input de nombre de categoria
 	const handleNameChange = e => {
@@ -41,59 +67,42 @@ const AdminCategoryForm = props => {
 	//Actualiza el icono de la categoria
 	const handleIconChange = e => {
 		const file = e.target.files[0]
-		setFormData({
-			...formData,
-			icon: file
-		})
+		setIconFormData(file)
 	}
 
 	//Actualiza la imagen de fondo de la categoria
 	const handleBackgroundImageChange = e => {
 		const file = e.target.files[0]
-		setFormData({
-			...formData,
-			backgroundImage: file
-		})
+		setBackgroundImageFormData(file)
 	}
 
 	//Actualiza los datos de los inputs personalizados
 	const handleInputChange = (e, index) => {
 		const { name, value } = e.target //Toma el Valor del Input
 
-		const updatedArrayCategoryFields = [...formData.arrayCategoryFields] //Copia el Array de Campos Personalizados
+		const updatedFields = fieldsFormData //Copia el Array de Campos Personalizados
 
-		updatedArrayCategoryFields[index] = {
+		updatedFields[index] = {
 			//Actualiza el Campo Personalizado
-			...updatedArrayCategoryFields[index],
-			[name]: value //Copia el Campo Personalizado
+			...updatedFields[index],[name]: value //Copia el Campo Personalizado
 		}
 
-		setFormData({
-			//Actualiza el Estado del Formulario
-			...formData,
-			arrayCategoryFields: updatedArrayCategoryFields
-		})
+		setFieldsFormData(updatedFields) //Actualiza el Array de Campos Personalizados	
 	}
 
 	//Agrega un nuevo campo personalizado
 	const handleAddField = () => {
-		setFormData({
-			...formData,
-			arrayCategoryFields: [initialField, ...formData.arrayCategoryFields] //Agrega un nuevo campo personalizado
-		})
+
+		setFieldsFormData([initialField, ...fieldsFormData]) //Agrega un nuevo campo personalizado
+
 	}
 
 	//Elimina un campo personalizado
 	const handleRemoveField = index => {
-		const updatedArrayCategoryFields = [...formData.arrayCategoryFields] //Copia el Array de Campos Personalizados
 
-		updatedArrayCategoryFields.splice(index, 1) //Elimina el Campo Personalizado
-
-		setFormData({
-			//Actualiza el Estado del Formulario
-			...formData,
-			arrayCategoryFields: updatedArrayCategoryFields
-		})
+		const updatedFields = [...fieldsFormData] //Copia el Array de Campos Personalizados
+		updatedFields.splice(index, 1) //Elimina el Campo Personalizado
+		setFieldsFormData(updatedFields) //Actualiza el Array de Campos Personalizados
 	}
 
 	//Envia los datos del formulario
@@ -133,13 +142,13 @@ const AdminCategoryForm = props => {
 						{/* Icono y Fondo de la Categoría */}
 						<Grid item direction="row" spacing={2} container>
 							<UploadImageInput
-								imageUrl={null}
+								imageUrl={formData.icon}
 								buttonTitle={"Upload Icon"}
 								label={"Icon"}
 								onChange={handleIconChange}
 							/>
 							<UploadImageInput
-								imageUrl={null}
+								imageUrl={formData.backgroundImage}
 								buttonTitle={"Upload Background"}
 								label={"Background Image"}
 								onChange={handleBackgroundImageChange}
@@ -156,22 +165,23 @@ const AdminCategoryForm = props => {
 						</Grid>
 
 						<Grid container item xs={12} direction="row">
-							{formData.arrayCategoryFields.map((field, index) => (
+							{fieldsFormData.map((field, index) => (
 								<Grid container item xs={12} key={index} direction="row">
 									<Grid item xs={6}>
 										<TextField
 											label="Campo"
 											name="key"
-											value={field.key}
+											value={field.name}
 											onChange={e => handleInputChange(e, index)}
 											fullWidth
 										/>
+										
 									</Grid>
 
 									<Grid item xs={4}>
 										<FormControl fullWidth>
 											<InputLabel>Tipo</InputLabel>
-											<Select name="value" value={field.value} onChange={e => handleInputChange(e, index)}>
+											<Select name="value" value={field.type} onChange={e => handleInputChange(e, index)}>
 												<MenuItem value="text">Texto</MenuItem>
 												<MenuItem value="number">Número</MenuItem>
 												<MenuItem value="size">Tamaño</MenuItem>

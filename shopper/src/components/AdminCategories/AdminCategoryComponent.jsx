@@ -12,13 +12,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 const AdminCategoryComponent = (props) => {
 
 
-  const fields = [{name:'name', type:'text'}, {name:'description',type:'text'}, {name:'icon',type:'image'},{name:'backgroundImage',type:'image'} , {name:'personalizedFields',type:'arrayCategoryFields'}]
-
   const handleClose = () => props.setOpen(false);
-
-  console.log("props", props.category);
-
-
 
   return (
     <>
@@ -31,7 +25,7 @@ const AdminCategoryComponent = (props) => {
         aria-describedby="modal-modal-description"
       >
         <DialogContent dividers>
-          <AdminCategoryForm inputArray={fields} category={props.category} />
+          <AdminCategoryForm category={props.category} />
         </DialogContent>
 
       </Dialog>
