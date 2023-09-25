@@ -66,14 +66,36 @@ const AdminCategoryForm = props => {
 
 	//Actualiza el icono de la categoria
 	const handleIconChange = e => {
-		const file = e.target.files[0]
-		setIconFormData(file)
+
+		console.log("Icono de la categoria:", e.target.files);
+
+		const file = e.target.files[0] 
+
+		if (file) {
+			setIconFormData(file)
+			const iconImageUrl = URL.createObjectURL(file)
+			setFormData({
+				//Actualiza el Estado del Formulario
+				...formData,
+				icon: iconImageUrl
+			})
+		}
+
 	}
 
 	//Actualiza la imagen de fondo de la categoria
 	const handleBackgroundImageChange = e => {
 		const file = e.target.files[0]
-		setBackgroundImageFormData(file)
+
+		if (file) {
+			setBackgroundImageFormData(file)
+			const bgImageUrl = URL.createObjectURL(file)
+			setFormData({
+				//Actualiza el Estado del Formulario
+				...formData,
+				backgroundImage: bgImageUrl
+			})
+		}
 	}
 
 	//Actualiza los datos de los inputs personalizados
