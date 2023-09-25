@@ -25,7 +25,10 @@ const AdminCategoryComponent = (props) => {
         aria-describedby="modal-modal-description"
       >
         <DialogContent dividers>
+
           <AdminCategoryForm category={props.category} />
+
+          
         </DialogContent>
 
       </Dialog>

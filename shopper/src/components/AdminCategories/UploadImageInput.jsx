@@ -19,7 +19,7 @@ const UploadImageInput = props => {
 	let buttonTitle = props.buttonTitle
 	let label = props.label
 
-	if (imageUrl === null) {
+	if (imageUrl === null || imageUrl === "") {
 		imageUrl = "https://via.placeholder.com/150"
 	}
 

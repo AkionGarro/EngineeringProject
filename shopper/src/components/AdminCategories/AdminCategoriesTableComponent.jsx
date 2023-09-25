@@ -20,8 +20,8 @@ import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
 
 //Categories Modal
-import AdminCategoryComponent from "./AdminCategoryComponent"
 import { useFirebase } from "../../context/DatabaseContext"
+import AdminCategoryForm from "./AdminCategoryForm"
 
 
 
@@ -171,7 +171,7 @@ const AdminCategoriesTableComponent = props => {
 				onRowsPerPageChange={handleChangeRowsPerPage}
 			/>
 
-			<AdminCategoryComponent open={open} setOpen={setOpen} category={editCategory} />
+			<AdminCategoryForm open={open} setOpen={setOpen} category={editCategory} />
 		</>
 	)
 }

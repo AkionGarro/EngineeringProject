@@ -8,8 +8,12 @@ import {
   where,
   query,
   doc,
-  updateDoc,
+  updateDoc,  
 } from "firebase/firestore";
+
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"; 
+
+
 
 /* Creating a context object. */
 export const databaseContext = createContext();
@@ -257,6 +261,40 @@ export function DatabaseProvider({ children }) {
     }
   }
 
+  //Para subir las imagenes de las categorias de productos
+  const uploadCategoryImage = async(file, type) => {
+    
+    // Listen for state changes, errors, and completion of the upload.
+
+      console.log("Upload category image")
+      let storagePath = ""
+      let imageUrl = ""
+      const storage = getStorage()
+
+      if (type === "icon") {
+        storagePath = "productCategories/icons/" + file.name;
+      } else if (type === "backgroundImage") {
+        storagePath = "productCategories/backgroundImages/" + file.name;
+      } else {
+        console.error("Invalid 'type' parameter");
+        return null; // Return early or handle the error as needed
+      }
+
+      const storageRef = ref(storage, storagePath)
+      // const uploadTask = uploadBytes(storageRef, file)
+      imageUrl = await uploadBytes(storageRef, file)
+        .then(snapshot => {
+          return getDownloadURL(snapshot.ref)
+        })
+        .then(downloadURL => {
+        return downloadURL
+      })
+
+    return(imageUrl)
+
+  }
+
+
   /**************************************************************** 
   * FIN de Categorias de productos para la Vista de Administrador *
   ****************************************************************/
@@ -275,7 +313,8 @@ export function DatabaseProvider({ children }) {
         deactivateCategory,
         activateCategory,
         updateCategoryData,
-        addNewCategory
+        addNewCategory,
+        uploadCategoryImage
       }}
     >
       {children}
