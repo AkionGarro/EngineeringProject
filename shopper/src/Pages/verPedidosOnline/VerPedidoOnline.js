@@ -35,7 +35,6 @@ function VerPedidosOnline() {
   }, []);
 
   const handleEditar = async (id) => {
-    console.log(id);
     try {
       const pedidoRef = doc(firestore, "pedidosOnline", id);
       const pedidoSnapshot = await getDoc(pedidoRef);
@@ -49,10 +48,6 @@ function VerPedidosOnline() {
     } catch (error) {
       console.error("Error al obtener el documento:", error);
     }
-  };
-
-  const handleEliminar = (id) => {
-    // Lógica para eliminar el pedido con el ID especificado
   };
 
   const columns = [

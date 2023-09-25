@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Stack from '@mui/material/Stack';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
-import DetallePedidoModal from '../../components/DetallePedidoModal'; 
+import DetallePedidoModal from '../../components/EditPersonalOrde/OrderDetailsModal'; 
 
 
 function Ver_pedidos() {
@@ -34,16 +34,16 @@ function Ver_pedidos() {
     };
 
     obtenerColeccion();
-  }, []);
+  }, [modalVisible == false]);
 
   const handleEditar = async (id) => {
-    setidselc(id)
     try {
       const pedidoRef = doc(firestore, 'pedidosPersonales', id);
       const pedidoSnapshot = await getDoc(pedidoRef);
       if (pedidoSnapshot.exists()) {
         const pedidoData = pedidoSnapshot.data();
         setPedidoSeleccionado(pedidoData);
+        setidselc(id);
         setModalVisible(true);
       } else {
         console.log('El documento no existe');
@@ -51,10 +51,6 @@ function Ver_pedidos() {
     } catch (error) {
       console.error('Error al obtener el documento:', error);
     }
-  };
-
-  const handleEliminar = (id) => {
-    // Lógica para eliminar el pedido con el ID especificado
   };
   
   const columns = [
@@ -103,7 +99,7 @@ function Ver_pedidos() {
         <DetallePedidoModal
           visible={modalVisible}
           onCancel={closeModal}
-          id={idselc}
+          idModal={idselc}
         />
       )}
       </div>
