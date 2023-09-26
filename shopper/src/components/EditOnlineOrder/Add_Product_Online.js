@@ -43,6 +43,7 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
 
   const cleanData = () => {
     setDescription("");
+    setLink("");
   };
 
   const closeModal = () => {
@@ -59,7 +60,7 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
     };
 
     try {
-      const documentoRef = doc(firestore, "pedidoOnline", id);
+      const documentoRef = doc(firestore, "pedidosOnline", id);
       await updateDoc(documentoRef, {
         productos: arrayUnion(data),
       });

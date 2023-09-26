@@ -72,10 +72,14 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
         const pedidoSnapshot = await getDoc(pedidoRef);
         const pedidoData = pedidoSnapshot.data();
         const products = pedidoData.productos;
+        console.log("Productos del firebase");
+        console.log(products);
         setProductos(products);
       } catch (error) {
         console.error("Error al obtener el documento:", error);
       }
+      console.log(rows);
+      console.log(idModal);
     };
     getCollection();
   }, [isModalOpen == false]);
