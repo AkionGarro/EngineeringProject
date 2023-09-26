@@ -9,11 +9,15 @@ import { useState, useEffect } from "react";
 import { firestore } from "../../firebase";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
 import Add_product from "./Add_Product_Online";
-import "./Order_Details.css";
+import "./OnlineOrder_Details.css";
 import { useFirebase } from "../../context/DatabaseContext";
 import Swal from "sweetalert2";
 
-export default function DetallePedidoModal({ visible, onCancel, idModal }) {
+export default function DetallePedidoOnlineModal({
+  visible,
+  onCancel,
+  idModal,
+}) {
   const firebase = useFirebase();
   const [estado, setEstado] = useState("");
   const estados = [
