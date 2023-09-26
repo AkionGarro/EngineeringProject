@@ -185,7 +185,7 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
           <DataGrid
             rows={rows}
             columns={columns}
-            getRowId={(row) => row.comentario}
+            getRowId={(row) => row.description}
             initialState={{
               pagination: {
                 paginationModel: { page: 0, pageSize: 5 },
