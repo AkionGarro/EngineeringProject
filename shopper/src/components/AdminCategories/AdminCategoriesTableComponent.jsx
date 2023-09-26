@@ -50,9 +50,12 @@ const AdminCategoriesTableComponent = props => {
 				console.log("Error al Obtener Datos de Catgeorias de Firebase", error)
 			}
 		}
-
 		fetchData()
+		setEditCategory(null)
+		setOpen(false)
 	}, [loading])
+
+	
 
 	//Elimina un elemento de la lista
 	// Primero busca el elemento en la lista y lo elimina 
@@ -171,7 +174,7 @@ const AdminCategoriesTableComponent = props => {
 				onRowsPerPageChange={handleChangeRowsPerPage}
 			/>
 
-			<AdminCategoryForm open={open} setOpen={setOpen} category={editCategory} />
+			<AdminCategoryForm setLoading={setLoading} open={open} setOpen={setOpen} category={editCategory} />
 		</>
 	)
 }

@@ -214,16 +214,7 @@ export function DatabaseProvider({ children }) {
   //Actualiza los datos de una categoria de productos
   const updateCategoryData = async (data) => {
     console.log("Update category data with:", data)
-    // const ref = collection(firestore, "productCategories")
-    // const q = query(ref, where("id", "==", data.id))
-    // const querySnapshot = await getDocs(q);
-
-    // if (querySnapshot.docs.length === 0) {
-    //   console.log("Categoria no encontrada.")
-    //   return;
-    // }
-
-    // const categoryDoc = querySnapshot.docs[0]
+  
     const categoryRef = doc(firestore, "productCategories", data.id)
 
     try {
@@ -272,7 +263,7 @@ export function DatabaseProvider({ children }) {
       const storage = getStorage()
 
       if (type === "icon") {
-        storagePath = "productCategories/icons/" + file.name;
+        storagePath = "productCategories/icons/" + Date.now() + "-" + file.name;
       } else if (type === "backgroundImage") {
         storagePath = "productCategories/backgroundImages/" + file.name;
       } else {
@@ -290,10 +281,8 @@ export function DatabaseProvider({ children }) {
         return downloadURL
       })
 
-    return(imageUrl)
-
+    return imageUrl
   }
-
 
   /**************************************************************** 
   * FIN de Categorias de productos para la Vista de Administrador *

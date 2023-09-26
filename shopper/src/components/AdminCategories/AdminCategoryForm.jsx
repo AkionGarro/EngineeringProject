@@ -13,21 +13,23 @@ const initialField = {
 	type: "text"
 }
 
+
+const initialFormData = {
+	id: "",
+	name: "",
+	description: "",
+	icon: "",
+	backgroundImage: "",
+	status: 1
+}
+
 const AdminCategoryForm = props => {
 	const handleClose = () => props.setOpen(false)
 
 	const api = useFirebase()
 
 	//Guarda los datos del formulario
-	const [formData, setFormData] = useState({
-		id: "",
-		name: "",
-		description: "",
-		icon: "",
-		backgroundImage: "",
-		status: 1
-	})
-
+	const [formData, setFormData] = useState(initialFormData)
 	//Guarda los datos del icono
 	const [iconFormData, setIconFormData] = useState(null)
 	//Guarda los datos de la imagen de fondo
@@ -38,7 +40,6 @@ const AdminCategoryForm = props => {
 	//Actualiza los datos del formulario
 	useEffect(() => {
 		if (props.category) {
-			console.log("holaasasassa");
 			setFormData({
 				id: props.category.id,
 				name: props.category.name,
@@ -47,14 +48,14 @@ const AdminCategoryForm = props => {
 				backgroundImage: props.category.backgroundImage,
 				status: props.category.status
 			})
-
-			setIconFormData(props.category.icon)
-			setBackgroundImageFormData(props.category.backgroundImage)
 			setFieldsFormData(props.category.personalizedFields)
+		} else{
+			setFormData(initialFormData)
+			setFieldsFormData([initialField])
+			setIconFormData(null)
+			setBackgroundImageFormData(null)
 		}
-	}, [props.category])
-
-	console.log("Categoria cargada en el form", formData);
+	}, [props.open])
 
 	//Actualiza el input de nombre de categoria
 	const handleNameChange = e => {
@@ -105,18 +106,24 @@ const AdminCategoryForm = props => {
 			})
 		}
 	}
-
+		
+	
 	//Actualiza los datos de los inputs personalizados
 	const handleInputChange = (e, index) => {
+		
+
 		const { name, value } = e.target //Toma el Valor del Input
 
-		const updatedFields = fieldsFormData //Copia el Array de Campos Personalizados
+		console.log("Cambiando el campo", index, "con el valor", name, value)
 
+		const updatedFields = [...fieldsFormData] //Copia el Array de Campos Personalizados
+
+		//Actualiza el Campo Personalizado
 		updatedFields[index] = {
-			//Actualiza el Campo Personalizado
 			...updatedFields[index],
-			[name]: value //Copia el Campo Personalizado
+			[name]: value
 		}
+
 
 		setFieldsFormData(updatedFields) //Actualiza el Array de Campos Personalizados
 	}
@@ -136,50 +143,54 @@ const AdminCategoryForm = props => {
 	//Envia los datos del formulario
 	const handleSubmit = async e => {
 		e.preventDefault()
-		// Aquí puedes enviar los datos del formulario a tu backend o realizar cualquier otra acción
+		let iconUrl = formData.icon
+		let bgUrl = formData.backgroundImage
 
-		console.log("Subiendo las imagenes al Storage")
-		let iconUrl = await api.uploadCategoryImage(iconFormData, "icon").then(iconUrl => {			
-			return iconUrl
-		})
+		if (iconFormData != null) {
+			iconUrl = await api.uploadCategoryImage(iconFormData, "icon").then(iconUrl => {			
+				return iconUrl
+			})			
+		}
 
-		setFormData({
-			//Actualiza el Estado del Formulario
-			...formData,
-			icon: iconUrl
-		})
+		if (backgroundImageFormData != null) {
+			bgUrl = await api.uploadCategoryImage(backgroundImageFormData, "backgroundImage").then(bgUrl => {
+				return bgUrl
+			})
+		}
+			 
 
-		let bgUrl = await api.uploadCategoryImage(backgroundImageFormData, "backgroundImage").then(bgUrl => {
-			console.log("Imagen de Fondo subida al Storage", bgUrl);
-			return bgUrl
-		})
-
-		setFormData({
-			//Actualiza el Estado del Formulario
-			...formData,
-			backgroundImage: bgUrl
-		})
-
-		//Actualiza los datos de la categoria
 		const newFormData = {
-			...formData,
-			personalizedFields: fieldsFormData
+			id: formData.id,
+			name: formData.name,
+			description: formData.description,
+			icon: iconUrl,
+			backgroundImage: bgUrl,
+			personalizedFields: fieldsFormData,
+			status: formData.status
 		}
 
 		//Si el id esta vacio, crea una nueva categoria
 		//Si no la actualiza
 		if (newFormData.id === "") {
+			console.log("Creando nueva categoria")
 			await api.addNewCategory(newFormData).then(() => {
 				// props.onClose()
 			})
 		} else {
+			console.log("Actualizando categoria");
 			//Si el id no esta vacio, actualiza la categoria
 			await api.updateCategoryData(newFormData).then(() => {
 				// props.onClose()
 			})
 		}
 
-		console.log("Form data", newFormData)
+		//Limpiamos los datos del formulario
+		setFormData(initialFormData)
+		setIconFormData(null)
+		setBackgroundImageFormData(null)
+		setFieldsFormData([initialField])
+
+		props.setLoading(true)
 	}
 
 	return (
@@ -253,7 +264,7 @@ const AdminCategoryForm = props => {
 												<Grid item xs={6}>
 													<TextField
 														label="Campo"
-														name="key"
+														name="name"
 														value={field.name}
 														onChange={e => handleInputChange(e, index)}
 														fullWidth
@@ -263,7 +274,7 @@ const AdminCategoryForm = props => {
 												<Grid item xs={4}>
 													<FormControl fullWidth>
 														<InputLabel>Tipo</InputLabel>
-														<Select name="value" value={field.type} onChange={e => handleInputChange(e, index)}>
+														<Select name="type" value={field.type} onChange={e => handleInputChange(e, index)}>
 															<MenuItem value="text">Texto</MenuItem>
 															<MenuItem value="number">Número</MenuItem>
 															<MenuItem value="size">Tamaño</MenuItem>
