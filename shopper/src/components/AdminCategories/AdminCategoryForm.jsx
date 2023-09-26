@@ -111,10 +111,7 @@ const AdminCategoryForm = props => {
 	//Actualiza los datos de los inputs personalizados
 	const handleInputChange = (e, index) => {
 		
-
 		const { name, value } = e.target //Toma el Valor del Input
-
-		console.log("Cambiando el campo", index, "con el valor", name, value)
 
 		const updatedFields = [...fieldsFormData] //Copia el Array de Campos Personalizados
 
@@ -172,12 +169,12 @@ const AdminCategoryForm = props => {
 		//Si el id esta vacio, crea una nueva categoria
 		//Si no la actualiza
 		if (newFormData.id === "") {
-			console.log("Creando nueva categoria")
+			//console.log("Creando nueva categoria")
 			await api.addNewCategory(newFormData).then(() => {
 				// props.onClose()
 			})
 		} else {
-			console.log("Actualizando categoria");
+			//console.log("Actualizando categoria");
 			//Si el id no esta vacio, actualiza la categoria
 			await api.updateCategoryData(newFormData).then(() => {
 				// props.onClose()
