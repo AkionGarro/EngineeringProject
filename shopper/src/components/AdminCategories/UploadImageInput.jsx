@@ -30,16 +30,12 @@ const UploadImageInput = props => {
 		justifyContent="center"
 		alignItems="center"
 		xs>
-
 			<p>{label}</p>
-
 			<img src={imageUrl} width={"150px"} height={"150px"} style={{objectFit: 'contain' }} alt="" />
-
 			<Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
 				{buttonTitle}
 				<VisuallyHiddenInput type="file" accept="image/*" onChange={props.onChange} />
 			</Button> 
-			
 		</Grid>
 	)
 }
