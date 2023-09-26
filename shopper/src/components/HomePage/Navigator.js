@@ -11,6 +11,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SellIcon from "@mui/icons-material/Sell";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import InventoryIcon from "@mui/icons-material/Inventory";
 import CategoryIcon from "@mui/icons-material/Category";
 
@@ -23,6 +24,7 @@ import Categories from "../../Pages/Categories/Categories";
 import Orders from "../../Pages/Orders/Orders";
 import Account from "../../Pages/Account/Account";
 import NewAdmin from "../../Pages/NewAdmin/NewAdmin";
+import PedidoPersonal from "../../Pages/Personal_orders/personal_order"
 
 const categories = [
   {
@@ -31,6 +33,7 @@ const categories = [
       { id: "Orders", icon: <SellIcon />, route: <Orders/>, tittle: "Manage Orders"},
       { id: "Products", icon: <InventoryIcon />, route: <Products />, tittle: "Manage Products"},
       { id: "Categories", icon: <CategoryIcon />, route: <Categories />, tittle: "Manage Categories" },
+      { id: "Personal Orders", icon: <ShoppingCartIcon />, route: <PedidoPersonal />, tittle: "Manage Personal Orders" },
     ],
   },
   {
