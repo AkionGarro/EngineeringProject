@@ -124,7 +124,7 @@ function Personal_Order() {
   }
   
   return (
-    <Container className="container">
+    <Container className="container_personal">
       <h2 className="texto">Pedido Personalizado</h2>
       <h4 className="texto">Envía la descripción e imágenes de los productos que quieras buscar</h4>
       {fields.map((field, index) => (

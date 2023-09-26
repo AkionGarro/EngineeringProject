@@ -16,6 +16,7 @@ import Add_product from "./Add_Product_Personal";
 import "./Order_Details.css";
 import { useFirebase } from "../../context/DatabaseContext";
 import Swal from "sweetalert2";
+import Link from '@mui/material/Link';
 
 export default function DetallePedidoModal({ visible, onCancel, idModal }) {
     const firebase = useFirebase();
@@ -26,7 +27,15 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
     const rows = productos;
     const columns = [
         { field: 'description', headerName: 'Descripción', width: 200 },
-        { field: 'image', headerName: 'Link de la imagen', width: 600 },
+        {field: 'image',
+            headerName: 'Link de la imagen',
+            width: 600,
+            renderCell: (params) => (
+              <Link href={params.value} target="_blank" rel="noopener noreferrer">
+                {params.value}
+              </Link>
+            ),
+          },
     ]
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [usuario, setUsuario] = useState(null);
