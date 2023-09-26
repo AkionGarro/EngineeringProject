@@ -1,5 +1,5 @@
 import React from "react";
-import "./pedido_personal.css";
+import "./personal_order.css";
 import {firestore} from "../../firebase";
 import { addDoc,collection } from "firebase/firestore";
 import {storage} from "../../firebase";
@@ -15,12 +15,16 @@ import {
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { auth } from "../../firebase"; 
+import Swal from "sweetalert2";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-function Pedido_Personal() {
+function Personal_Order() {
 
   const [fields, setFields] = useState([{ description: '', image: null }]);
   const [direction, setDirection] = useState("");
   const referencia =  collection(firestore, "pedidosPersonales");
+  const user = auth.currentUser;
 
   const VisuallyHiddenInput = styled('input')`
     clip: rect(0 0 0 0);
@@ -34,8 +38,6 @@ function Pedido_Personal() {
     width: 1px;
   `;
 
-  const [selectedFile, setSelectedFile] = useState(null); // Estado para almacenar el archivo seleccionado
-
 
   const handleFieldChange = (index, fieldName, value, nombre) => {
     const updatedFields = [...fields];
@@ -46,7 +48,6 @@ function Pedido_Personal() {
   
   const handleImageUpload = async(index, event) => {
     const archivo = event.target.files[0];
-    setSelectedFile(archivo.name);
     const refArchivo = ref(storage,`pedidosPersonales/${archivo.name}` )
     await uploadBytes(refArchivo, archivo)
     const file = await getDownloadURL(refArchivo)
@@ -58,9 +59,35 @@ function Pedido_Personal() {
   };
 
   const removeFields = (index) => {
-    const updatedFields = [...fields];
-    updatedFields.splice(index, 1);
-    setFields(updatedFields);
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¡Todos tus pedidos se borrarán de la lista! ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "¡Sí, quiero eliminarlos!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedFields = [...fields];
+        updatedFields.splice(index, 1);
+        setFields(updatedFields);
+      }
+    });
+  };
+
+  const deleteAll = () => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¡Todos tus pedidos se borrarán de la lista! ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "¡Sí, quiero eliminarlos!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setFields([{ description: "", image: "" }]);
+      }
+    });
   };
   
   const handleDirectionOnSelect = (event) => {
@@ -72,7 +99,7 @@ function Pedido_Personal() {
     event.preventDefault();
 
     let data = {
-      usuario : 'Fiorela',
+      usuario : user.email,
       direccion : direction,
       productos : fields,
       estado : 0
@@ -80,31 +107,43 @@ function Pedido_Personal() {
 
     try {
       const docRef = await addDoc(referencia, data);
-      console.log("Document written with ID: ", docRef.id);
+      Swal.fire({
+        icon: "success",
+        title: "¡Pedido Completado!",
+        text: "Tu pedido se ha guardado de forma correcta.",
+      });
+      cleanData();
     }   catch (e) {
         console.error("Error adding document: ", e);
     }
   };
-
+  
+  const cleanData = () => {
+    setFields([{ description: '', image: null }]);
+    setDirection("");
+  }
+  
   return (
     <Container className="container">
-      <h2>Pedido Personalizado</h2>
-      <h4>Envía la descripción e imágenes de los productos que quieras buscar</h4>
+      <h2 className="texto">Pedido Personalizado</h2>
+      <h4 className="texto">Envía la descripción e imágenes de los productos que quieras buscar</h4>
       {fields.map((field, index) => (
-        <Grid container spacing={2} key={index} className="grid-container">
-          <Grid item xs={6}>
+        <Grid container spacing={3} key={index} className="grid-container">
+          <Grid item xs={12}>
             <TextField
               fullWidth
               label="Descripción"
               variant="outlined"
               value={field.description}
+              className="description"
               onChange={(e) =>
                 handleFieldChange(index, 'description', e.target.value)
               }
-              id="link"
+              id="description"
+              autoComplete="off"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <Button
               component="label"
               variant="contained"
@@ -118,24 +157,35 @@ function Pedido_Personal() {
             </Button>  
           </Grid>
           <Grid item xs={12} className="button-container">
-            <Button
-              variant="outlined"
-              color="error"
+            <DeleteIcon
+              className="iconoEliminar"
               onClick={() => removeFields(index)}
             >
-              Eliminar
-            </Button>
+              Icono de Eliminación
+            </DeleteIcon>
           </Grid>
         </Grid>
         ))}
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={addFields}
-          className="add-button"
-        >
-          + Agregar otro producto
-        </Button>
+        <div className="opciones-botones">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={addFields}
+            className="add-button"
+          >
+            + Agregar otro producto
+          </Button>
+
+          <Button
+            variant="contained"
+            color="error"
+            onClick={deleteAll}
+            className="add-button"
+          >
+            Vaciar pedido
+          </Button>
+      </div>
+        
 
         <div className="opciones-direccion">
         <Select
@@ -169,4 +219,4 @@ function Pedido_Personal() {
   );
 }
 
-export default Pedido_Personal;
+export default Personal_Order;
