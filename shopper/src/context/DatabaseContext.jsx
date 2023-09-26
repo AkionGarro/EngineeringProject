@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 import { firestore } from "../firebase";
-import { addDoc, getDocs,collection, where, query, deleteDoc } from "firebase/firestore";
+import { addDoc, updateDoc, getDocs,collection, where, query, deleteDoc } from "firebase/firestore";
 
 /* Creating a context object. */
 export const databaseContext = createContext();
@@ -34,15 +34,51 @@ export function DatabaseProvider({ children }) {
     }
   };
 
+  const changeStateOrder = async (orderId, newState) => {
+    const db = firestore;
+    const ordersCollectionRef = collection(db, "pedidosTest");
+  
+    try {
+      const querySnapshot = await getDocs(
+        query(ordersCollectionRef, where("pedido.id", "==", orderId))
+      );
+  
+      querySnapshot.forEach(async (doc) => {
+        const orderRef = doc.ref;
+        const currentData = doc.data();
+        
+        // Actualiza el estado de la orden en la copia local de los datos
+        currentData.pedido.estado = newState;
+  
+        try {
+          // Actualiza el documento en Firestore
+          await updateDoc(orderRef, currentData);
+  
+          console.log(`Orden con ID ${orderId} actualizada correctamente`);
+        } catch (error) {
+          console.error("Error al actualizar la orden:", error);
+        }
+      });
+  
+      if (querySnapshot.empty) {
+        console.log(`No se encontró ninguna orden con ID ${orderId}`);
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error("Error al actualizar la orden:", error);
+      return false;
+    }
+  };  
+
   const getOrder = async (orderId) => {
     console.log("ORDER ID: ", orderId);
-    let order = {};
+    let order = null;
     let ref = collection(firestore, "pedidosTest");
     let q = query(ref, where("pedido.id", "==", parseInt(orderId)));
     let querySnapshot = await getDocs(q);
-    console.log("QUERY SNAPSHOT RESULT: ", querySnapshot);
     querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
+
       order = doc.data();
     });
     return order;
@@ -58,7 +94,6 @@ export function DatabaseProvider({ children }) {
     }
   
     const snapshot = await getDocs(ref);
-    console.log("SNAPSHOT: ", snapshot)
   
     try {
       snapshot.forEach((doc) => {
@@ -82,7 +117,6 @@ export function DatabaseProvider({ children }) {
       // Si se encuentra un documento, elimínalo
       querySnapshot.forEach((doc) => {
         deleteDoc(doc.ref);
-        console.log(`Orden con ID ${orderId} eliminada correctamente`);
         return true;
       });
   
@@ -106,7 +140,8 @@ export function DatabaseProvider({ children }) {
         registerDataUser,
         getAllOrders,
         deleteOrder,
-        getOrder
+        getOrder,
+        changeStateOrder,
       }}
     >
       {children}

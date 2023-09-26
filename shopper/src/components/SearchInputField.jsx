@@ -5,13 +5,14 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import "./SearchInputField.css";
 
-function SearchInputField({ placeholder, onChange }) {
+function SearchInputField({ placeholder, searchFunc }) {
     const [searchText, setSearchText] = useState("Nada aún");
     const textFieldRef = useRef(null);
 
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
-            setSearchText(event.target.value);
+            console.log('Enter key pressed: ', event.target.value);
+            searchFunc(event.target.value);
         }
     };
 

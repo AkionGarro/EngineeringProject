@@ -1,12 +1,43 @@
-/* EditModal.css */
-
 .modal-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
-    z-index: 1000; /* Asegura que esté por encima del contenido detrás del modal */
-    
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  z-index: 1000; /* Asegura que esté por encima del contenido detrás del modal */
+}
+
+.modal-title {
+  font-size: 24px;
+  padding: 16px;
+}
+
+.client-name {
+  margin-top: 16px;
+  font-size: 18px;
+}
+
+.client-name-span {
+  font-weight: bold;
+}
+
+.order-status {
+  margin-top: 16px;
+  font-size: 18px;
+}
+
+.order-status-select {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.cancel-button {
+  color: #ff0000; /* Color del botón Cancelar */
+}
+
+.save-button {
+  color: #008000; /* Color del botón Guardar */
+}
+
