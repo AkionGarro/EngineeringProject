@@ -12,28 +12,29 @@ import Add_product from "./Add_Product_Personal";
 import "./Order_Details.css";
 import { useFirebase } from "../../context/DatabaseContext";
 import Swal from "sweetalert2";
+import Link from '@mui/material/Link';
 
 export default function DetallePedidoModal({ visible, onCancel, idModal }) {
-  const firebase = useFirebase();
-  const [estado, setEstado] = useState("");
-  const estados = [
-    "Pendiente de confirmación",
-    "En proceso",
-    "Pendiente de pago",
-    "Cancelado",
-    "Pagado",
-    "Enviado",
-    "Recibido",
-  ];
-  const [pedido, setPedido] = useState([]);
-  const [productos, setProductos] = useState([]);
-  const rows = productos;
-  const columns = [
-    { field: "Link", headerName: "Link", width: 200 },
-    { field: "Comentario", headerName: "Comentario", width: 200 },
-  ];
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [usuario, setUsuario] = useState(null);
+    const firebase = useFirebase();
+    const [estado, setEstado] = useState("");
+    const estados = ['Pendiente de confirmación', 'En proceso', 'Pendiente de pago', 'Cancelado', 'Pagado', 'Enviado', 'Recibido'];
+    const [pedido, setPedido] = useState([]);
+    const [productos, setProductos] = useState([]);
+    const rows = productos;
+    const columns = [
+        { field: 'description', headerName: 'Descripción', width: 200 },
+        {field: 'image',
+            headerName: 'Link de la imagen',
+            width: 600,
+            renderCell: (params) => (
+              <Link href={params.value} target="_blank" rel="noopener noreferrer">
+                {params.value}
+              </Link>
+            ),
+          },
+    ]
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [usuario, setUsuario] = useState(null);
 
   const handleEstadonOnSelect = (event) => {
     setEstado(event.target.value);
@@ -184,7 +185,7 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
           <DataGrid
             rows={rows}
             columns={columns}
-            getRowId={(row) => row.comentario}
+            getRowId={(row) => row.description}
             initialState={{
               pagination: {
                 paginationModel: { page: 0, pageSize: 5 },
