@@ -48,6 +48,7 @@ function Orders() {
     "Enviado",
     "Recibido",
   ];
+
   const [filtroSeleccionado, setFiltroSeleccionado] = useState("Todos");
   const childRef = React.useRef();
 
@@ -59,7 +60,7 @@ function Orders() {
   const [fechaMayor, setFechaMayor] = useState(new Date(2000, 1, 1));
   const [fecha, setFecha] = useState(fechaMenor.toLocaleDateString() + " - " + fechaMayor.toLocaleDateString());
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [order, setOrder] = useState({});
+  const [order, setOrder] = useState(null);
   const [idOrder, setOrderId] = useState(0);
   
   const getIdForModal = () =>{
@@ -72,7 +73,13 @@ function Orders() {
     setIsEditModalOpen(true);
   };
 
-  
+  const onChangeInput = async (idOrder) => {
+    console.log("ID ORDER onChangeInput: ", idOrder);
+    const data = await firebase.getOrder(idOrder);
+    if (data !== null){
+      setOrders([data]);
+    }
+  };
 
   const handleCloseEditModal = () => {
     // Cierra el modal de edición
@@ -80,7 +87,10 @@ function Orders() {
   };
 
   const getOrders = async (filtroParametro) => {
-    setFiltroSeleccionado(filtroParametro)
+    console.log("FILTRO: ", filtroParametro);
+    if(filtroParametro !== null){
+      setFiltroSeleccionado(filtroParametro)
+    }
     let data;
     const setData = async () => {
       data = await firebase.getAllOrders(filtroParametro);
@@ -200,7 +210,7 @@ function Orders() {
         ))}
       </div>
       <div className="row row-search">
-        <div className='div-search'><SearchInputField placeholder="Buscar por ID de orden" /></div>
+        <div className='div-search'><SearchInputField  placeholder="Buscar por ID de orden" searchFunc={onChangeInput} /></div>
         <div className='div-search'>
           <div className="fecha">
             <DateRangeIcon className="date-icon" />{fecha}
@@ -258,7 +268,7 @@ function Orders() {
           />
         </TableContainer>
       </div>
-      <EditModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} idOrderModal = {idOrder} getIdFunc = {getIdForModal}/>
+      <EditModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} idOrderModal = {idOrder} getIdFunc = {getIdForModal} getOrdersFunc={getOrders} filter = {filtroSeleccionado}/>
 
     </div>
   );
