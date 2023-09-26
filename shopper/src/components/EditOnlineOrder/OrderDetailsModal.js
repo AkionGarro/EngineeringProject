@@ -8,33 +8,32 @@ import { Select, MenuItem, Container } from "@mui/material";
 import { useState, useEffect } from "react";
 import { firestore } from "../../firebase";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
-import Add_product from "./Add_Product_Personal";
+import Add_product from "./Add_Product_Online";
 import "./Order_Details.css";
 import { useFirebase } from "../../context/DatabaseContext";
 import Swal from "sweetalert2";
-import Link from '@mui/material/Link';
 
 export default function DetallePedidoModal({ visible, onCancel, idModal }) {
-    const firebase = useFirebase();
-    const [estado, setEstado] = useState("");
-    const estados = ['Pendiente de confirmación', 'En proceso', 'Pendiente de pago', 'Cancelado', 'Pagado', 'Enviado', 'Recibido'];
-    const [pedido, setPedido] = useState([]);
-    const [productos, setProductos] = useState([]);
-    const rows = productos;
-    const columns = [
-        { field: 'description', headerName: 'Descripción', width: 200 },
-        {field: 'image',
-            headerName: 'Link de la imagen',
-            width: 600,
-            renderCell: (params) => (
-              <Link href={params.value} target="_blank" rel="noopener noreferrer">
-                {params.value}
-              </Link>
-            ),
-          },
-    ]
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [usuario, setUsuario] = useState(null);
+  const firebase = useFirebase();
+  const [estado, setEstado] = useState("");
+  const estados = [
+    "Pendiente de confirmación",
+    "En proceso",
+    "Pendiente de pago",
+    "Cancelado",
+    "Pagado",
+    "Enviado",
+    "Recibido",
+  ];
+  const [pedido, setPedido] = useState([]);
+  const [productos, setProductos] = useState([]);
+  const rows = productos;
+  const columns = [
+    { field: "comentario", headerName: "Comentario", width: 200 },
+    { field: "link", headerName: "Link del producto", width: 600 },
+  ];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [usuario, setUsuario] = useState(null);
 
   const handleEstadonOnSelect = (event) => {
     setEstado(event.target.value);
@@ -43,13 +42,15 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
   useEffect(() => {
     const getCollection = async () => {
       try {
-        const pedidoRef = doc(firestore, "pedidosPersonales", idModal);
+        const pedidoRef = doc(firestore, "pedidosOnline", idModal);
         const pedidoSnapshot = await getDoc(pedidoRef);
         const pedidoData = pedidoSnapshot.data();
         const products = pedidoData.productos;
         setPedido(pedidoData);
         setProductos(products);
         setEstado(pedidoData.estado);
+        console.log("Datos recuperados");
+        console.log(products);
         await fetchUserData(pedidoData.usuario);
       } catch (error) {
         console.error("Error al obtener el documento:", error);
@@ -67,14 +68,18 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
   useEffect(() => {
     const getCollection = async () => {
       try {
-        const pedidoRef = doc(firestore, "pedidosPersonales", idModal);
+        const pedidoRef = doc(firestore, "pedidosOnline", idModal);
         const pedidoSnapshot = await getDoc(pedidoRef);
         const pedidoData = pedidoSnapshot.data();
         const products = pedidoData.productos;
+        console.log("Productos del firebase");
+        console.log(products);
         setProductos(products);
       } catch (error) {
         console.error("Error al obtener el documento:", error);
       }
+      console.log(rows);
+      console.log(idModal);
     };
     getCollection();
   }, [isModalOpen == false]);
@@ -92,7 +97,7 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
       estado: estado,
     };
     try {
-      const documentoRef = doc(firestore, "pedidosPersonales", idModal);
+      const documentoRef = doc(firestore, "pedidosOnline", idModal);
       await updateDoc(documentoRef, nuevosDatos);
       Swal.fire({
         icon: "success",
