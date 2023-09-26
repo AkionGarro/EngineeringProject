@@ -389,6 +389,115 @@ export function DatabaseProvider({ children }) {
   /**************************************************************** 
   * FIN de Categorias de productos para la Vista de Administrador *
   ****************************************************************/
+
+
+  /********************************************************* 
+  * Productos para la Vista de Administrador               *
+  *********************************************************/
+
+    //Trae los documentos de las categorias de productos
+    const getAllProducts = async() =>{
+      console.log("Get all products")
+      try{
+        const ref = collection(firestore, "products")
+        const snapshot = await getDocs(ref)
+        const productList = snapshot.docs.map(doc => ({id:doc.id, ...doc.data()}))
+        return productList
+      } catch(e){
+        console.log(e)
+      }
+    }
+  
+    //Traer todos los documentos de categorias de productos donde el status sea 1 
+    const getProducts_Status1= async() =>{
+      console.los("Get all Products with Status 1 ");
+      try{
+        const ref = collection(firestore, "products")
+        const q = query(ref, where("status", "==", 1))
+        const querySnapshot = await getDocs(q)
+        const productList = querySnapshot.docs.map(doc => ({id:doc.id, ...doc.data()}))
+        return productList
+      } catch(e){
+        console.log(e)
+      }
+    }
+  
+    //Elimina una categoria de productos por su id 
+    //Cambia el estado de la categoria de 1 a 0
+    const deactivateProduct = async(id) =>{
+      console.trace("Try to delete product with id:", id)  
+      try {
+        const productRef = doc(firestore, "products", id)
+        await updateDoc(productRef, {
+          status: 0
+        })
+        
+      } catch (error) {
+        console.error("Error al desactivar el producto:", error)
+      }
+    }
+  
+    //Activa una categoria de productos por su id 
+    //Cambia el estado de la categoria de 0 a 1
+    const activateProduct = async(id) =>{
+      console.trace("Try to activate product with id:", id)  
+      try {
+        const productRef = doc(firestore, "products", id)
+        await updateDoc(productRef, {
+          status: 1
+        })
+        
+      } catch (error) {
+        console.error("Error al eliminar la categoria:", error)
+      }
+    }
+  
+    //Actualiza los datos de una categoria de productos
+    const updateProductData = async (data) => {
+      console.log("Update product data with:", data)
+    
+      const productRef = doc(firestore, "products", data.id)
+  
+      try {
+        await updateDoc(productRef, {
+          name: data.name,
+          category: data.category,
+          images: data.images,
+          price: data.price,
+          personalizedFields: data.personalizedFields,
+          status: data.status
+        });
+        console.log("Producto actualizado con éxito.")
+      } catch (error) {
+        console.error("Error al actualizar el Producto:", error)
+      }
+    }
+  
+    //Agrega una nueva categoria de productos
+    const addNewProduct = async (data) => {
+      const ref = collection(firestore, "products")
+      let productData = {
+        name: data.name,
+        category: data.category,
+        images: data.images,
+        price: data.price,
+        personalizedFields: data.personalizedFields,
+        status: data.status
+      };
+      
+      try {
+        const docRef = await addDoc(ref, productData)
+        console.log(" New Product Added: Document written with ID: ", docRef.id)
+      } catch (e) {
+        console.error("Error adding product Document: ", e)
+      }
+    }
+
+  /**************************************************************** 
+  * FIN de Productos para la Vista de Administrador *
+  ****************************************************************/
+
+
   return (
     <databaseContext.Provider
       value={{
@@ -409,7 +518,14 @@ export function DatabaseProvider({ children }) {
         activateCategory,
         updateCategoryData,
         addNewCategory,
-        uploadCategoryImage
+        uploadCategoryImage,
+        //Productos para la Vista de Administrador
+        getAllProducts,
+        getProducts_Status1,
+        deactivateProduct,
+        activateProduct,
+        updateProductData,
+        addNewProduct
       }}
     >
       {children}

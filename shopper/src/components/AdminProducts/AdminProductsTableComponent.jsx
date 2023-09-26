@@ -20,8 +20,8 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
 
-import { firestore } from "../../firebase"
-import { collection, getDocs } from "firebase/firestore"
+import { useFirebase } from "../../context/DatabaseContext"
+import AdminProductForm from "./AdminProductForm"
 
 const AdminProductsTableComponent = memo(props => {
 	const [page, setPage] = useState(0)
@@ -29,23 +29,26 @@ const AdminProductsTableComponent = memo(props => {
 	const [products, setProducts] = useState([])
 	const [loading, setLoading] = useState(true)
 
-	const collectionRef = collection(firestore, "products")
+	const [open, setOpen] = useState(false)
+	const [editProduct, setEditProduct] = useState(null)
+
+	const api = useFirebase()
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const querySnapshot = await getDocs(collectionRef)
-				const newData = querySnapshot.docs.map(doc => doc.data())
-				setProducts(newData)
-				setLoading(false)
-				console.log("Datos Obtenidos de Firebase", newData)
+				const querySnapshot = await api.getAllProducts()
+				setProducts(querySnapshot)
+				setLoading(false)				
 			} catch (error) {
 				console.log("Error al Obtener Datos de Firebase", error)
 			}
 		}
 
 		fetchData()
-	}, [])
+		setEditProduct(null)
+		setOpen(false)
+	}, [loading])
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage)
@@ -116,7 +119,10 @@ const AdminProductsTableComponent = memo(props => {
 				onPageChange={handleChangePage}
 				onRowsPerPageChange={handleChangeRowsPerPage}
 			/>
-		</>
+
+			<AdminProductForm setLoading={setLoading} open={open} setOpen={setOpen} product={editProduct} />
+
+		</>		
 	)
 })
 

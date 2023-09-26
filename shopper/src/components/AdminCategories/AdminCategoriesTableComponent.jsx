@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react"
+import React, {useEffect, useState } from "react"
 
 //MUI Components
 import {
@@ -73,11 +73,6 @@ const AdminCategoriesTableComponent = props => {
 		//Vamos a abrir el modal para editar la categoria seleccionada
 		setEditCategory(item)
 		setOpen(true)
-
-		// console.log("Editar categoria:", item)
-		// api.editCategory(item).then(() => {
-		// 	setLoading(true)
-		// })
 	}
 
 	const handleChangePage = (event, newPage) => {

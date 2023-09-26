@@ -14,7 +14,7 @@ const VisuallyHiddenInput = styled("input")({
 	width: 1
 })
 
-const UploadImageInput = props => {
+const UploadProductImagesInput = props => {
 	let imageUrl = props.imageUrl
 	let buttonTitle = props.buttonTitle
 	let label = props.label
@@ -44,4 +44,4 @@ const UploadImageInput = props => {
 	)
 }
 
-export default UploadImageInput
+export default UploadProductImagesInput
