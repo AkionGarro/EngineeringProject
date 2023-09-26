@@ -29,8 +29,8 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
   const [productos, setProductos] = useState([]);
   const rows = productos;
   const columns = [
-    { field: "description", headerName: "Descripción", width: 200 },
-    { field: "image", headerName: "Link de la imagen", width: 600 },
+    { field: "comentario", headerName: "Comentario", width: 200 },
+    { field: "link", headerName: "Link del producto", width: 600 },
   ];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [usuario, setUsuario] = useState(null);
@@ -49,6 +49,8 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
         setPedido(pedidoData);
         setProductos(products);
         setEstado(pedidoData.estado);
+        console.log("Datos recuperados");
+        console.log(products);
         await fetchUserData(pedidoData.usuario);
       } catch (error) {
         console.error("Error al obtener el documento:", error);
@@ -184,7 +186,7 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
           <DataGrid
             rows={rows}
             columns={columns}
-            getRowId={(row) => row.description}
+            getRowId={(row) => row.comentario}
             initialState={{
               pagination: {
                 paginationModel: { page: 0, pageSize: 5 },
