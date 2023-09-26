@@ -50,6 +50,28 @@ const AdminProductsTableComponent = memo(props => {
 		setOpen(false)
 	}, [loading])
 
+	console.log(products);
+
+	const handleDelete = item => {
+
+		console.log("Desactivar producto:", item);
+
+		api.deactivateProduct(item.id).then(() => {
+			setLoading(true)
+		})
+	}
+
+	const handleEdit = item => {
+		//Vamos a abrir el modal para editar la categoria seleccionada
+		setEditProduct(item)
+		setOpen(true)
+	}
+
+	const handleOpenForm = item => {
+		setEditProduct(item)
+		setOpen(true)
+	}
+
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage)
 	}
@@ -64,26 +86,25 @@ const AdminProductsTableComponent = memo(props => {
 
 	return (
 		<>
-			<IconButton aria-label="add">
+			<IconButton aria-label="add" onClick={() => handleOpenForm()} >
 				<AddIcon />
 			</IconButton>
 			<TableContainer component={Paper}>
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell>Nombre</TableCell>
-							<TableCell>Categoria</TableCell>
-							<TableCell>Precio</TableCell>
-							<TableCell>Estado</TableCell>
-							<TableCell>Campos</TableCell>
-							<TableCell>Acciones</TableCell>
+							<TableCell>Name</TableCell>
+							<TableCell>Category</TableCell>
+							<TableCell>Price</TableCell>
+							<TableCell>State</TableCell>
+							<TableCell>Actions</TableCell>
 						</TableRow>
 					</TableHead>
 
 					<TableBody>
 						{loading ? (
 							<TableRow>
-								<TableCell colSpan={5}>Cargando...</TableCell>
+								<TableCell colSpan={5}>Loading...</TableCell>
 							</TableRow>
 						) : (
 							products.slice(startIndex, endIndex).map((item, index) => (
@@ -91,14 +112,14 @@ const AdminProductsTableComponent = memo(props => {
 									<TableCell>{item.name}</TableCell>
 									<TableCell>Categoria</TableCell>
 									<TableCell>{item.price}</TableCell>
-									<TableCell>{item.status}</TableCell>
-									<TableCell>Campos Personalizados</TableCell>
+									{ item.status === 1 ? <TableCell>Active</TableCell> : <TableCell>Inactive</TableCell> }
+									{/* <TableCell>{item.personalizedFields}</TableCell> */}
 									<TableCell>
 										<Box sx={{ display: "flex", gap: 1 }}>
-											<IconButton aria-label="delete">
+											<IconButton aria-label="delete" onClick={() => handleDelete(item)}>
 												<DeleteIcon />
 											</IconButton>
-											<IconButton aria-label="edit">
+											<IconButton aria-label="edit" onClick={() => handleEdit(item)}>
 												<EditIcon />
 											</IconButton>
 										</Box>

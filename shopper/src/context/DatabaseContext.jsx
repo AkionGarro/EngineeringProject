@@ -256,6 +256,18 @@ export function DatabaseProvider({ children }) {
   * Categorias de productos para la Vista de Administrador *
   *********************************************************/
 
+
+  const getCategoryByID = async (categoryRef) => {
+    try {
+      
+      let querySnapshot = await getDoc(categoryRef)
+      const category = querySnapshot.data()
+      return category;
+    } catch (error) {
+      console.log("Error getting documents: ", error)
+    }
+  };
+
   //Trae los documentos de las categorias de productos
   const getAllCategories = async() =>{
     console.log("Get all categories")
@@ -519,6 +531,7 @@ export function DatabaseProvider({ children }) {
         updateCategoryData,
         addNewCategory,
         uploadCategoryImage,
+        getCategoryByID,
         //Productos para la Vista de Administrador
         getAllProducts,
         getProducts_Status1,

@@ -37,8 +37,12 @@ const AdminCategoryForm = props => {
 	//Guarda los datos de los campos personalizados
 	const [fieldsFormData, setFieldsFormData] = useState([initialField])
 
+	
+
 	//Actualiza los datos del formulario
 	useEffect(() => {
+		console.log("Abriendo el modal de productrossjkhasdjk;hask");
+
 		if (props.category) {
 			setFormData({
 				id: props.category.id,
@@ -56,6 +60,9 @@ const AdminCategoryForm = props => {
 			setBackgroundImageFormData(null)
 		}
 	}, [props.open])
+
+
+
 
 	//Actualiza el input de nombre de categoria
 	const handleNameChange = e => {

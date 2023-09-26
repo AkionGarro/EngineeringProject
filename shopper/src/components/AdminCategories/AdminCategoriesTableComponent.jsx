@@ -119,7 +119,7 @@ const AdminCategoriesTableComponent = props => {
 					<TableBody>
 						{loading ? (
 							<TableRow>
-								<TableCell colSpan={5}>Cargando...</TableCell>
+								<TableCell colSpan={5}>Loading...</TableCell>
 							</TableRow>
 						) : (
 							categories.slice(startIndex, endIndex).map((item, index) => (

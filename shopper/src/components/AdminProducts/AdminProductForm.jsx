@@ -23,6 +23,10 @@ const initialFormData = {
 	status: 1
 }
 
+const initialproductCategory = {
+	personalizedFields: [initialField]
+}
+
 const AdminProductForm = props => {
 	const handleClose = () => props.setOpen(false)
 
@@ -34,9 +38,22 @@ const AdminProductForm = props => {
 	const [imagesFormData, setImagesFormData] = useState([])
 	//Guarda los datos de los campos personalizados
 	const [fieldsFormData, setFieldsFormData] = useState([initialField]) //If this doesn't exists we need to ask the user to pick a catgeory first
-
+	//Guarda los datos de la categoria 
+	const [productCategory, setProductCategory] = useState(initialproductCategory)
 	//Actualiza los datos del formulario
 	useEffect(() => {
+
+		const fetchProductCategory = async (categoryRef) => {
+
+			try {
+				const productCategorySnap = await api.getCategoryByID(categoryRef)
+				setProductCategory(productCategorySnap)
+			} catch (error) {
+				console.log("Error la categoria del producto", error)
+			}
+		}
+
+
 		if (props.product) {
 			setFormData({
 				id: props.product.id,
@@ -44,13 +61,17 @@ const AdminProductForm = props => {
 				category: props.product.category,
 				images: props.product.images,             // A List with al the images's urls
 				price: props.product.price,
-				status: props.products.status
+				status: props.product.status
 			})
 			setFieldsFormData(props.product.personalizedFields)
+			fetchProductCategory(props.product.category)
+		
+
 		} else{
 			setFormData(initialFormData)
 			setFieldsFormData([initialField])
 			setImagesFormData([])
+			setProductCategory(initialproductCategory)
 		}
 	}, [props.open])
 
@@ -194,7 +215,7 @@ const AdminProductForm = props => {
 									</Grid>
 
 									<Grid container item xs={12} direction="row">
-										{fieldsFormData.map((field, index) => (
+										{productCategory.personalizedFields.map((field, index) => (
 											<Grid container item xs={12} key={index} direction="row">
 												<Grid item xs={6}>
 													<TextField
