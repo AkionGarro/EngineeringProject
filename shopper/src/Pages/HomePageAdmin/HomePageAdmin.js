@@ -247,7 +247,6 @@ export default function HomePageAdmin(props) {
               navigatorOptions1={navigatorOptions}
             />
           )}
-
           <Navigator
             PaperProps={{ style: { width: drawerWidth } }}
             navigatorOptions1={navigatorOptions}

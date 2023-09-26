@@ -15,9 +15,25 @@ import "./Register.css";
 import logoVeroShop from "../../images/logo.png";
 import { useAuth } from "../../context/AuthContext";
 import { useFirebase } from "../../context/DatabaseContext";
-import LogoVeroShop from "../../components/Logo/Logo";
 import Swal from "sweetalert2";
 
+function Copyright(props) {
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
+      <Link color="inherit" href="https://mui.com/">
+        VeroCamShop
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -58,6 +74,7 @@ export default function Register() {
           data.email,
           data.phone
         );
+        
         Swal.fire({
           icon: "success",
           title: "¡Registrado!",
@@ -96,7 +113,7 @@ export default function Register() {
           }}
         >
           <div className="container">
-            <LogoVeroShop />
+            {/* <LogoVeroShop /> */}
           </div>
 
 

@@ -10,6 +10,8 @@ import {
 import { firestore } from "../../firebase";
 import { collection } from "firebase/firestore";
 import { addDocument } from "../../firebase";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Swal from "sweetalert2";
 import "./PedidoOnline.css";
 
 const PedidoOnline = () => {
@@ -31,6 +33,38 @@ const PedidoOnline = () => {
     addDocument(ref, data);
   };
 
+  const deleteAll = () => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¡Todos tus pedidos se borrarán de la lista! ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "¡Sí, quiero eliminarlos!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setLinkFields([{ link: "", comentario: "" }]);
+      }
+    });
+  };
+
+  const removeField = (index) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¡Todos tus pedidos se borrarán de la lista! ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "¡Sí, quiero eliminarlos!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedFields = [...linkFields];
+        updatedFields.splice(index, 1);
+        setLinkFields(updatedFields);
+      }
+    });
+  };
+
   const addFields = () => {
     setLinkFields([...linkFields, { link: "", comentario: "" }]);
   };
@@ -44,12 +78,6 @@ const PedidoOnline = () => {
   const handleCommentaryChange = (event, index) => {
     const updatedFields = [...linkFields];
     updatedFields[index].comentario = event.target.value;
-    setLinkFields(updatedFields);
-  };
-
-  const removeFields = (index) => {
-    const updatedFields = [...linkFields];
-    updatedFields.splice(index, 1);
     setLinkFields(updatedFields);
   };
 
@@ -90,26 +118,39 @@ const PedidoOnline = () => {
             />
           </Grid>
           <Grid item xs={12} className="button-container">
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => removeFields(index)}
+            <DeleteIcon
+              className="iconoEliminar"
+              onClick={() => removeField(index)}
             >
-              Eliminar
-            </Button>
+              Icono de Eliminación
+            </DeleteIcon>
           </Grid>
         </Grid>
       ))}
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={addFields}
-        className="add-button"
-      >
-        + Agregar otro producto
-      </Button>
+      <div className="opciones-botones">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={addFields}
+          className="add-button"
+        >
+          + Agregar otro producto
+        </Button>
+
+        <Button
+          variant="contained"
+          color="error"
+          onClick={deleteAll}
+          className="add-button"
+        >
+          Vaciar pedido
+        </Button>
+      </div>
 
       <div className="opciones-direccion">
+        <h4 className="texto">
+          Selecciona la dirección en la cual se entregaran tus productos
+        </h4>
         <Select
           fullWidth
           variant="outlined"
@@ -127,7 +168,7 @@ const PedidoOnline = () => {
         </Select>
       </div>
 
-      <div className="botones-opciones">
+      <div className="boton-enviar">
         <Button
           variant="contained"
           color="success"
