@@ -12,25 +12,41 @@ import { collection } from "firebase/firestore";
 import { addDocument } from "../../firebase";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
+import { auth } from "../../firebase";
 import "./PedidoOnline.css";
 
 const PedidoOnline = () => {
   const ref = collection(firestore, "pedidosOnline");
   const [linkFields, setLinkFields] = useState([{ link: "", comentario: "" }]);
   const [direction, setDirection] = useState("");
+  const user = auth.currentUser;
 
-  const handleSubmit = async (e) => {
+  const cleanData = () => {
+    setLinkFields([{ link: "", comentario: "" }]);
+    setDirection("");
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("mando data");
-    console.log(linkFields);
+
     let data = {
-      usuario: "Chen",
-      productos: linkFields,
+      usuario: user.email,
       direccion: direction,
-      estado: 1,
-      telefono: 85627272,
+      productos: linkFields,
+      estado: 0,
     };
-    addDocument(ref, data);
+
+    try {
+      addDocument(ref, data);
+      Swal.fire({
+        icon: "success",
+        title: "¡Pedido Completado!",
+        text: "Tu pedido se ha guardado de forma correcta.",
+      });
+      cleanData();
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   };
 
   const deleteAll = () => {
