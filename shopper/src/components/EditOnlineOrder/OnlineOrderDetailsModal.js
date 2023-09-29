@@ -53,8 +53,6 @@ export default function DetallePedidoOnlineModal({
         setPedido(pedidoData);
         setProductos(products);
         setEstado(pedidoData.estado);
-        console.log("Datos recuperados");
-        console.log(products);
         await fetchUserData(pedidoData.usuario);
       } catch (error) {
         console.error("Error al obtener el documento:", error);
@@ -76,14 +74,10 @@ export default function DetallePedidoOnlineModal({
         const pedidoSnapshot = await getDoc(pedidoRef);
         const pedidoData = pedidoSnapshot.data();
         const products = pedidoData.productos;
-        console.log("Productos del firebase");
-        console.log(products);
         setProductos(products);
       } catch (error) {
         console.error("Error al obtener el documento:", error);
       }
-      console.log(rows);
-      console.log(idModal);
     };
     getCollection();
   }, [isModalOpen == false]);
@@ -165,7 +159,7 @@ export default function DetallePedidoOnlineModal({
               </Select>
             </div>
           </div>
-          <div style={{ display: "flex" }}>
+          <div className="info_container" style={{ display: "flex" }}>
             <div style={{ flex: 1 }}>
               <h3 className="subtitlle_details">
                 Información del cliente y entrega
@@ -204,21 +198,32 @@ export default function DetallePedidoOnlineModal({
             autoHeight
           />
           <Container style={{ textAlign: "left", marginTop: "15px" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={openModal}
-              className="add-button"
-            >
-              + Agregar otro producto
-            </Button>
+            <div className="botones">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={openModal}
+                className="add-button"
+              >
+                + Agregar otro producto
+              </Button>
+
+              <Button
+                variant="contained"
+                color="error"
+                onClick={onCancel}
+                className="cancel-modal"
+              >
+                Cancelar
+              </Button>
+            </div>
           </Container>
           <Container style={{ textAlign: "center", marginTop: "15px" }}>
             <Button
               variant="contained"
               color="success"
               onClick={handleSubmit}
-              className="add-button"
+              className="save-changes"
             >
               Guardar cambios
             </Button>

@@ -1,22 +1,62 @@
-.titlle_details{
-    text-align: center;
-    color: #005990;
+.titlle_details {
+  text-align: center;
+  color: #005990;
 }
 
-.subtitlle_details{
-    font-weight:bold ;
-    color: #005990;
+.subtitlle_details {
+  font-weight: bold;
+  color: #005990;
 }
 
-.info{
-    font-size:larger;
-    font-weight:bolder;
+.info {
+  font-size: larger;
+  font-weight: bolder;
+  margin-left: 0.5rem;
 }
 
-.info_client{
-    display: inline;
-    margin:'0';
-    font-size:large;
-    padding: '0';
-    font-weight:normal;
+.titlle_details {
+  margin-left: 0.5rem !important;
+  margin-bottom: 4rem;
+}
+
+.subtitlle_details {
+  margin-left: 0.5rem !important;
+}
+
+.info_client {
+  display: inline;
+  margin: "0";
+  font-size: large;
+  padding: "0";
+  font-weight: normal;
+}
+
+.info {
+  margin-bottom: 3rem !important;
+}
+
+.botones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.info_container {
+  border: 5px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 3rem;
+}
+
+.add-button {
+  width: 250px;
+}
+
+.cancel-modal {
+  width: 250px;
+}
+
+.save-changes {
+  width: 250px;
 }
