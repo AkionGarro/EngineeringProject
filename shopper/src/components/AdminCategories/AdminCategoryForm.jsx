@@ -11,6 +11,9 @@ import { useFirebase } from "../../context/DatabaseContext"
 import Dialog from "@mui/material/Dialog"
 import DialogContent from "@mui/material/DialogContent"
 
+import Swal from "sweetalert2";
+
+
 //Campo Personalizado en blanco
 const initialField = {
 	name: "",
@@ -27,7 +30,7 @@ const initialFormData = {
 }
 
 const AdminCategoryForm = props => {
-	const handleClose = () => props.setOpen(false)
+	
 
 	const api = useFirebase()
 
@@ -201,9 +204,34 @@ const AdminCategoryForm = props => {
 		props.setLoading(true)
 	}
 
+	const handleClose = () => {
+
+
+		Swal.fire({
+			target: document.getElementById('form-modal'),
+			title: 'You have unsaved changes!',
+			text: "Are you sure you want to leave without saving?",
+			icon: 'warning',
+			showCancelButton: true,
+			cancelButtonColor: '#3085d6',
+			confirmButtonColor: '#d33',
+			cancelButtonText:'Stay on this Page',
+			confirmButtonText: 'Discard Changes'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				props.setOpen(false)
+				
+			}
+		})
+
+		
+
+	} 
+
 	return (
 		<>
 			<Dialog
+				id="form-modal"
 				open={props.open}
 				onClose={handleClose}
 				scroll="paper"
@@ -213,7 +241,7 @@ const AdminCategoryForm = props => {
 				<DialogContent dividers>
 					<form onSubmit={handleSubmit}>
 						<Grid id="FormContainer" container spacing={1}>
-							
+
 							<Grid id="Title-Exit" container xs={12}>
 								<Grid id="Title" xs={10}>
 									<h3>Category Form</h3>
@@ -358,7 +386,7 @@ const AdminCategoryForm = props => {
 							<Grid container id="Action Buttons" xs={12}>
 								<Grid xs={6}>
 									<Button onClick={handleClose} variant="contained" color="error" fullWidth>
-										Cancel
+										Discard Changes
 									</Button>
 								</Grid>
 								<Grid xs={6}>
