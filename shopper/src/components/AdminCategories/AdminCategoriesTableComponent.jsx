@@ -1,6 +1,4 @@
-import PropTypes from 'prop-types'
 import React, { memo, useEffect, useState } from "react"
-
 
 //MUI Components
 import {
@@ -13,7 +11,7 @@ import {
 	Paper,
 	TablePagination,
 	Box,
-	IconButton,
+	IconButton
 } from "@mui/material"
 
 //MUI Icons
@@ -22,37 +20,65 @@ import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
 
 //Categories Modal
-import AdminCategoryComponent from "./AdminCategoryComponent"
+import { useFirebase } from "../../context/DatabaseContext"
+import AdminCategoryForm from "./AdminCategoryForm"
 
-import { firestore } from "../../firebase"
-import { collection, getDocs } from "firebase/firestore"
 
-const AdminCategoriesTableComponent = memo((props) => {
-  const [page, setPage] = useState(0)
+
+
+const AdminCategoriesTableComponent = props => {
+	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [categories, setCategories] = useState([])
 	const [loading, setLoading] = useState(true)
 
-  const [open, setOpen] = React.useState(false)
-  const [editCategory, setEditCategory] = React.useState("")
+	const [open, setOpen] = useState(false)
+	const [editCategory, setEditCategory] = useState(null)
 
-	const collectionRef = collection(firestore, "productCategories")
 
+	const api = useFirebase()
+
+	//Trae los datos del Firebase
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const querySnapshot = await getDocs(collectionRef)
-				const newData = querySnapshot.docs.map(doc => doc.data())
-				setCategories(newData)
+				const querySnapshot = await api.getAllCategories()
+				setCategories(querySnapshot)
 				setLoading(false)
-				console.log("Datos Obtenidos de Firebase", newData)
+				
 			} catch (error) {
-				console.log("Error al Obtener Datos de Firebase", error)
+				console.log("Error al Obtener Datos de Catgeorias de Firebase", error)
 			}
 		}
-
 		fetchData()
-	}, [])
+		setEditCategory(null)
+		setOpen(false)
+	}, [loading])
+
+	
+
+	//Elimina un elemento de la lista
+	// Primero busca el elemento en la lista y lo elimina 
+	// Luego actualiza la base de datos 
+	const handleDelete = item => {
+
+		console.log("Desactivar categoria:", item);
+
+		api.deactivateCategory(item.id).then(() => {
+			setLoading(true)
+		})
+	}
+
+	const handleEdit = item => {
+		//Vamos a abrir el modal para editar la categoria seleccionada
+		setEditCategory(item)
+		setOpen(true)
+
+		// console.log("Editar categoria:", item)
+		// api.editCategory(item).then(() => {
+		// 	setLoading(true)
+		// })
+	}
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage)
@@ -63,19 +89,21 @@ const AdminCategoriesTableComponent = memo((props) => {
 		setPage(0)
 	}
 
-  const handleOpenModal = (item) => {
-    setEditCategory(item)
-    setOpen(true)
-  };
+	const handleOpenModal = item => {
+		setEditCategory(item)
+		setOpen(true)
+	}
 
 	const startIndex = page * rowsPerPage
 	const endIndex = startIndex + rowsPerPage
 
 	return (
 		<>
-			<IconButton aria-label="add" onClick={() => {
-    handleOpenModal()
-  }}>
+			<IconButton
+				aria-label="add"
+				onClick={() => {
+					handleOpenModal()
+				}}>
 				<AddIcon />
 			</IconButton>
 
@@ -85,6 +113,7 @@ const AdminCategoriesTableComponent = memo((props) => {
 						<TableRow>
 							<TableCell>Name</TableCell>
 							<TableCell>Description</TableCell>
+							<TableCell>Status</TableCell>
 							<TableCell>Personalized Fields</TableCell>
 							<TableCell>Background Image</TableCell>
 							<TableCell>Icon Image</TableCell>
@@ -99,22 +128,31 @@ const AdminCategoriesTableComponent = memo((props) => {
 							</TableRow>
 						) : (
 							categories.slice(startIndex, endIndex).map((item, index) => (
-								<TableRow key={index}>
+								<TableRow key={item.id}>
 									<TableCell>{item.name}</TableCell>
 									<TableCell>{item.description}</TableCell>
+									{ item.status === 1 ? <TableCell>Active</TableCell> : <TableCell>Inactive</TableCell> }
 									<TableCell>{item.personalizedFields.length}</TableCell>
 									<TableCell>
-                    <img src={item.backgroundImage} width={"70px"} alt="BG" />
-                  </TableCell>
+										<img src={item.backgroundImage} width={"70px"} alt="BG" />
+									</TableCell>
 									<TableCell>
-                  <img src={item.icon} width={"70px"} alt="BG" />
-                  </TableCell>
+										<img src={item.icon} width={"70px"} alt="BG" />
+									</TableCell>
 									<TableCell>
 										<Box sx={{ display: "flex", gap: 1 }}>
-											<IconButton aria-label="delete"  onClick={() => {handleOpenModal(item)}}>
+											
+											<IconButton
+												aria-label="delete"
+												onClick={() => {
+													handleDelete(item)
+												}}>
 												<DeleteIcon />
 											</IconButton>
-											<IconButton aria-label="edit">
+
+											<IconButton aria-label="edit" onClick={() => {
+													handleEdit(item)
+												}}>
 												<EditIcon />
 											</IconButton>
 										</Box>
@@ -135,14 +173,10 @@ const AdminCategoriesTableComponent = memo((props) => {
 				onPageChange={handleChangePage}
 				onRowsPerPageChange={handleChangeRowsPerPage}
 			/>
-      
-      <AdminCategoryComponent open={open} setOpen={setOpen} category={editCategory}/>
+
+			<AdminCategoryForm setLoading={setLoading} open={open} setOpen={setOpen} category={editCategory} />
 		</>
 	)
 }
-  
-  )
-
-AdminCategoriesTableComponent.propTypes = {}
 
 export default AdminCategoriesTableComponent

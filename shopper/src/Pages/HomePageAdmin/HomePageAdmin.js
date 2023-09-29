@@ -247,16 +247,14 @@ export default function HomePageAdmin(props) {
               navigatorOptions1={navigatorOptions}
             />
           )}
-
           <Navigator
             PaperProps={{ style: { width: drawerWidth } }}
             navigatorOptions1={navigatorOptions}
             sx={{ display: { sm: "block", xs: "none" } }}
           />
         </Box>
-        <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+        <Box sx={{ flex: 1, display: "flex", flexDirection: "column"}}>
           <AppBar
-            color="secondary"
             position="sticky"
             elevation={0}
             className="appbar"
@@ -277,12 +275,7 @@ export default function HomePageAdmin(props) {
                   {tittle}
                 </Typography>
                 <Grid item xs />
-
-                <Grid item>
-                  <IconButton color="inherit" sx={{ p: 0.5 }}>
-                    <Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
-                  </IconButton>
-                </Grid>
+                {displayName}
 
                 <IconButton
                   onClick={handleLogout}
@@ -313,6 +306,7 @@ export default function HomePageAdmin(props) {
               paddingRight: "0px",
               paddingBottom: "0px",
               paddingTop: "0px",
+              backgroundColor:"#FFFF" 
             }}
           >
             {componentToRender}

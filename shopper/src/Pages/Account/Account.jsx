@@ -1,6 +1,6 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
-import { TextField, Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { TextField, Button, Grid, Typography, Paper, IconButton } from "@mui/material";
+import { Edit as EditIcon, CheckCircleOutline as CheckCircleOutlineIcon } from "@mui/icons-material"; // Import icons
 import "./Account.css";
 import { useFirebase } from "../../context/DatabaseContext";
 
@@ -13,6 +13,12 @@ function Account() {
   const [identification, setIdentification] = useState(0);
   const [address, setAddress] = useState({});
   const [role, setRole] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,6 +36,7 @@ function Account() {
     try {
       await firebase.updateUserData(data);
       setUpdateInfo(true);
+      setIsEditing(false);
     } catch (error) {
       console.log(error);
     }
@@ -52,65 +59,94 @@ function Account() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="profileInfo">
-        <TextField
-          className="profileInfo__textfield"
-          id="fullName"
-          label="Full Name"
-          name="fullName"
-          variant="standard"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        />
-        <TextField
-          className="profileInfo__textfield"
-          id = "email"
-          label="Email"
-          name="email"
-          variant="standard"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          className="profileInfo__textfield"
-          id="identification"
-          label="Identification"
-          name="identification"
-          variant="standard"
-          value={identification}
-          onChange={(e) => setIdentification(e.target.value)}
-        />
-        <TextField
-          className="profileInfo__textfield"
-          id="phone"
-          name="phone"
-          variant="standard"
-          label="Phone Number"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
-        <TextField
-          className="profileInfo__textfield"
-          id="address"
-          label="Address"
-          name="address"
-          variant="standard"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        <TextField
-          className="profileInfo__textfield"
-         id="role"
-          label="Role"
-          name="role"
-          variant="standard"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-        />
-      </div>
-      <div className="profileInfo__button">
-        <Button variant="contained" type="submit">Update</Button>
-      </div>
+      <Paper elevation={3} className="profileInfo">
+        <Grid container spacing={2} mt={2} ml={2}>
+          <Grid item xs={12} sm={5}>
+            <TextField
+              id="fullName"
+              label="Full Name"
+              name="fullName"
+              variant="outlined"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              disabled={!isEditing}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={5}>
+            <TextField
+              id="email"
+              label="Email"
+              name="email"
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={!isEditing}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={5}>
+            <TextField
+              id="identification"
+              label="Identification"
+              name="identification"
+              variant="outlined"
+              value={identification}
+              onChange={(e) => setIdentification(e.target.value)}
+              disabled={!isEditing}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={5}>
+            <TextField
+              id="phone"
+              label="Phone Number"
+              name="phone"
+              variant="outlined"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              disabled={!isEditing}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={5}>
+            <TextField
+              id="address"
+              label="Address"
+              name="address"
+              variant="outlined"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              disabled={!isEditing}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={5}>
+            <TextField
+              id="role"
+              label="Role"
+              name="role"
+              variant="outlined"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              disabled={!isEditing}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
+         
+              <IconButton onClick={handleEditClick}>
+                <EditIcon />
+              </IconButton>
+           
+              <IconButton type="submit">
+                <CheckCircleOutlineIcon />
+              </IconButton>
+          
+          </Grid>
+        </Grid>
+      </Paper>
+
     </form>
   );
 }

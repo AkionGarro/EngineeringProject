@@ -13,6 +13,8 @@ import AddIcon from "@mui/icons-material/Add";
 import { useFirebase } from "../../context/DatabaseContext";
 import "./NewAdmin.css";
 import Swal from "sweetalert2";
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 function NewAdmin() {
   const [users, setUsers] = useState([]);
   const api = useFirebase();
@@ -70,15 +72,20 @@ function NewAdmin() {
     console.log(props.userData);
     if (props.userData.userType === "admin") {
       return (
+        <div className="container__permissions">
         <Button onClick={() => changeAdminToUser(props.userData.email)}>
-          <AddIcon></AddIcon> Change to User
+          <CheckOutlinedIcon></CheckOutlinedIcon> 
         </Button>
+        </div>
+
       );
     } else {
       return (
+        <div className="container__permissions">
         <Button onClick={() => handleNewAdmin(props.userData.email)}>
-          <AddIcon></AddIcon> New Admin
+        <CloseOutlinedIcon></CloseOutlinedIcon> 
         </Button>
+        </div>
       );
     }
   }
@@ -134,7 +141,7 @@ function NewAdmin() {
               {isColumnVisible &&<TableCell>Nombre Completo</TableCell>}
                 {isColumnVisible &&<TableCell>Teléfono</TableCell>}
                 {isColumnVisible &&<TableCell>Tipo</TableCell>}
-              <TableCell>Permisos</TableCell>
+              <TableCell>Administrador</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

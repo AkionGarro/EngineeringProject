@@ -7,12 +7,13 @@ import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Stack from "@mui/material/Stack";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
-import DetallePedidoOnlineModal from "../../components/DetallePedidoOnlineModal";
+import DetallePedidoModal from "../../components/EditOnlineOrder/OrderDetailsModal";
 
 function VerPedidosOnline() {
   const [pedidos, setPedidos] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
+  const [idselc, setidselc] = useState(null);
   const rows = pedidos;
 
   useEffect(() => {
@@ -32,16 +33,16 @@ function VerPedidosOnline() {
     };
 
     obtenerColeccion();
-  }, []);
+  }, [modalVisible == false]);
 
   const handleEditar = async (id) => {
-    console.log(id);
     try {
       const pedidoRef = doc(firestore, "pedidosOnline", id);
       const pedidoSnapshot = await getDoc(pedidoRef);
       if (pedidoSnapshot.exists()) {
         const pedidoData = pedidoSnapshot.data();
         setPedidoSeleccionado(pedidoData);
+        setidselc(id);
         setModalVisible(true);
       } else {
         console.log("El documento no existe");
@@ -49,10 +50,6 @@ function VerPedidosOnline() {
     } catch (error) {
       console.error("Error al obtener el documento:", error);
     }
-  };
-
-  const handleEliminar = (id) => {
-    // Lógica para eliminar el pedido con el ID especificado
   };
 
   const columns = [
@@ -71,16 +68,12 @@ function VerPedidosOnline() {
       renderCell: (params) => (
         <div>
           <Stack direction="row" spacing={2}>
-            <Button variant="outlined" startIcon={<DeleteIcon />}>
-              Eliminar
-            </Button>
+            <Button variant="outlined" startIcon={<DeleteIcon />}></Button>
             <Button
               variant="outlined"
               onClick={() => handleEditar(params.row.id)}
               startIcon={<BorderColorRoundedIcon />}
-            >
-              Editar
-            </Button>
+            ></Button>
           </Stack>
         </div>
       ),
@@ -113,10 +106,10 @@ function VerPedidosOnline() {
           autoHeight
         />
         {pedidoSeleccionado && (
-          <DetallePedidoOnlineModal
+          <DetallePedidoModal
             visible={modalVisible}
             onCancel={closeModal}
-            pedidoData={pedidoSeleccionado}
+            idModal={idselc}
           />
         )}
       </div>

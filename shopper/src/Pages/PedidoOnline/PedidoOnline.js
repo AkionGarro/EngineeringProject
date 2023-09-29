@@ -10,25 +10,75 @@ import {
 import { firestore } from "../../firebase";
 import { collection } from "firebase/firestore";
 import { addDocument } from "../../firebase";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Swal from "sweetalert2";
+import { auth } from "../../firebase";
 import "./PedidoOnline.css";
 
 const PedidoOnline = () => {
   const ref = collection(firestore, "pedidosOnline");
   const [linkFields, setLinkFields] = useState([{ link: "", comentario: "" }]);
   const [direction, setDirection] = useState("");
+  const user = auth.currentUser;
 
-  const handleSubmit = async (e) => {
+  const cleanData = () => {
+    setLinkFields([{ link: "", comentario: "" }]);
+    setDirection("");
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("mando data");
-    console.log(linkFields);
+
     let data = {
-      usuario: "Chen",
-      productos: linkFields,
+      usuario: user.email,
       direccion: direction,
-      estado: 1,
-      telefono: 85627272,
+      productos: linkFields,
+      estado: 0,
     };
-    addDocument(ref, data);
+
+    try {
+      addDocument(ref, data);
+      Swal.fire({
+        icon: "success",
+        title: "¡Pedido Completado!",
+        text: "Tu pedido se ha guardado de forma correcta.",
+      });
+      cleanData();
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
+
+  const deleteAll = () => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¡Todos tus pedidos se borrarán de la lista! ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "¡Sí, quiero eliminarlos!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setLinkFields([{ link: "", comentario: "" }]);
+      }
+    });
+  };
+
+  const removeField = (index) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¡Todos tus pedidos se borrarán de la lista! ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "¡Sí, quiero eliminarlos!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedFields = [...linkFields];
+        updatedFields.splice(index, 1);
+        setLinkFields(updatedFields);
+      }
+    });
   };
 
   const addFields = () => {
@@ -44,12 +94,6 @@ const PedidoOnline = () => {
   const handleCommentaryChange = (event, index) => {
     const updatedFields = [...linkFields];
     updatedFields[index].comentario = event.target.value;
-    setLinkFields(updatedFields);
-  };
-
-  const removeFields = (index) => {
-    const updatedFields = [...linkFields];
-    updatedFields.splice(index, 1);
     setLinkFields(updatedFields);
   };
 
@@ -90,26 +134,39 @@ const PedidoOnline = () => {
             />
           </Grid>
           <Grid item xs={12} className="button-container">
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => removeFields(index)}
+            <DeleteIcon
+              className="iconoEliminar"
+              onClick={() => removeField(index)}
             >
-              Eliminar
-            </Button>
+              Icono de Eliminación
+            </DeleteIcon>
           </Grid>
         </Grid>
       ))}
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={addFields}
-        className="add-button"
-      >
-        + Agregar otro producto
-      </Button>
+      <div className="opciones-botones">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={addFields}
+          className="add-button"
+        >
+          + Agregar otro producto
+        </Button>
+
+        <Button
+          variant="contained"
+          color="error"
+          onClick={deleteAll}
+          className="add-button"
+        >
+          Vaciar pedido
+        </Button>
+      </div>
 
       <div className="opciones-direccion">
+        <h4 className="texto">
+          Selecciona la dirección en la cual se entregaran tus productos
+        </h4>
         <Select
           fullWidth
           variant="outlined"
@@ -127,7 +184,7 @@ const PedidoOnline = () => {
         </Select>
       </div>
 
-      <div className="botones-opciones">
+      <div className="boton-enviar">
         <Button
           variant="contained"
           color="success"

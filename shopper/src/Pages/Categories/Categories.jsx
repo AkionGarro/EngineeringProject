@@ -4,7 +4,7 @@ import AdminCategoriesTableComponent from '../../components/AdminCategories/Admi
 
 import './Categories.css';
 
-function Categories() {
+const  Categories = () => {
     return (
         <AdminCategoriesTableComponent />
     );
