@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, IconButton, Paper } from "@mui/material"
+
+
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
+
 import Grid from "@mui/material/Unstable_Grid2"
 import DeleteIcon from "@mui/icons-material/Delete"
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close"
 
 import UploadProductImagesInput from "./UploadProductImagesInput"
 import { useFirebase } from "../../context/DatabaseContext"
@@ -100,6 +105,16 @@ const AdminProductForm = props => {
 			//Actualiza el Estado del Formulario
 			...formData,
 			name: value
+		})
+	}
+
+	//Actualiza el Status del Producto
+	const handleStatusChange = e => {
+		const { value } = e.target //Toma el Valor del Input
+		setFormData({
+			//Actualiza el Estado del Formulario
+			...formData,
+			status: value
 		})
 	}
 
@@ -215,15 +230,29 @@ const AdminProductForm = props => {
 										margin="normal"
 									/>
 
+									<FormControl fullWidth margin="normal">
+										<InputLabel htmlFor="price-adornment">Price</InputLabel>
+										<OutlinedInput
+											id="price-adornment"
+											name="Price"
+											onChange={e => handleDescriptionChange(e)}
+											startAdornment={<InputAdornment position="start">$</InputAdornment>}
+											label="Price"
+										/>
+									</FormControl>
+
 									<TextField
 										InputLabelProps={{ shrink: true }}
-										label="Price"
-										name="price"
-										value={formData.price}
-										onChange={e => handleDescriptionChange(e)}
+										label="Status"
+										name="status"
+										value={formData.status}
+										onChange={e => handleStatusChange(e)}
+										select
 										fullWidth
-										margin="normal"
-									/>
+										margin="normal">
+										<MenuItem value={1}>Active</MenuItem>
+										<MenuItem value={0}>Inactive</MenuItem>
+									</TextField>
 								</Grid>
 
 								<Grid xs={12}>

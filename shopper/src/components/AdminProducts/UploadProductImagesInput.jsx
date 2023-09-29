@@ -26,12 +26,12 @@ const UploadProductImagesInput = props => {
 		justifyContent="center"
 		alignItems="center"
 		xs>
-			<Button component="label" variant="contained" startIcon={<CloudUploadIcon />} fullWidth >
+			<Button component="label" variant="contained" startIcon={<CloudUploadIcon />} fullWidth  sx={{ mt: 2 }}>
 				Add Image
 				<VisuallyHiddenInput type="file" accept="image/*" onChange={props.handleAddImage} />
 			</Button> 
 
-			<ImageList xs={12} cols={3} rowHeight={150}>
+			<ImageList xs={12} cols={3} rowHeight={150}  sx={{ mt: 2 }}>
 				{props.images.map((item) => (
 					<ImageListItem key={item.url}>
 						<img
