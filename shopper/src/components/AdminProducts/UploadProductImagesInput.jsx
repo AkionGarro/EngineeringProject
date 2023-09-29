@@ -1,7 +1,10 @@
 import React from "react"
 import { styled } from "@mui/material/styles"
-import { Grid, IconButton, ImageList, ImageListItem, ImageListItemBar } from "@mui/material"
-import InfoIcon from "@mui/icons-material/Info"
+import { Button,Grid, IconButton, ImageList, ImageListItem, ImageListItemBar } from "@mui/material"
+import DeleteIcon from "@mui/icons-material/Delete"
+import CloudUploadIcon from "@mui/icons-material/CloudUpload"
+
+
 
 const VisuallyHiddenInput = styled("input")({
 	clip: "rect(0 0 0 0)",
@@ -15,15 +18,6 @@ const VisuallyHiddenInput = styled("input")({
 })
 
 const UploadProductImagesInput = props => {
-	let imageUrl = props.imageUrl
-	let buttonTitle = props.buttonTitle
-	let label = props.label
-
-	if (imageUrl === null || imageUrl === "") {
-		imageUrl = "https://via.placeholder.com/150"
-	}
-	
-	console.log(props.productImages);
 
 	return (
 
@@ -32,34 +26,32 @@ const UploadProductImagesInput = props => {
 		justifyContent="center"
 		alignItems="center"
 		xs>
-{/* 
-			<p>{label}</p>
+			<Button component="label" variant="contained" startIcon={<CloudUploadIcon />} fullWidth >
+				Add Image
+				<VisuallyHiddenInput type="file" accept="image/*" onChange={props.handleAddImage} />
+			</Button> 
 
-			<img src={imageUrl} width={"150px"} height={"150px"} style={{objectFit: 'contain' }} alt="" />
-
-			<Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-				{buttonTitle}
-				<VisuallyHiddenInput type="file" accept="image/*" onChange={props.onChange} />
-			</Button>  */}
-
-
-			<ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-				{props.productImages.map((item) => (
-					<ImageListItem key={item}>
+			<ImageList xs={12} cols={3} rowHeight={150}>
+				{props.images.map((item) => (
+					<ImageListItem key={item.url}>
 						<img
-							src={`${item}?w=164&h=164&fit=crop&auto=format`}
-							srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-							// alt={item.title}
+							// srcSet={`${item.url}?w=150&h=150&fit=crop&auto=format&dpr=2 2x`}
+							// src={`${item.url}?w=150&h=150&fit=crop&auto=format`}
+							src={item.url}
+							width="10px"
+							height="10px"
 							loading="lazy"
 						/>
+
 						<ImageListItemBar
-							title="titulo"
+							title=""
 							actionIcon={
 								<IconButton
 									sx={{ color: "rgba(255, 255, 255, 0.54)" }}
 									aria-label={`info about ${"imagen"}`}
+									onClick={() => props.handleRemoveImage(item)}
 								>
-									<InfoIcon />
+									<DeleteIcon />
 								</IconButton>
 							}
 						/>
@@ -67,6 +59,7 @@ const UploadProductImagesInput = props => {
 				))}
 			</ImageList>
 
+			
 			
 		</Grid>
 	)

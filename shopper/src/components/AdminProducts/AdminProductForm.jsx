@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react"
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid, IconButton } from "@mui/material"
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, IconButton, Paper } from "@mui/material"
+import Grid from "@mui/material/Unstable_Grid2"
 import DeleteIcon from "@mui/icons-material/Delete"
+import CloseIcon from '@mui/icons-material/Close';
+
 import UploadProductImagesInput from "./UploadProductImagesInput"
 import { useFirebase } from "../../context/DatabaseContext"
 
 import Dialog from "@mui/material/Dialog"
 import DialogContent from "@mui/material/DialogContent"
+
+import { styled } from "@mui/material/styles"
 
 //Campo Personalizado en blanco
 const initialField = {
@@ -13,19 +18,31 @@ const initialField = {
 	type: "text"
 }
 
+const initialImage = {
+	url: "",
+	file: null
+}
 
 const initialFormData = {
 	id: "",
 	name: "",
 	category: "",
-	images: "",
+	images: [],
 	price: "",
+	personalizedFields: {},
 	status: 1
 }
 
 const initialproductCategory = {
 	personalizedFields: [initialField]
 }
+
+const Item = styled(Paper)(({ theme }) => ({
+	backgroundColor: theme.palette.secondary.light,
+	padding: theme.spacing(1),
+	textAlign: "center",
+	color: theme.palette.text.secondary
+}))
 
 const AdminProductForm = props => {
 	const handleClose = () => props.setOpen(false)
@@ -36,15 +53,11 @@ const AdminProductForm = props => {
 	const [formData, setFormData] = useState(initialFormData)
 	//Guarda los datos de las imagenes del producto
 	const [imagesFormData, setImagesFormData] = useState([])
-	//Guarda los datos de los campos personalizados
-	const [fieldsFormData, setFieldsFormData] = useState([initialField]) //If this doesn't exists we need to ask the user to pick a catgeory first
-	//Guarda los datos de la categoria 
+	//Guarda los datos de la categoria
 	const [productCategory, setProductCategory] = useState(initialproductCategory)
 	//Actualiza los datos del formulario
 	useEffect(() => {
-
-		const fetchProductCategory = async (categoryRef) => {
-
+		const fetchProductCategory = async categoryRef => {
 			try {
 				const productCategorySnap = await api.getCategoryByID(categoryRef)
 				setProductCategory(productCategorySnap)
@@ -53,23 +66,28 @@ const AdminProductForm = props => {
 			}
 		}
 
-
 		if (props.product) {
+			//Crea un array de imagenes con los datos del producto
+			const imageList = props.product.images.map(image => {
+				return {
+					url: image,
+					file: null
+				}
+			})
+
 			setFormData({
 				id: props.product.id,
 				name: props.product.name,
 				category: props.product.category,
-				images: props.product.images,             // A List with al the images's urls
 				price: props.product.price,
-				status: props.product.status
+				status: props.product.status,
+				personalizedFields: props.product.personalizedFields
 			})
-			setFieldsFormData(props.product.personalizedFields)
-			fetchProductCategory(props.product.category)
-		
 
-		} else{
+			fetchProductCategory(props.product.category)
+			setImagesFormData(imageList)
+		} else {
 			setFormData(initialFormData)
-			setFieldsFormData([initialField])
 			setImagesFormData([])
 			setProductCategory(initialproductCategory)
 		}
@@ -99,44 +117,46 @@ const AdminProductForm = props => {
 		const file = e.target.files[0]
 
 		if (file) {
-			setImagesFormData([...imagesFormData, file])
+			const newImage = {
+				url: URL.createObjectURL(file),
+				file: file
+			}
+
+			setImagesFormData([...imagesFormData, newImage])
 		}
 	}
 
-	const handleRemoveImage = index => {
+	const handleRemoveImage = item => {
+		const index = imagesFormData.indexOf(item)
 		const updatedImages = [...imagesFormData]
 		updatedImages.splice(index, 1)
 		setImagesFormData(updatedImages)
 	}
 
-	
 	//Actualiza los datos de los inputs personalizados
-	const handleInputChange = (e, index) => {
-		
-		const { name, value } = e.target //Toma el Valor del Input
+	const handleInputChange = (e, attribute) => {
+		const { value } = e.target //Toma el Valor del Input
 
-		const updatedFields = [...fieldsFormData] //Copia el Array de Campos Personalizados
+		setFormData({
+			//Actualiza el Estado del Formulario
+			...formData,
+			personalizedFields: {
+				...formData.personalizedFields,
+				[attribute]: value
+			}
+		})
 
-		//Actualiza el Campo Personalizado
-		updatedFields[index] = {
-			...updatedFields[index],
-			[name]: value
-		}
+		// const { name, value } = e.target //Toma el Valor del Input
 
+		// const updatedFields = [...fieldsFormData] //Copia el Array de Campos Personalizados
 
-		setFieldsFormData(updatedFields) //Actualiza el Array de Campos Personalizados
-	}
+		// //Actualiza el Campo Personalizado
+		// updatedFields[index] = {
+		// 	...updatedFields[index],
+		// 	[name]: value
+		// }
 
-	//Agrega un nuevo campo personalizado
-	const handleAddField = () => {
-		setFieldsFormData([initialField, ...fieldsFormData]) //Agrega un nuevo campo personalizado
-	}
-
-	//Elimina un campo personalizado
-	const handleRemoveField = index => {
-		const updatedFields = [...fieldsFormData] //Copia el Array de Campos Personalizados
-		updatedFields.splice(index, 1) //Elimina el Campo Personalizado
-		setFieldsFormData(updatedFields) //Actualiza el Array de Campos Personalizados
+		// setFieldsFormData(updatedFields) //Actualiza el Array de Campos Personalizados
 	}
 
 	//Envia los datos del formulario
@@ -150,14 +170,12 @@ const AdminProductForm = props => {
 			images: formData.images,
 			price: formData.price,
 			status: formData.status,
-			personalizedFields: fieldsFormData,
+			personalizedFields: formData.personalizedFields,
 			newImages: imagesFormData
 		}
 
-		console.log( "Submitting this product: ", product);
-
+		console.log("Submitting this product: ", product)
 	}
-
 
 	return (
 		<>
@@ -165,94 +183,86 @@ const AdminProductForm = props => {
 				open={props.open}
 				onClose={handleClose}
 				scroll="paper"
-				maxWidth="md"
+				maxWidth="lg"
 				aria-labelledby="modal-modal-title"
 				aria-describedby="modal-modal-description">
 				<DialogContent dividers>
 					<form onSubmit={handleSubmit}>
-						<h3>Product Form</h3>
-						<Grid container direction="column" spacing={4}>
-							{/* Contiene 2 Columnas */}
-
-							<Grid container item spacing={4} direction="row" xs>
-								{/* Nombre de la Categoria */}
-								<Grid container item spacing={4} xs>
-									<Grid item xs={12}>
-										<TextField
-											label="Name"
-											name="name"
-											value={formData.name}
-											onChange={e => handleNameChange(e)}
-											fullWidth
-										/>
-									</Grid>
-
-									{/* Descripción de la Categoría */}
-									<Grid item xs={12}>
-										<TextField
-											label="Price"
-											name="price"
-											value={formData.price}
-											onChange={e => handleDescriptionChange(e)}
-											fullWidth
-										/>
-									</Grid>
-
-									{/* Icono y Fondo de la Categoría */}
-									<Grid item direction="row" spacing={2} container>
-										
-										<UploadProductImagesInput  productImages={formData.images} uploadImages={imagesFormData} handleAddImage={handleAddImage} handleRemoveImage={handleRemoveImage} />
-
-									</Grid>
+						<Grid id="FormContainer" container spacing={2}>
+							<Grid id="Title-Exit" container xs={12}>
+								<Grid id="Title" xs={10}>
+									<h3>Category Form</h3>
 								</Grid>
 
-								{/* Campos Personalizados */}
-								<Grid container item spacing={2} xs>
-									<Grid item xs={12}>
-										<Button onClick={handleAddField} variant="outlined">
-											Agregar Campo
-										</Button>
-									</Grid>
-
-									<Grid container item xs={12} direction="row">
-										{productCategory.personalizedFields.map((field, index) => (
-											<Grid container item xs={12} key={index} direction="row">
-												<Grid item xs={6}>
-													<TextField
-														label="Campo"
-														name="name"
-														value={field.name}
-														onChange={e => handleInputChange(e, index)}
-														fullWidth
-													/>
-												</Grid>
-
-												<Grid item xs={4}>
-													<FormControl fullWidth>
-														<InputLabel>Tipo</InputLabel>
-														<Select name="type" value={field.type} onChange={e => handleInputChange(e, index)}>
-															<MenuItem value="text">Texto</MenuItem>
-															<MenuItem value="number">Número</MenuItem>
-															<MenuItem value="size">Tamaño</MenuItem>
-														</Select>
-													</FormControl>
-												</Grid>
-
-												<Grid item xs={2}>
-													<IconButton onClick={() => handleRemoveField(index)} color="secondary" aria-label="Eliminar">
-														<DeleteIcon />
-													</IconButton>
-												</Grid>
-											</Grid>
-										))}
-									</Grid>
+								<Grid id="Exit_Button" xs={2} display="flex" justifyContent="end" alignItems="center">
+									<IconButton onClick={handleClose}>
+										<CloseIcon />
+									</IconButton>
 								</Grid>
 							</Grid>
 
-							<Grid item xs={12}>
-								<Button type="submit" variant="contained" color="primary">
-									Enviar
-								</Button>
+							<Grid container id="InputContainer" xs={12} sm={6}>
+								<Grid xs={12}>
+									<p>General Information</p>
+
+									<TextField
+										InputLabelProps={{ shrink: true }}
+										label="Name"
+										name="name"
+										value={formData.name}
+										onChange={e => handleNameChange(e)}
+										fullWidth
+										margin="normal"
+									/>
+
+									<TextField
+										InputLabelProps={{ shrink: true }}
+										label="Price"
+										name="price"
+										value={formData.price}
+										onChange={e => handleDescriptionChange(e)}
+										fullWidth
+										margin="normal"
+									/>
+								</Grid>
+
+								<Grid xs={12}>
+									<p>Product Attributes</p>
+									{productCategory.personalizedFields.map((field, index) => (
+										<TextField
+											InputLabelProps={{ shrink: true }}
+											label={field.name}
+											name={field.name}
+											value={formData.personalizedFields[field.name]}
+											onChange={e => handleInputChange(e, field.name)}
+											fullWidth
+											margin="normal"
+										/>
+									))}
+								</Grid>
+							</Grid>
+
+							<Grid id="ImagesContainer" xs={12} sm={6}>
+								<p>Product Images</p>
+
+								<UploadProductImagesInput
+									images={imagesFormData}
+									handleAddImage={handleAddImage}
+									handleRemoveImage={handleRemoveImage}
+								/>
+							</Grid>
+
+							<Grid container id="Action Buttons" xs={12}>
+								<Grid xs={6}>
+									<Button type="submit" variant="contained" color="error" fullWidth>
+										Cancel
+									</Button>
+								</Grid>
+								<Grid xs={6}>
+									<Button type="submit" variant="contained" color="success" fullWidth>
+										Save Changes
+									</Button>
+								</Grid>
 							</Grid>
 						</Grid>
 					</form>

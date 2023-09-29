@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react"
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid, IconButton } from "@mui/material"
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, IconButton, Stack, Menu } from "@mui/material"
+import Paper from "@mui/material/Paper"
+import Grid from "@mui/material/Unstable_Grid2"
+
 import DeleteIcon from "@mui/icons-material/Delete"
+import CloseIcon from '@mui/icons-material/Close';
 import UploadImageInput from "./UploadImageInput"
 import { useFirebase } from "../../context/DatabaseContext"
 
@@ -10,9 +14,8 @@ import DialogContent from "@mui/material/DialogContent"
 //Campo Personalizado en blanco
 const initialField = {
 	name: "",
-	type: "text"
+	type: ""
 }
-
 
 const initialFormData = {
 	id: "",
@@ -37,11 +40,9 @@ const AdminCategoryForm = props => {
 	//Guarda los datos de los campos personalizados
 	const [fieldsFormData, setFieldsFormData] = useState([initialField])
 
-	
-
 	//Actualiza los datos del formulario
 	useEffect(() => {
-		console.log("Abriendo el modal de productrossjkhasdjk;hask");
+		console.log("Abriendo el modal de productrossjkhasdjk;hask")
 
 		if (props.category) {
 			setFormData({
@@ -53,16 +54,13 @@ const AdminCategoryForm = props => {
 				status: props.category.status
 			})
 			setFieldsFormData(props.category.personalizedFields)
-		} else{
+		} else {
 			setFormData(initialFormData)
 			setFieldsFormData([initialField])
 			setIconFormData(null)
 			setBackgroundImageFormData(null)
 		}
 	}, [props.open])
-
-
-
 
 	//Actualiza el input de nombre de categoria
 	const handleNameChange = e => {
@@ -81,6 +79,16 @@ const AdminCategoryForm = props => {
 			//Actualiza el Estado del Formulario
 			...formData,
 			description: value
+		})
+	}
+
+	//Actualiza el Status de la categoria
+	const handleStatusChange = e => {
+		const { value } = e.target //Toma el Valor del Input
+		setFormData({
+			//Actualiza el Estado del Formulario
+			...formData,
+			status: value
 		})
 	}
 
@@ -113,11 +121,9 @@ const AdminCategoryForm = props => {
 			})
 		}
 	}
-		
-	
+
 	//Actualiza los datos de los inputs personalizados
 	const handleInputChange = (e, index) => {
-		
 		const { name, value } = e.target //Toma el Valor del Input
 
 		const updatedFields = [...fieldsFormData] //Copia el Array de Campos Personalizados
@@ -127,7 +133,6 @@ const AdminCategoryForm = props => {
 			...updatedFields[index],
 			[name]: value
 		}
-
 
 		setFieldsFormData(updatedFields) //Actualiza el Array de Campos Personalizados
 	}
@@ -151,9 +156,9 @@ const AdminCategoryForm = props => {
 		let bgUrl = formData.backgroundImage
 
 		if (iconFormData != null) {
-			iconUrl = await api.uploadCategoryImage(iconFormData, "icon").then(iconUrl => {			
+			iconUrl = await api.uploadCategoryImage(iconFormData, "icon").then(iconUrl => {
 				return iconUrl
-			})			
+			})
 		}
 
 		if (backgroundImageFormData != null) {
@@ -161,7 +166,6 @@ const AdminCategoryForm = props => {
 				return bgUrl
 			})
 		}
-			 
 
 		const newFormData = {
 			id: formData.id,
@@ -203,104 +207,165 @@ const AdminCategoryForm = props => {
 				open={props.open}
 				onClose={handleClose}
 				scroll="paper"
-				maxWidth="md"
+				maxWidth="lg"
 				aria-labelledby="modal-modal-title"
 				aria-describedby="modal-modal-description">
 				<DialogContent dividers>
 					<form onSubmit={handleSubmit}>
-						<h3>Formulario de Categorías</h3>
-						Nombre y Descripcion de la categoria
-						<Grid container direction="column" spacing={4}>
-							{/* Contiene 2 Columnas */}
-
-							<Grid container item spacing={4} direction="row" xs>
-								{/* Nombre de la Categoria */}
-								<Grid container item spacing={4} xs>
-									<Grid item xs={12}>
-										<TextField
-											label="Name"
-											name="name"
-											value={formData.name}
-											onChange={e => handleNameChange(e)}
-											fullWidth
-										/>
-									</Grid>
-
-									{/* Descripción de la Categoría */}
-									<Grid item xs={12}>
-										<TextField
-											label="Description"
-											name="description"
-											value={formData.description}
-											onChange={e => handleDescriptionChange(e)}
-											fullWidth
-										/>
-									</Grid>
-
-									{/* Icono y Fondo de la Categoría */}
-									<Grid item direction="row" spacing={2} container>
-										<UploadImageInput
-											imageUrl={formData.icon}
-											buttonTitle={"Upload Icon"}
-											label={"Icon"}
-											onChange={handleIconChange}
-										/>
-										<UploadImageInput
-											imageUrl={formData.backgroundImage}
-											buttonTitle={"Upload Background"}
-											label={"Background Image"}
-											onChange={handleBackgroundImageChange}
-										/>
-									</Grid>
+						<Grid id="FormContainer" container spacing={1}>
+							
+							<Grid id="Title-Exit" container xs={12}>
+								<Grid id="Title" xs={10}>
+									<h3>Category Form</h3>
 								</Grid>
 
-								{/* Campos Personalizados */}
-								<Grid container item spacing={2} xs>
-									<Grid item xs={12}>
-										<Button onClick={handleAddField} variant="outlined">
-											Agregar Campo
-										</Button>
-									</Grid>
-
-									<Grid container item xs={12} direction="row">
-										{fieldsFormData.map((field, index) => (
-											<Grid container item xs={12} key={index} direction="row">
-												<Grid item xs={6}>
-													<TextField
-														label="Campo"
-														name="name"
-														value={field.name}
-														onChange={e => handleInputChange(e, index)}
-														fullWidth
-													/>
-												</Grid>
-
-												<Grid item xs={4}>
-													<FormControl fullWidth>
-														<InputLabel>Tipo</InputLabel>
-														<Select name="type" value={field.type} onChange={e => handleInputChange(e, index)}>
-															<MenuItem value="text">Texto</MenuItem>
-															<MenuItem value="number">Número</MenuItem>
-															<MenuItem value="size">Tamaño</MenuItem>
-														</Select>
-													</FormControl>
-												</Grid>
-
-												<Grid item xs={2}>
-													<IconButton onClick={() => handleRemoveField(index)} color="secondary" aria-label="Eliminar">
-														<DeleteIcon />
-													</IconButton>
-												</Grid>
-											</Grid>
-										))}
-									</Grid>
+								<Grid id="Exit_Button" xs={2} display="flex" justifyContent="end" alignItems="center">
+									<IconButton onClick={handleClose}>
+										<CloseIcon />
+									</IconButton>
 								</Grid>
 							</Grid>
 
-							<Grid item xs={12}>
-								<Button type="submit" variant="contained" color="primary">
-									Enviar
+							<Grid container id="InputContainer" xs={12} sm={6} spacing={0}>
+								<Grid xs={12}>
+									<p>General Information</p>
+
+									<TextField
+										InputLabelProps={{ shrink: true }}
+										label="Name"
+										name="name"
+										value={formData.name}
+										onChange={e => handleNameChange(e)}
+										fullWidth
+										margin="normal"
+									/>
+
+									<TextField
+										InputLabelProps={{ shrink: true }}
+										label="Description"
+										name="description"
+										value={formData.description}
+										onChange={e => handleDescriptionChange(e)}
+										fullWidth
+										margin="normal"
+									/>
+
+									<TextField
+										InputLabelProps={{ shrink: true }}
+										label="Status"
+										name="status"
+										value={formData.status}
+										onChange={e => handleStatusChange(e)}
+										select
+										fullWidth
+										margin="normal">
+										<MenuItem value={1}>Active</MenuItem>
+										<MenuItem value={0}>Inactive</MenuItem>
+									</TextField>
+								</Grid>
+
+								<Grid container xs={12} id="ImagesInput" spacing={0}>
+									<Grid xs={12}>
+										<p>Category Images</p>
+									</Grid>
+
+									<UploadImageInput
+										imageUrl={formData.icon}
+										buttonTitle={"Upload Icon"}
+										label={"Icon"}
+										onChange={handleIconChange}
+									/>
+									<UploadImageInput
+										imageUrl={formData.backgroundImage}
+										buttonTitle={"Upload Background"}
+										label={"Background Image"}
+										onChange={handleBackgroundImageChange}
+									/>
+								</Grid>
+							</Grid>
+
+							<Grid id="AttributesContainer" xs={12} sm={6}>
+								<p>Category Attributes</p>
+
+								<Button onClick={handleAddField} variant="outlined" fullWidth sx={{ mt: 2 }}>
+									Add Attribute
 								</Button>
+
+								<Paper xs={12} style={{ height: "50vh", minWidth: "100%", overflow: "auto" }} sx={{ mt: 2 }}>
+									{fieldsFormData.map((field, index) => (
+										<Stack direction="row" spacing={2} key={index} sx={{ mt: 2 }}>
+											<TextField
+												label="Attribute"
+												name="name"
+												value={field.name}
+												onChange={e => handleInputChange(e, index)}
+												InputLabelProps={{ shrink: true }}
+												margin="normal"
+												fullWidth
+											/>
+
+											<TextField
+												InputLabelProps={{ shrink: true }}
+												label="Attribute Type"
+												name="attributeType"
+												value={field.type}
+												onChange={e => handleInputChange(e, index)}
+												select
+												fullWidth
+												margin="normal">
+												<MenuItem value="text">Text</MenuItem>
+												<MenuItem value="number">Number</MenuItem>
+												<MenuItem value="size">Size</MenuItem>
+											</TextField>
+
+											<IconButton onClick={() => handleRemoveField(index)} color="secondary" aria-label="Eliminar">
+												<DeleteIcon />
+											</IconButton>
+
+											{/* <Grid container xs={12} key={index} >
+										<Grid  xs={6}>
+											<TextField
+												label="Attribute"
+												name="name"
+												value={field.name}
+												onChange={e => handleInputChange(e, index)}
+												fullWidth
+											/>
+										</Grid>
+
+										<Grid  xs={4}>
+											<FormControl fullWidth>
+												<InputLabel>Type</InputLabel>
+												<Select name="type" value={field.type} onChange={e => handleInputChange(e, index)}>
+													<MenuItem value="text">Texto</MenuItem>
+													<MenuItem value="number">Número</MenuItem>
+													<MenuItem value="size">Tamaño</MenuItem>
+												</Select>
+											</FormControl>
+										</Grid>
+
+										<Grid  xs={2}>
+											<IconButton onClick={() => handleRemoveField(index)} color="secondary" aria-label="Eliminar">
+												<DeleteIcon />
+											</IconButton>
+										</Grid>
+									</Grid> */}
+										</Stack>
+									))}
+								</Paper>
+							</Grid>
+
+							<Grid container id="Action Buttons" xs={12}>
+								<Grid xs={6}>
+									<Button onClick={handleClose} variant="contained" color="error" fullWidth>
+										Cancel
+									</Button>
+								</Grid>
+								<Grid xs={6}>
+									<Button type="submit" variant="contained" color="success" fullWidth>
+										Save Changes
+									</Button>
+								</Grid>
 							</Grid>
 						</Grid>
 					</form>
