@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 
 //MUI Components
 import {
@@ -11,7 +11,8 @@ import {
 	Paper,
 	TablePagination,
 	Box,
-	IconButton
+	IconButton,
+	ListItem
 } from "@mui/material"
 
 //MUI Icons
@@ -19,14 +20,23 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
 
+import Chip from "@mui/material/Chip"
+import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt"
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
+
 //Categories Modal
 import { useFirebase } from "../../context/DatabaseContext"
 import AdminCategoryForm from "./AdminCategoryForm"
+import FilterBar from "../ProductCategoryFilter/FilterBar"
 
-
-
+const Filters = [
+	{ key: 0, label: "All" },
+	{ key: 1, label: "Active" },
+	{ key: 2, label: "Inactive" }
+]
 
 const AdminCategoriesTableComponent = props => {
+	const [filter, setFilter] = useState("All")
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [categories, setCategories] = useState([])
@@ -35,34 +45,41 @@ const AdminCategoriesTableComponent = props => {
 	const [open, setOpen] = useState(false)
 	const [editCategory, setEditCategory] = useState(null)
 
-
 	const api = useFirebase()
 
 	//Trae los datos del Firebase
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const querySnapshot = await api.getAllCategories()
+
+				let querySnapshot = null
+
+				if (filter === "Active"){
+					querySnapshot = await api.getCategoriesByStatus(1)
+				} else if (filter === "Inactive"){
+					querySnapshot = await api.getCategoriesByStatus(0)
+				}else{
+					querySnapshot = await api.getAllCategories()
+				}
+
+				
 				setCategories(querySnapshot)
 				setLoading(false)
-				
 			} catch (error) {
 				console.log("Error al Obtener Datos de Catgeorias de Firebase", error)
 			}
 		}
+
 		fetchData()
 		setEditCategory(null)
 		setOpen(false)
-	}, [loading])
-
-	
+	}, [loading, filter])
 
 	//Elimina un elemento de la lista
-	// Primero busca el elemento en la lista y lo elimina 
-	// Luego actualiza la base de datos 
+	// Primero busca el elemento en la lista y lo elimina
+	// Luego actualiza la base de datos
 	const handleDelete = item => {
-
-		console.log("Desactivar categoria:", item);
+		console.log("Desactivar categoria:", item)
 
 		api.deactivateCategory(item.id).then(() => {
 			setLoading(true)
@@ -88,12 +105,21 @@ const AdminCategoriesTableComponent = props => {
 		setEditCategory(item)
 		setOpen(true)
 	}
+	
+	const handleFilterChange = (event) => {
+		setLoading(true)
+		setFilter(event.target.innerText)
+		console.log("Filter: ", event.target.innerText)
+	}
 
 	const startIndex = page * rowsPerPage
 	const endIndex = startIndex + rowsPerPage
 
 	return (
 		<>
+
+		<FilterBar FilterList={Filters} handleFilterChange={handleFilterChange} />
+
 			<IconButton
 				aria-label="add"
 				onClick={() => {
@@ -126,7 +152,27 @@ const AdminCategoriesTableComponent = props => {
 								<TableRow key={item.id}>
 									<TableCell>{item.name}</TableCell>
 									<TableCell>{item.description}</TableCell>
-									{ item.status === 1 ? <TableCell>Active</TableCell> : <TableCell>Inactive</TableCell> }
+									{item.status === 1 ? (
+										<TableCell align="center">
+											<Chip
+												id="status-chip"
+												icon={<SentimentSatisfiedAltIcon />}
+												label="  Active"
+												color="success"
+												size="small"
+											/>
+										</TableCell>
+									) : (
+										<TableCell align="center">
+											<Chip
+												id="status-chip"
+												icon={<SentimentVeryDissatisfiedIcon />}
+												label="Inactive"
+												color="error"
+												size="small"
+											/>
+										</TableCell>
+									)}
 									<TableCell>{item.personalizedFields.length}</TableCell>
 									<TableCell>
 										<img src={item.backgroundImage} width={"70px"} alt="BG" />
@@ -136,7 +182,6 @@ const AdminCategoriesTableComponent = props => {
 									</TableCell>
 									<TableCell>
 										<Box sx={{ display: "flex", gap: 1 }}>
-											
 											<IconButton
 												aria-label="delete"
 												onClick={() => {
@@ -145,7 +190,9 @@ const AdminCategoriesTableComponent = props => {
 												<DeleteIcon />
 											</IconButton>
 
-											<IconButton aria-label="edit" onClick={() => {
+											<IconButton
+												aria-label="edit"
+												onClick={() => {
 													handleEdit(item)
 												}}>
 												<EditIcon />

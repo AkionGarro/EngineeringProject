@@ -1,8 +1,8 @@
 {
   "workbench.colorCustomizations": {
-    "tab.activeBorder": "#8B378B",
-    "titleBar.activeBackground": "#8B378B",
+    "tab.activeBorder": "#F4A6D3",
+    "titleBar.activeBackground": "#F4A6D3",
     "titleBar.activeForeground": "#000000"
   },
-  "window.title": "~[Productos]~${separator}${separator}${separator}${separator}${separator}${separator}${activeEditorShort}${separator}${rootName}${separator}${profileName}"
+  "window.title": "~[Categorias]~${separator}${activeEditorShort}${separator}${rootName}${separator}${profileName}"
 }

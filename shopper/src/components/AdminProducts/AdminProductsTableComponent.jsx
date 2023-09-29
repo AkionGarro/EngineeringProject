@@ -20,6 +20,10 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
 
+import Chip from '@mui/material/Chip';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+
 import { useFirebase } from "../../context/DatabaseContext"
 import AdminProductForm from "./AdminProductForm"
 
@@ -97,6 +101,7 @@ const AdminProductsTableComponent = memo(props => {
 							<TableCell>Category</TableCell>
 							<TableCell>Price</TableCell>
 							<TableCell>State</TableCell>
+							{/* <TableCell>Attributes</TableCell> */}
 							<TableCell>Actions</TableCell>
 						</TableRow>
 					</TableHead>
@@ -112,8 +117,12 @@ const AdminProductsTableComponent = memo(props => {
 									<TableCell>{item.name}</TableCell>
 									<TableCell>Categoria</TableCell>
 									<TableCell>{item.price}</TableCell>
-									{ item.status === 1 ? <TableCell>Active</TableCell> : <TableCell>Inactive</TableCell> }
-									{/* <TableCell>{item.personalizedFields}</TableCell> */}
+									{ item.status === 1 ? 
+											<TableCell align="center"><Chip id="status-chip" icon={<SentimentSatisfiedAltIcon />} label="  Active" color="success" size="small" /></TableCell> 
+											
+										: <TableCell align="center"><Chip id="status-chip" icon={<SentimentVeryDissatisfiedIcon />} label="Inactive" color="error" size="small"/></TableCell> 
+									}
+									{/* <TableCell>{item.personalizedFields.length}</TableCell>  */}
 									<TableCell>
 										<Box sx={{ display: "flex", gap: 1 }}>
 											<IconButton aria-label="delete" onClick={() => handleDelete(item)}>

@@ -13,3 +13,8 @@
     box-sizing: border-box;
 
 }
+
+#status-chip{
+
+    width: 100%;
+}

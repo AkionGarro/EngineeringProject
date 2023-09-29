@@ -282,11 +282,11 @@ export function DatabaseProvider({ children }) {
   }
 
   //Traer todos los documentos de categorias de productos donde el status sea 1 
-  const getCategories_Status1= async() =>{
-    console.los("Get all categories with Status 1 ");
+  const getCategoriesByStatus= async(status) =>{
+    console.log("Get all categories with Status: ", status);
     try{
       const ref = collection(firestore, "productCategories")
-      const q = query(ref, where("status", "==", 1))
+      const q = query(ref, where("status", "==", status))
       const querySnapshot = await getDocs(q)
       const listCategories = querySnapshot.docs.map(doc => ({id:doc.id, ...doc.data()}))
       return listCategories
@@ -525,7 +525,7 @@ export function DatabaseProvider({ children }) {
         updateUserData,
         //Categorias de productos para la Vista de Administrador
         getAllCategories,
-        getCategories_Status1,
+        getCategoriesByStatus,
         deactivateCategory,
         activateCategory,
         updateCategoryData,
