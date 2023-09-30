@@ -31,13 +31,14 @@ export const useFirebase = () => {
 };
 
 export function DatabaseProvider({ children }) {
-  const registerDataUser = async (fullnameF, emailF, phoneF) => {
+  const registerDataUser = async (fullnameF, emailF, phoneF,identificationF) => {
     const ref = collection(firestore, "users");
     let data = {
       fullName: fullnameF,
       email: emailF,
       phone: phoneF,
       userType: "user",
+      identification:identificationF
     };
 
     try {
@@ -47,6 +48,24 @@ export function DatabaseProvider({ children }) {
       console.error("Error adding document: ", e);
     }
   };
+
+  const addAddressToUser = async (data) => {
+    const ref = collection(firestore, "users");
+    const addressCollection = collection(firestore, "usersAddress");
+    const q = query(ref, where("email", "==", data.email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.docs.length === 0) {
+      console.log("Usuario no encontrado.");
+      return;
+    }else{
+      const docRef = await addDoc(addressCollection, data);
+      console.log("Document written with ID: ", docRef.id);
+    }
+
+  };
+
+
 
   const changeStateOrder = async (orderId, newState) => {
     const db = firestore;
@@ -402,6 +421,7 @@ export function DatabaseProvider({ children }) {
         changeToUser,
         getUserData,
         updateUserData,
+        addAddressToUser,
         //Categorias de productos para la Vista de Administrador
         getAllCategories,
         getCategories_Status1,
@@ -409,7 +429,8 @@ export function DatabaseProvider({ children }) {
         activateCategory,
         updateCategoryData,
         addNewCategory,
-        uploadCategoryImage
+        uploadCategoryImage,
+        
       }}
     >
       {children}
