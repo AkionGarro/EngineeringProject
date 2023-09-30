@@ -128,6 +128,7 @@ const AdminCategoriesTableComponent = props => {
 				<AddIcon />
 			</IconButton>
 
+
 			<TableContainer component={Paper}>
 				<Table>
 					<TableHead>
