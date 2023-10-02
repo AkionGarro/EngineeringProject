@@ -12,7 +12,8 @@ import {
 	Paper,
 	TablePagination,
 	Box,
-	IconButton
+	IconButton,
+	Button
 } from "@mui/material"
 
 //MUI Icons
@@ -127,9 +128,9 @@ const AdminProductsTableComponent = memo(props => {
 
 					<FilterBar FilterList={Filters} filter={filter} handleFilterChange={handleFilterChange} />
 
-					<IconButton aria-label="add" onClick={() => handleOpenForm()}>
-						<AddIcon />
-					</IconButton>
+					<Button variant="contained" onClick={() => handleOpenForm()} startIcon={<AddIcon />} sx={{mt:2, mb:2}}>
+						Add Product
+					</Button>
 
 					<TableContainer component={Paper}>
 						<Table>

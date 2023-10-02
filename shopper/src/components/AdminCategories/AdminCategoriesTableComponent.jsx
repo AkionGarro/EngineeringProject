@@ -12,7 +12,8 @@ import {
 	TablePagination,
 	Box,
 	IconButton,
-	ListItem
+	ListItem,
+	Button
 } from "@mui/material"
 
 //MUI Icons
@@ -129,13 +130,10 @@ const AdminCategoriesTableComponent = props => {
 				<>
 					<FilterBar FilterList={Filters} filter={filter} handleFilterChange={handleFilterChange} />
 
-					<IconButton
-						aria-label="add"
-						onClick={() => {
-							handleOpenModal()
-						}}>
-						<AddIcon />
-					</IconButton>
+					<Button variant="contained" onClick={() => handleOpenModal()} startIcon={<AddIcon />} sx={{mt:2, mb:2}}>
+						Add Category
+					</Button>
+
 
 					<TableContainer component={Paper}>
 						<Table>
