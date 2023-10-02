@@ -8,33 +8,36 @@ import { Select, MenuItem, Container } from "@mui/material";
 import { useState, useEffect } from "react";
 import { firestore } from "../../firebase";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
-import Add_product from "./Add_Product_Personal";
-import "./Order_Details.css";
+import Add_product from "./Add_Product_Online";
+import "./OnlineOrder_Details.css";
 import { useFirebase } from "../../context/DatabaseContext";
 import Swal from "sweetalert2";
-import Link from '@mui/material/Link';
 
-export default function DetallePedidoModal({ visible, onCancel, idModal }) {
-    const firebase = useFirebase();
-    const [estado, setEstado] = useState("");
-    const estados = ['Pendiente de confirmación', 'En proceso', 'Pendiente de pago', 'Cancelado', 'Pagado', 'Enviado', 'Recibido'];
-    const [pedido, setPedido] = useState([]);
-    const [productos, setProductos] = useState([]);
-    const rows = productos;
-    const columns = [
-        { field: 'description', headerName: 'Descripción', width: 200 },
-        {field: 'image',
-            headerName: 'Link de la imagen',
-            width: 600,
-            renderCell: (params) => (
-              <Link href={params.value} target="_blank" rel="noopener noreferrer">
-                {params.value}
-              </Link>
-            ),
-          },
-    ]
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [usuario, setUsuario] = useState(null);
+export default function DetallePedidoOnlineModal({
+  visible,
+  onCancel,
+  idModal,
+}) {
+  const firebase = useFirebase();
+  const [estado, setEstado] = useState("");
+  const estados = [
+    "Pendiente de confirmación",
+    "En proceso",
+    "Pendiente de pago",
+    "Cancelado",
+    "Pagado",
+    "Enviado",
+    "Recibido",
+  ];
+  const [pedido, setPedido] = useState([]);
+  const [productos, setProductos] = useState([]);
+  const rows = productos;
+  const columns = [
+    { field: "comentario", headerName: "Comentario", width: 200 },
+    { field: "link", headerName: "Link del producto", width: 600 },
+  ];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [usuario, setUsuario] = useState(null);
 
   const handleEstadonOnSelect = (event) => {
     setEstado(event.target.value);
@@ -43,7 +46,7 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
   useEffect(() => {
     const getCollection = async () => {
       try {
-        const pedidoRef = doc(firestore, "pedidosPersonales", idModal);
+        const pedidoRef = doc(firestore, "pedidosOnline", idModal);
         const pedidoSnapshot = await getDoc(pedidoRef);
         const pedidoData = pedidoSnapshot.data();
         const products = pedidoData.productos;
@@ -67,7 +70,7 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
   useEffect(() => {
     const getCollection = async () => {
       try {
-        const pedidoRef = doc(firestore, "pedidosPersonales", idModal);
+        const pedidoRef = doc(firestore, "pedidosOnline", idModal);
         const pedidoSnapshot = await getDoc(pedidoRef);
         const pedidoData = pedidoSnapshot.data();
         const products = pedidoData.productos;
@@ -92,7 +95,7 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
       estado: estado,
     };
     try {
-      const documentoRef = doc(firestore, "pedidosPersonales", idModal);
+      const documentoRef = doc(firestore, "pedidosOnline", idModal);
       await updateDoc(documentoRef, nuevosDatos);
       Swal.fire({
         icon: "success",
@@ -156,7 +159,7 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
               </Select>
             </div>
           </div>
-          <div style={{ display: "flex" }}>
+          <div className="info_container" style={{ display: "flex" }}>
             <div style={{ flex: 1 }}>
               <h3 className="subtitlle_details">
                 Información del cliente y entrega
@@ -185,7 +188,7 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
           <DataGrid
             rows={rows}
             columns={columns}
-            getRowId={(row) => row.description}
+            getRowId={(row) => row.comentario}
             initialState={{
               pagination: {
                 paginationModel: { page: 0, pageSize: 5 },
@@ -195,21 +198,32 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
             autoHeight
           />
           <Container style={{ textAlign: "left", marginTop: "15px" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={openModal}
-              className="add-button"
-            >
-              + Agregar otro producto
-            </Button>
+            <div className="botones">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={openModal}
+                className="add-button"
+              >
+                + Agregar otro producto
+              </Button>
+
+              <Button
+                variant="contained"
+                color="error"
+                onClick={onCancel}
+                className="cancel-modal"
+              >
+                Cancelar
+              </Button>
+            </div>
           </Container>
           <Container style={{ textAlign: "center", marginTop: "15px" }}>
             <Button
               variant="contained"
               color="success"
               onClick={handleSubmit}
-              className="add-button"
+              className="save-changes"
             >
               Guardar cambios
             </Button>

@@ -11,11 +11,9 @@ import HomeIcon from "@mui/icons-material/Home";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SellIcon from "@mui/icons-material/Sell";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import CategoryIcon from "@mui/icons-material/Category";
-
-
 
 import { Link } from "react-router-dom";
 import Products from "../../Pages/Products/Products";
@@ -24,23 +22,60 @@ import Categories from "../../Pages/Categories/Categories";
 import Orders from "../../Pages/Orders/Orders";
 import Account from "../../Pages/Account/Account";
 import NewAdmin from "../../Pages/NewAdmin/NewAdmin";
-import PedidoPersonal from "../../Pages/Personal_orders/personal_order"
+import PedidoPersonal from "../../Pages/PersonalOrders/PersonalOrder";
+import PedidoOnline from "../../Pages/PedidoOnline/PedidoOnline";
 
 const categories = [
   {
-    id: "Options:",
+    id: "Opciones:",
     children: [
-      { id: "Orders", icon: <SellIcon />, route: <Orders/>, tittle: "Manage Orders"},
-      { id: "Products", icon: <InventoryIcon />, route: <Products />, tittle: "Manage Products"},
-      { id: "Categories", icon: <CategoryIcon />, route: <Categories />, tittle: "Manage Categories" },
-      { id: "Personal Orders", icon: <ShoppingCartIcon />, route: <PedidoPersonal />, tittle: "Manage Personal Orders" },
+      {
+        id: "Pedidos",
+        icon: <SellIcon />,
+        route: <Orders />,
+        tittle: "Gestionar Pedidos",
+      },
+      {
+        id: "Productos",
+        icon: <InventoryIcon />,
+        route: <Products />,
+        tittle: "Gestionar productos",
+      },
+      {
+        id: "Categorías",
+        icon: <CategoryIcon />,
+        route: <Categories />,
+        tittle: "Gestionar Categorías",
+      },
+      {
+        id: "Pedido Personal",
+        icon: <ShoppingCartIcon />,
+        route: <PedidoPersonal />,
+        tittle: "Gestionar Pedido Personal",
+      },
+      {
+        id: "Pedido en línea",
+        icon: <ShoppingCartIcon />,
+        route: <PedidoOnline />,
+        tittle: "Gestionar Pedido en línea ",
+      },
     ],
   },
   {
     id: "Users",
     children: [
-      { id: "My Account", icon: <AccountCircleIcon />, route: <Account />, tittle: "My Account"},
-      { id: "New Admin", icon: <PersonAddIcon />, route: <NewAdmin />, tittle: "New Admin" },
+      {
+        id: "Mi cuenta",
+        icon: <AccountCircleIcon />,
+        route: <Account />,
+        tittle: "Mi Perfil",
+      },
+      {
+        id: "Gestión de administradores",
+        icon: <PersonAddIcon />,
+        route: <NewAdmin />,
+        tittle: "Gestión de administradores",
+      },
     ],
   },
 ];
@@ -75,13 +110,10 @@ export default function Navigator(props) {
   return (
     <Drawer variant="permanent" {...props}>
       <List disablePadding>
-        <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: "#fff" }}>
+        <ListItem
+          sx={{ ...item, ...itemCategory, fontSize: 22, color: "#fff" }}
+        >
           VeroCamShop
-        </ListItem>
-        <ListItem sx={{ ...item, ...itemCategory }}>
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
         </ListItem>
         {categories.map(({ id, children }) => (
           <Box key={id} sx={{ bgcolor: "#101F33" }}>

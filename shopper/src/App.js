@@ -7,7 +7,8 @@ import HomePageAdmin from "./Pages/HomePageAdmin/HomePageAdmin";
 import { AuthProvider } from "./context/AuthContext";
 import { DatabaseProvider } from "./context/DatabaseContext";
 import Register from "./Pages/Register/Register";
-import Ver_pedido from "./Pages/ver_pedidos/ver_pedidos"
+import Ver_pedido from "./Pages/ver_pedidos/ver_pedidos";
+import VerPedidosOnline from "./Pages/VerPedidosOnline/VerPedidosOnline";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
             <Route path="/PedidoOnline" element={<PedidoOnline />} />
             <Route path="/Ver_pedido" element={<Ver_pedido />} />
+            <Route path="/VerPedidosOnline" element={<VerPedidosOnline />} />
           </Routes>
         </Router>
       </DatabaseProvider>
