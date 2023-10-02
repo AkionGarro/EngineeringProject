@@ -256,6 +256,14 @@ export function DatabaseProvider({ children }) {
   * Categorias de productos para la Vista de Administrador *
   *********************************************************/
 
+  const getCategoryReference = (category) => {
+
+
+    const categoryRef = doc(firestore, "productCategories", category.id)
+    
+    return categoryRef
+
+  }
 
   const getCategoryByID = async (categoryRef) => {
     try {
@@ -421,11 +429,11 @@ export function DatabaseProvider({ children }) {
     }
   
     //Traer todos los documentos de categorias de productos donde el status sea 1 
-    const getProducts_Status1= async() =>{
-      console.los("Get all Products with Status 1 ");
+    const getProductsByStatus= async(status) =>{
+      console.log("Get all Products with Status: ", status);
       try{
         const ref = collection(firestore, "products")
-        const q = query(ref, where("status", "==", 1))
+        const q = query(ref, where("status", "==", status))
         const querySnapshot = await getDocs(q)
         const productList = querySnapshot.docs.map(doc => ({id:doc.id, ...doc.data()}))
         return productList
@@ -524,6 +532,7 @@ export function DatabaseProvider({ children }) {
         getUserData,
         updateUserData,
         //Categorias de productos para la Vista de Administrador
+        getCategoryReference,
         getAllCategories,
         getCategoriesByStatus,
         deactivateCategory,
@@ -534,7 +543,7 @@ export function DatabaseProvider({ children }) {
         getCategoryByID,
         //Productos para la Vista de Administrador
         getAllProducts,
-        getProducts_Status1,
+        getProductsByStatus,
         deactivateProduct,
         activateProduct,
         updateProductData,

@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from "react"
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, IconButton, Paper } from "@mui/material"
 
-
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputAdornment from '@mui/material/InputAdornment';
+import OutlinedInput from "@mui/material/OutlinedInput"
+import InputAdornment from "@mui/material/InputAdornment"
 
 import Grid from "@mui/material/Unstable_Grid2"
 import DeleteIcon from "@mui/icons-material/Delete"
 import CloseIcon from "@mui/icons-material/Close"
+import Autocomplete from "@mui/material/Autocomplete"
+import Alert from "@mui/material/Alert"
 
 import UploadProductImagesInput from "./UploadProductImagesInput"
 import { useFirebase } from "../../context/DatabaseContext"
 
 import Dialog from "@mui/material/Dialog"
 import DialogContent from "@mui/material/DialogContent"
+import CircularProgress from "@mui/material/CircularProgress"
 
 import { styled } from "@mui/material/styles"
-import Swal from "sweetalert2";
-
+import Swal from "sweetalert2"
 
 //Campo Personalizado en blanco
 const initialField = {
@@ -52,7 +53,6 @@ const Item = styled(Paper)(({ theme }) => ({
 }))
 
 const AdminProductForm = props => {
-
 	const api = useFirebase()
 
 	//Guarda los datos del formulario
@@ -60,9 +60,43 @@ const AdminProductForm = props => {
 	//Guarda los datos de las imagenes del producto
 	const [imagesFormData, setImagesFormData] = useState([])
 	//Guarda los datos de la categoria
-	const [productCategory, setProductCategory] = useState(initialproductCategory)
+	const [productCategory, setProductCategory] = useState(null)
 	//Actualiza los datos del formulario
+
+	//Para cambair categorias
+	const [openCategoryBox, setOpenCategoryBox] = useState(false)
+	const [categoryOptions, setCategoryOptions] = useState([])
+	const loadingCategory = openCategoryBox && categoryOptions.length === 0
+
 	useEffect(() => {
+		let active = true
+
+		if (!loadingCategory) {
+			return undefined
+		}
+
+		;(async () => {
+			const categories = await api.getCategoriesByStatus(1)
+			if (active) {
+				setCategoryOptions(categories)
+			}
+		})()
+
+		return () => {
+			active = false
+		}
+	}, [loadingCategory])
+
+	useEffect(() => {
+		if (!openCategoryBox) {
+			setCategoryOptions([])
+		}
+	}, [openCategoryBox])
+
+	useEffect(() => {
+
+		console.log("Producto:", props.product );
+
 		const fetchProductCategory = async categoryRef => {
 			try {
 				const productCategorySnap = await api.getCategoryByID(categoryRef)
@@ -95,7 +129,9 @@ const AdminProductForm = props => {
 		} else {
 			setFormData(initialFormData)
 			setImagesFormData([])
-			setProductCategory(initialproductCategory)
+			setProductCategory(null)
+			setCategoryOptions([])
+			setOpenCategoryBox(false)
 		}
 	}, [props.open])
 
@@ -120,12 +156,12 @@ const AdminProductForm = props => {
 	}
 
 	//Actualiza la descripcion de la categoria
-	const handleDescriptionChange = e => {
+	const handlePriceChange = e => {
 		const { value } = e.target //Toma el Valor del Input
 		setFormData({
 			//Actualiza el Estado del Formulario
 			...formData,
-			description: value
+			price: value
 		})
 	}
 
@@ -154,7 +190,6 @@ const AdminProductForm = props => {
 		const { value } = e.target //Toma el Valor del Input
 
 		setFormData({
-			//Actualiza el Estado del Formulario
 			...formData,
 			personalizedFields: {
 				...formData.personalizedFields,
@@ -162,58 +197,88 @@ const AdminProductForm = props => {
 			}
 		})
 
-		// const { name, value } = e.target //Toma el Valor del Input
-
-		// const updatedFields = [...fieldsFormData] //Copia el Array de Campos Personalizados
-
-		// //Actualiza el Campo Personalizado
-		// updatedFields[index] = {
-		// 	...updatedFields[index],
-		// 	[name]: value
-		// }
-
-		// setFieldsFormData(updatedFields) //Actualiza el Array de Campos Personalizados
+		console.log(productCategory)
 	}
 
 	//Envia los datos del formulario
 	const handleSubmit = async e => {
 		e.preventDefault()
 
-		const product = {
-			id: formData.id,
-			name: formData.name,
-			category: formData.category,
-			images: formData.images,
-			price: formData.price,
-			status: formData.status,
-			personalizedFields: formData.personalizedFields,
-			newImages: imagesFormData
+
+		let newImages = formData.images
+
+		if (newImages === null || newImages.length === 0) {
+			newImages = []
 		}
 
-		console.log("Submitting this product: ", product)
+
+		const newProduct = {
+			id: formData.id,
+			name: formData.name,
+			category: api.getCategoryReference(productCategory),
+			images: newImages,
+			price: Number(formData.price),
+			status: formData.status,
+			personalizedFields: formData.personalizedFields
+		}
+
+		console.log("Submitting this product: ", newProduct)
+
+
+		if (newProduct.id) {
+			//Edita el producto
+			await api.updateProductData(newProduct)
+		} else {
+			//Crea el producto
+			await api.addNewProduct(newProduct)
+		}
+		
+	}
+
+	const checkKeyDown = e => {
+		if (e.code === "Enter") {
+			e.preventDefault()
+			e.stopPropagation()
+		}
 	}
 
 	const handleClose = () => {
-
 		Swal.fire({
-			target: document.getElementById('form-modal'),
-			title: 'You have unsaved changes!',
+			target: document.getElementById("form-modal"),
+			title: "You have unsaved changes!",
 			text: "Are you sure you want to leave without saving?",
-			icon: 'warning',
+			icon: "warning",
 			showCancelButton: true,
-			cancelButtonColor: '#3085d6',
-			confirmButtonColor: '#d33',
-			cancelButtonText:'Stay on this Page',
-			confirmButtonText: 'Discard Changes'
-		}).then((result) => {
+			cancelButtonColor: "#3085d6",
+			confirmButtonColor: "#d33",
+			cancelButtonText: "Stay on this Page",
+			confirmButtonText: "Discard Changes"
+		}).then(result => {
 			if (result.isConfirmed) {
-				props.setOpen(false)
-				
+				props.closeForm()
 			}
 		})
+	}
 
-	} 
+	const handleCategoryChange = category => {
+		console.log("Category ID: ", category)
 
+		//Hacer un json con los atributos de name de personalized fields de la categroy
+		const personalizedFields = {}
+		category.personalizedFields.forEach(field => {
+			personalizedFields[field.name] = ""
+		})
+
+		//Setea los datos del Producto
+		setFormData({
+			...formData,
+			category: category.id,
+			personalizedFields: personalizedFields
+		})
+
+		//Setea los datos de la categoria
+		setProductCategory(category)
+	}
 
 	return (
 		<>
@@ -226,7 +291,7 @@ const AdminProductForm = props => {
 				aria-labelledby="modal-modal-title"
 				aria-describedby="modal-modal-description">
 				<DialogContent dividers>
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleSubmit} onKeyDown={e => checkKeyDown(e)}>
 						<Grid id="FormContainer" container spacing={2}>
 							<Grid id="Title-Exit" container xs={12}>
 								<Grid id="Title" xs={10}>
@@ -245,6 +310,8 @@ const AdminProductForm = props => {
 									<p>General Information</p>
 
 									<TextField
+										required
+										key="nameInput"
 										InputLabelProps={{ shrink: true }}
 										label="Name"
 										name="name"
@@ -254,44 +321,91 @@ const AdminProductForm = props => {
 										margin="normal"
 									/>
 
-									<FormControl fullWidth margin="normal">
-										<InputLabel htmlFor="price-adornment">Price</InputLabel>
+									<FormControl required fullWidth margin="normal">
+										<InputLabel id="price-adornment">Price</InputLabel>
 										<OutlinedInput
+											key="priceInput"
 											id="price-adornment"
 											name="Price"
-											onChange={e => handleDescriptionChange(e)}
+											onChange={e => handlePriceChange(e)}
 											startAdornment={<InputAdornment position="start">$</InputAdornment>}
-											label="Price"
+											label="price"
+											inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+											value={formData.price}
 										/>
 									</FormControl>
 
-									<TextField
-										InputLabelProps={{ shrink: true }}
-										label="Status"
-										name="status"
-										value={formData.status}
-										onChange={e => handleStatusChange(e)}
-										select
-										fullWidth
-										margin="normal">
-										<MenuItem value={1}>Active</MenuItem>
-										<MenuItem value={0}>Inactive</MenuItem>
-									</TextField>
+									<FormControl required fullWidth margin="normal">
+										<InputLabel id="status-adornment">Status</InputLabel>
+										<Select
+											id="statusSelect"
+											value={formData.status}
+											label="status"
+											onChange={e => handleStatusChange(e)}>
+											<MenuItem value={1}>Active</MenuItem>
+											<MenuItem value={0}>Inactive</MenuItem>
+										</Select>
+									</FormControl>
+
+									<Autocomplete
+										disableClearable
+										id="async-categories"
+										open={openCategoryBox}
+										onOpen={() => {
+											setOpenCategoryBox(true)
+										}}
+										onClose={() => {
+											setOpenCategoryBox(false)
+										}}
+										isOptionEqualToValue={(option, value) => option.id === value.id}
+										getOptionLabel={option => option.name}
+										options={categoryOptions}
+										loading={loadingCategory}
+										value={productCategory ? productCategory : ""}
+										onChange={(event, newValue) => {
+											handleCategoryChange(newValue)
+										}}
+										renderInput={params => (
+											<TextField
+												{...params}
+												fullWidth
+												margin="normal"
+												InputLabelProps={{ shrink: true }}
+												required
+												label="Category"
+												InputProps={{
+													...params.InputProps,
+													endAdornment: (
+														<React.Fragment>
+															{loadingCategory ? <CircularProgress color="inherit" size={20} /> : null}
+															{params.InputProps.endAdornment}
+														</React.Fragment>
+													)
+												}}
+											/>
+										)}
+									/>
 								</Grid>
 
 								<Grid xs={12}>
 									<p>Product Attributes</p>
-									{productCategory.personalizedFields.map((field, index) => (
-										<TextField
-											InputLabelProps={{ shrink: true }}
-											label={field.name}
-											name={field.name}
-											value={formData.personalizedFields[field.name]}
-											onChange={e => handleInputChange(e, field.name)}
-											fullWidth
-											margin="normal"
-										/>
-									))}
+									{!productCategory ? (
+										<Alert severity="error"> We can't show you the product attributes until you select a category.<br/> Please choose a category first. </Alert>
+									) : (
+										productCategory.personalizedFields.map((field, index) => (
+											<TextField
+												required
+												key={index}
+												InputLabelProps={{ shrink: true }}
+												label={field.name}
+												name={field.name}
+												value={formData.personalizedFields[field.name]}
+												onChange={e => handleInputChange(e, field.name)}
+												fullWidth
+												margin="normal"
+											/>
+										))
+									)}
 								</Grid>
 							</Grid>
 
@@ -307,8 +421,8 @@ const AdminProductForm = props => {
 
 							<Grid container id="Action Buttons" xs={12}>
 								<Grid xs={6}>
-									<Button type="submit" variant="contained" color="error" fullWidth>
-										Cancel
+									<Button onClick={handleClose} variant="contained" color="error" fullWidth>
+										Discard Changes
 									</Button>
 								</Grid>
 								<Grid xs={6}>

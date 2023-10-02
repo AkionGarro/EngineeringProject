@@ -23,6 +23,7 @@ import AddIcon from "@mui/icons-material/Add"
 import Chip from "@mui/material/Chip"
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt"
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
+import CircularProgress from "@mui/material/CircularProgress"
 
 //Categories Modal
 import { useFirebase } from "../../context/DatabaseContext"
@@ -51,22 +52,20 @@ const AdminCategoriesTableComponent = props => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-
 				let querySnapshot = null
 
-				if (filter === "Active"){
+				if (filter === "Active") {
 					querySnapshot = await api.getCategoriesByStatus(1)
-				} else if (filter === "Inactive"){
+				} else if (filter === "Inactive") {
 					querySnapshot = await api.getCategoriesByStatus(0)
-				}else{
+				} else {
 					querySnapshot = await api.getAllCategories()
 				}
 
-				
 				setCategories(querySnapshot)
 				setLoading(false)
 			} catch (error) {
-				console.log("Error al Obtener Datos de Catgeorias de Firebase", error)
+				console.log("Error al Obtener Datos de Categorias de Firebase", error)
 			}
 		}
 
@@ -105,8 +104,13 @@ const AdminCategoriesTableComponent = props => {
 		setEditCategory(item)
 		setOpen(true)
 	}
-	
-	const handleFilterChange = (event) => {
+
+	const handleCloseModal = () => {
+		setEditCategory(null)
+		setOpen(false)
+	}
+
+	const handleFilterChange = event => {
 		setLoading(true)
 		setFilter(event.target.innerText)
 		console.log("Filter: ", event.target.innerText)
@@ -117,107 +121,107 @@ const AdminCategoriesTableComponent = props => {
 
 	return (
 		<>
+			{loading ? (
+				<Box sx={{ display: "flex" }}>
+					<CircularProgress />
+				</Box>
+			) : (
+				<>
+					<FilterBar FilterList={Filters} handleFilterChange={handleFilterChange} />
 
-		<FilterBar FilterList={Filters} handleFilterChange={handleFilterChange} />
+					<IconButton
+						aria-label="add"
+						onClick={() => {
+							handleOpenModal()
+						}}>
+						<AddIcon />
+					</IconButton>
 
-			<IconButton
-				aria-label="add"
-				onClick={() => {
-					handleOpenModal()
-				}}>
-				<AddIcon />
-			</IconButton>
-
-
-			<TableContainer component={Paper}>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell>Name</TableCell>
-							<TableCell>Description</TableCell>
-							<TableCell>Status</TableCell>
-							<TableCell>Personalized Fields</TableCell>
-							<TableCell>Background Image</TableCell>
-							<TableCell>Icon Image</TableCell>
-							<TableCell>Actions</TableCell>
-						</TableRow>
-					</TableHead>
-
-					<TableBody>
-						{loading ? (
-							<TableRow>
-								<TableCell colSpan={5}>Loading...</TableCell>
-							</TableRow>
-						) : (
-							categories.slice(startIndex, endIndex).map((item, index) => (
-								<TableRow key={item.id}>
-									<TableCell>{item.name}</TableCell>
-									<TableCell>{item.description}</TableCell>
-									{item.status === 1 ? (
-										<TableCell align="center">
-											<Chip
-												id="status-chip"
-												icon={<SentimentSatisfiedAltIcon />}
-												label="  Active"
-												color="success"
-												size="small"
-											/>
-										</TableCell>
-									) : (
-										<TableCell align="center">
-											<Chip
-												id="status-chip"
-												icon={<SentimentVeryDissatisfiedIcon />}
-												label="Inactive"
-												color="error"
-												size="small"
-											/>
-										</TableCell>
-									)}
-									<TableCell>{item.personalizedFields.length}</TableCell>
-									<TableCell>
-										<img src={item.backgroundImage} width={"70px"} alt="BG" />
-									</TableCell>
-									<TableCell>
-										<img src={item.icon} width={"70px"} alt="BG" />
-									</TableCell>
-									<TableCell>
-										<Box sx={{ display: "flex", gap: 1 }}>
-											<IconButton
-												aria-label="delete"
-												onClick={() => {
-													handleDelete(item)
-												}}>
-												<DeleteIcon />
-											</IconButton>
-
-											<IconButton
-												aria-label="edit"
-												onClick={() => {
-													handleEdit(item)
-												}}>
-												<EditIcon />
-											</IconButton>
-										</Box>
-									</TableCell>
+					<TableContainer component={Paper}>
+						<Table>
+							<TableHead>
+								<TableRow>
+									<TableCell>Name</TableCell>
+									<TableCell>Description</TableCell>
+									<TableCell>Status</TableCell>
+									<TableCell>Personalized Fields</TableCell>
+									<TableCell>Background Image</TableCell>
+									<TableCell>Icon Image</TableCell>
+									<TableCell>Actions</TableCell>
 								</TableRow>
-							))
-						)}
-					</TableBody>
-				</Table>
-			</TableContainer>
+							</TableHead>
 
-			<TablePagination
-				rowsPerPageOptions={[5, 10, 25]}
-				component="div"
-				count={categories.length}
-				rowsPerPage={rowsPerPage}
-				page={page}
-				onPageChange={handleChangePage}
-				onRowsPerPageChange={handleChangeRowsPerPage}
-			/>
+							<TableBody>
+								{categories.slice(startIndex, endIndex).map((item, index) => (
+									<TableRow key={item.id}>
+										<TableCell>{item.name}</TableCell>
+										<TableCell>{item.description}</TableCell>
+										{item.status === 1 ? (
+											<TableCell align="center">
+												<Chip
+													id="status-chip"
+													icon={<SentimentSatisfiedAltIcon />}
+													label="  Active"
+													color="success"
+													size="small"
+												/>
+											</TableCell>
+										) : (
+											<TableCell align="center">
+												<Chip
+													id="status-chip"
+													icon={<SentimentVeryDissatisfiedIcon />}
+													label="Inactive"
+													color="error"
+													size="small"
+												/>
+											</TableCell>
+										)}
+										<TableCell>{item.personalizedFields.length}</TableCell>
+										<TableCell>
+											<img src={item.backgroundImage} width={"70px"} alt="BG" />
+										</TableCell>
+										<TableCell>
+											<img src={item.icon} width={"70px"} alt="BG" />
+										</TableCell>
+										<TableCell>
+											<Box sx={{ display: "flex", gap: 1 }}>
+												<IconButton
+													aria-label="delete"
+													onClick={() => {
+														handleDelete(item)
+													}}>
+													<DeleteIcon />
+												</IconButton>
 
-			<AdminCategoryForm setLoading={setLoading} open={open} setOpen={setOpen} category={editCategory} />
+												<IconButton
+													aria-label="edit"
+													onClick={() => {
+														handleEdit(item)
+													}}>
+													<EditIcon />
+												</IconButton>
+											</Box>
+										</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					</TableContainer>
+
+					<TablePagination
+						rowsPerPageOptions={[5, 10, 25]}
+						component="div"
+						count={categories.length}
+						rowsPerPage={rowsPerPage}
+						page={page}
+						onPageChange={handleChangePage}
+						onRowsPerPageChange={handleChangeRowsPerPage}
+					/>
+
+					<AdminCategoryForm setLoading={setLoading} open={open} closeModal={handleCloseModal} category={editCategory} />
+				</>
+			)}
 		</>
 	)
 }

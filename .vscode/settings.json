@@ -4,5 +4,5 @@
     "titleBar.activeBackground": "#F4A6D3",
     "titleBar.activeForeground": "#000000"
   },
-  "window.title": "~[Categorias]~${separator}${activeEditorShort}${separator}${rootName}${separator}${profileName}"
+  "window.title": "~[Categorias]~${separator}${separator}${separator}${separator}${activeEditorShort}${separator}${rootName}${separator}${profileName}"
 }

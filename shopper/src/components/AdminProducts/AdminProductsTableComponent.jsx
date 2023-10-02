@@ -12,7 +12,7 @@ import {
 	Paper,
 	TablePagination,
 	Box,
-	IconButton,
+	IconButton
 } from "@mui/material"
 
 //MUI Icons
@@ -20,14 +20,25 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
 
-import Chip from '@mui/material/Chip';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import Chip from "@mui/material/Chip"
+import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt"
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
+import CircularProgress from "@mui/material/CircularProgress"
+
+import FilterBar from "../ProductCategoryFilter/FilterBar"
 
 import { useFirebase } from "../../context/DatabaseContext"
 import AdminProductForm from "./AdminProductForm"
 
+const Filters = [
+	{ key: 0, label: "All" },
+	{ key: 1, label: "Active" },
+	{ key: 2, label: "Inactive" }
+]
+
 const AdminProductsTableComponent = memo(props => {
+
+	const [filter, setFilter] = useState("All")
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [products, setProducts] = useState([])
@@ -41,24 +52,28 @@ const AdminProductsTableComponent = memo(props => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const querySnapshot = await api.getAllProducts()
+				let querySnapshot = null
+				if(filter === "Active"){
+					querySnapshot = await api.getProductsByStatus(1)
+				}else if(filter === "Inactive"){
+					querySnapshot = await api.getProductsByStatus(0)
+				}else{
+					querySnapshot = await api.getAllProducts()
+				}
 				setProducts(querySnapshot)
-				setLoading(false)				
+				setLoading(false)
 			} catch (error) {
-				console.log("Error al Obtener Datos de Firebase", error)
+				console.log("Error al Obtener Datos de productos de Firebase", error)
 			}
 		}
-
 		fetchData()
 		setEditProduct(null)
 		setOpen(false)
-	}, [loading])
+	}, [loading, filter])
 
-	console.log(products);
 
 	const handleDelete = item => {
-
-		console.log("Desactivar producto:", item);
+		console.log("Desactivar producto:", item)
 
 		api.deactivateProduct(item.id).then(() => {
 			setLoading(true)
@@ -76,6 +91,12 @@ const AdminProductsTableComponent = memo(props => {
 		setOpen(true)
 	}
 
+	const handleCloseform = () => {
+		setEditProduct(null)
+		setOpen(false)
+	}
+
+
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage)
 	}
@@ -85,74 +106,102 @@ const AdminProductsTableComponent = memo(props => {
 		setPage(0)
 	}
 
+	const handleFilterChange = event => {
+		setFilter(event.target.innerText)
+		setLoading(true)
+		console.log("Filter: ", event.target.innerText);
+	}
+
+
 	const startIndex = page * rowsPerPage
 	const endIndex = startIndex + rowsPerPage
 
 	return (
 		<>
-			<IconButton aria-label="add" onClick={() => handleOpenForm()} >
-				<AddIcon />
-			</IconButton>
-			<TableContainer component={Paper}>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell>Name</TableCell>
-							<TableCell>Category</TableCell>
-							<TableCell>Price</TableCell>
-							<TableCell>State</TableCell>
-							{/* <TableCell>Attributes</TableCell> */}
-							<TableCell>Actions</TableCell>
-						</TableRow>
-					</TableHead>
+			{loading ? (
+				<Box sx={{ display: "flex" }}>
+					<CircularProgress />
+				</Box>
+			) : (
+				<>
 
-					<TableBody>
-						{loading ? (
-							<TableRow>
-								<TableCell colSpan={5}>Loading...</TableCell>
-							</TableRow>
-						) : (
-							products.slice(startIndex, endIndex).map((item, index) => (
-								<TableRow key={index}>
-									<TableCell>{item.name}</TableCell>
-									<TableCell>Categoria</TableCell>
-									<TableCell>{item.price}</TableCell>
-									{ item.status === 1 ? 
-											<TableCell align="center"><Chip id="status-chip" icon={<SentimentSatisfiedAltIcon />} label="  Active" color="success" size="small" /></TableCell> 
-											
-										: <TableCell align="center"><Chip id="status-chip" icon={<SentimentVeryDissatisfiedIcon />} label="Inactive" color="error" size="small"/></TableCell> 
-									}
-									{/* <TableCell>{item.personalizedFields.length}</TableCell>  */}
-									<TableCell>
-										<Box sx={{ display: "flex", gap: 1 }}>
-											<IconButton aria-label="delete" onClick={() => handleDelete(item)}>
-												<DeleteIcon />
-											</IconButton>
-											<IconButton aria-label="edit" onClick={() => handleEdit(item)}>
-												<EditIcon />
-											</IconButton>
-										</Box>
-									</TableCell>
+					<FilterBar FilterList={Filters} handleFilterChange={handleFilterChange} />
+
+					<IconButton aria-label="add" onClick={() => handleOpenForm()}>
+						<AddIcon />
+					</IconButton>
+
+					<TableContainer component={Paper}>
+						<Table>
+							<TableHead>
+								<TableRow>
+									<TableCell>Name</TableCell>
+									<TableCell>Category</TableCell>
+									<TableCell>Price</TableCell>
+									<TableCell>State</TableCell>
+									{/* <TableCell>Attributes</TableCell> */}
+									<TableCell>Actions</TableCell>
 								</TableRow>
-							))
-						)}
-					</TableBody>
-				</Table>
-			</TableContainer>
+							</TableHead>
 
-			<TablePagination
-				rowsPerPageOptions={[5, 10, 25]}
-				component="div"
-				count={products.length}
-				rowsPerPage={rowsPerPage}
-				page={page}
-				onPageChange={handleChangePage}
-				onRowsPerPageChange={handleChangeRowsPerPage}
-			/>
+							<TableBody>
+								{products.slice(startIndex, endIndex).map((item, index) => (
+									<TableRow key={index}>
+										<TableCell>{item.name}</TableCell>
+										<TableCell>Categoria</TableCell>
+										<TableCell>{item.price}</TableCell>
+										{item.status === 1 ? (
+											<TableCell align="center">
+												<Chip
+													id="status-chip"
+													icon={<SentimentSatisfiedAltIcon />}
+													label="  Active"
+													color="success"
+													size="small"
+												/>
+											</TableCell>
+										) : (
+											<TableCell align="center">
+												<Chip
+													id="status-chip"
+													icon={<SentimentVeryDissatisfiedIcon />}
+													label="Inactive"
+													color="error"
+													size="small"
+												/>
+											</TableCell>
+										)}
+										{/* <TableCell>{item.personalizedFields.length}</TableCell>  */}
+										<TableCell>
+											<Box sx={{ display: "flex", gap: 1 }}>
+												<IconButton aria-label="delete" onClick={() => handleDelete(item)}>
+													<DeleteIcon />
+												</IconButton>
+												<IconButton aria-label="edit" onClick={() => handleEdit(item)}>
+													<EditIcon />
+												</IconButton>
+											</Box>
+										</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					</TableContainer>
 
-			<AdminProductForm setLoading={setLoading} open={open} setOpen={setOpen} product={editProduct} />
+					<TablePagination
+						rowsPerPageOptions={[5, 10, 25]}
+						component="div"
+						count={products.length}
+						rowsPerPage={rowsPerPage}
+						page={page}
+						onPageChange={handleChangePage}
+						onRowsPerPageChange={handleChangeRowsPerPage}
+					/>
 
-		</>		
+					<AdminProductForm setLoading={setLoading} open={open} closeForm={handleCloseform} product={editProduct} />
+				</>
+			)}
+		</>
 	)
 })
 

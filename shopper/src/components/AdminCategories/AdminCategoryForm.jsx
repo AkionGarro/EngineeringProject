@@ -57,6 +57,7 @@ const AdminCategoryForm = props => {
 				status: props.category.status
 			})
 			setFieldsFormData(props.category.personalizedFields)
+
 		} else {
 			setFormData(initialFormData)
 			setFieldsFormData([initialField])
@@ -219,12 +220,10 @@ const AdminCategoryForm = props => {
 			confirmButtonText: 'Discard Changes'
 		}).then((result) => {
 			if (result.isConfirmed) {
-				props.setOpen(false)
+				props.closeModal()
 				
 			}
 		})
-
-		
 
 	} 
 
@@ -262,6 +261,7 @@ const AdminCategoryForm = props => {
 										InputLabelProps={{ shrink: true }}
 										label="Name"
 										name="name"
+										required
 										value={formData.name}
 										onChange={e => handleNameChange(e)}
 										fullWidth
@@ -272,6 +272,7 @@ const AdminCategoryForm = props => {
 										InputLabelProps={{ shrink: true }}
 										label="Description"
 										name="description"
+										required
 										value={formData.description}
 										onChange={e => handleDescriptionChange(e)}
 										fullWidth
@@ -282,6 +283,7 @@ const AdminCategoryForm = props => {
 										InputLabelProps={{ shrink: true }}
 										label="Status"
 										name="status"
+										required
 										value={formData.status}
 										onChange={e => handleStatusChange(e)}
 										select
@@ -325,6 +327,7 @@ const AdminCategoryForm = props => {
 											<TextField
 												label="Attribute"
 												name="name"
+												required
 												value={field.name}
 												onChange={e => handleInputChange(e, index)}
 												InputLabelProps={{ shrink: true }}
@@ -340,6 +343,7 @@ const AdminCategoryForm = props => {
 												onChange={e => handleInputChange(e, index)}
 												select
 												fullWidth
+												required
 												margin="normal">
 												<MenuItem value="text">Text</MenuItem>
 												<MenuItem value="number">Number</MenuItem>
