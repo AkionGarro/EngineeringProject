@@ -125,7 +125,7 @@ const AdminProductsTableComponent = memo(props => {
 			) : (
 				<>
 
-					<FilterBar FilterList={Filters} handleFilterChange={handleFilterChange} />
+					<FilterBar FilterList={Filters} filter={filter} handleFilterChange={handleFilterChange} />
 
 					<IconButton aria-label="add" onClick={() => handleOpenForm()}>
 						<AddIcon />

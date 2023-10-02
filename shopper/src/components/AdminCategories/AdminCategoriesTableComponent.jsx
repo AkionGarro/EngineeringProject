@@ -127,7 +127,7 @@ const AdminCategoriesTableComponent = props => {
 				</Box>
 			) : (
 				<>
-					<FilterBar FilterList={Filters} handleFilterChange={handleFilterChange} />
+					<FilterBar FilterList={Filters} filter={filter} handleFilterChange={handleFilterChange} />
 
 					<IconButton
 						aria-label="add"
