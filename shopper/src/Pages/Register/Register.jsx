@@ -18,8 +18,7 @@ import { useFirebase } from "../../context/DatabaseContext";
 import Swal from "sweetalert2";
 
 const defaultTheme = createTheme();
-
-export default function Register() {
+const Register = () => {
   const auth = useAuth();
   const firebase = useFirebase();
   const navigate = useNavigate();
@@ -144,6 +143,7 @@ export default function Register() {
             <Grid container spacing={1.5}>
               <Grid item xs={12}>
                 <TextField
+                InputLabelProps={{ shrink: true }}
                   name="fullName"
                   required
                   fullWidth
@@ -155,6 +155,7 @@ export default function Register() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                InputLabelProps={{ shrink: true }}
                   required
                   fullWidth
                   id="email"
@@ -165,6 +166,7 @@ export default function Register() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                InputLabelProps={{ shrink: true }}
                   required
                   fullWidth
                   name="password"
@@ -176,6 +178,7 @@ export default function Register() {
               </Grid>
               <Grid item xs={6}>
                 <TextField
+                InputLabelProps={{ shrink: true }}
                   required
                   fullWidth
                   id="phone"
@@ -188,6 +191,7 @@ export default function Register() {
 
               <Grid item xs={6}>
                 <TextField
+                InputLabelProps={{ shrink: true }}
                   required
                   fullWidth
                   id="identification"
@@ -210,6 +214,7 @@ export default function Register() {
 
             <div className="container__address">
               <TextField
+              InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
                 id="country"
@@ -220,6 +225,7 @@ export default function Register() {
               />
 
               <TextField
+              InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
                 id="province"
@@ -232,6 +238,7 @@ export default function Register() {
 
             <div className="container__address">
               <TextField
+              InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
                 id="canton"
@@ -241,6 +248,7 @@ export default function Register() {
                 onChange={(e) => setCanton(e.target.value)}
               />
               <TextField
+              InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
                 id="district"
@@ -253,6 +261,7 @@ export default function Register() {
 
             <div className="container__address">
               <TextField
+              InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
                 id="address"
@@ -284,3 +293,5 @@ export default function Register() {
     </ThemeProvider>
   );
 }
+
+export default Register;

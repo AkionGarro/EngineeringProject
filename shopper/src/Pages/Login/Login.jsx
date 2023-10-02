@@ -17,7 +17,7 @@ import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
 import Swal from "sweetalert2";
 import LogoVeroShop from "../../components/Logo/Logo";
-
+import Register from "../Register/Register";
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
@@ -96,21 +96,23 @@ export default function Login() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
+                InputLabelProps={{ shrink: true }}
                   required
                   fullWidth
                   id="email"
                   label="Correo"
                   name="email"
                   value={email}
-                  variant="standard"
+                  variant="outlined"
                   autoFocus
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                InputLabelProps={{ shrink: true }}
                   margin="dense"
-                  variant="standard"
+                  variant="outlined"
                   fullWidth
                   name="password"
                   label="Contraseña"
@@ -135,6 +137,7 @@ export default function Login() {
 
             <Grid container>
               <Grid item className="register__info">
+                
                 <Link href="/Register" variant="body2">
                   {"¿No tienes cuenta? ¡Regístrate!"}
                 </Link>

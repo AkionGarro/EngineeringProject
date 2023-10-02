@@ -63,6 +63,8 @@ function Account() {
         <Grid container spacing={2} mt={2} ml={2}>
           <Grid item xs={12} sm={5}>
             <TextField
+            InputLabelProps={{ shrink: true }}
+
               id="fullName"
               label="Full Name"
               name="fullName"
@@ -75,6 +77,7 @@ function Account() {
           </Grid>
           <Grid item xs={12} sm={5}>
             <TextField
+            InputLabelProps={{ shrink: true }}
               id="email"
               label="Email"
               name="email"
@@ -87,6 +90,7 @@ function Account() {
           </Grid>
           <Grid item xs={12} sm={5}>
             <TextField
+            InputLabelProps={{ shrink: true }}
               id="identification"
               label="Identification"
               name="identification"
@@ -99,6 +103,7 @@ function Account() {
           </Grid>
           <Grid item xs={12} sm={5}>
             <TextField
+            InputLabelProps={{ shrink: true }}
               id="phone"
               label="Phone Number"
               name="phone"
@@ -111,6 +116,7 @@ function Account() {
           </Grid>
           <Grid item xs={12} sm={5}>
             <TextField
+            InputLabelProps={{ shrink: true }}
               id="address"
               label="Address"
               name="address"
@@ -123,6 +129,7 @@ function Account() {
           </Grid>
           <Grid item xs={12} sm={5}>
             <TextField
+            InputLabelProps={{ shrink: true }}
               id="role"
               label="Role"
               name="role"
