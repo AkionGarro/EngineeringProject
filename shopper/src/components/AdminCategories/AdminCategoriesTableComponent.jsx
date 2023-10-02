@@ -37,7 +37,7 @@ const Filters = [
 ]
 
 const AdminCategoriesTableComponent = props => {
-	const [filter, setFilter] = useState("All")
+	const [filter, setFilter] = useState("Active")
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [categories, setCategories] = useState([])
