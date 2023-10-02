@@ -4,15 +4,14 @@ import Paper from "@mui/material/Paper"
 import Grid from "@mui/material/Unstable_Grid2"
 
 import DeleteIcon from "@mui/icons-material/Delete"
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close"
 import UploadImageInput from "./UploadImageInput"
 import { useFirebase } from "../../context/DatabaseContext"
 
 import Dialog from "@mui/material/Dialog"
 import DialogContent from "@mui/material/DialogContent"
 
-import Swal from "sweetalert2";
-
+import Swal from "sweetalert2"
 
 //Campo Personalizado en blanco
 const initialField = {
@@ -30,8 +29,6 @@ const initialFormData = {
 }
 
 const AdminCategoryForm = props => {
-	
-
 	const api = useFirebase()
 
 	//Guarda los datos del formulario
@@ -57,7 +54,6 @@ const AdminCategoryForm = props => {
 				status: props.category.status
 			})
 			setFieldsFormData(props.category.personalizedFields)
-
 		} else {
 			setFormData(initialFormData)
 			setFieldsFormData([initialField])
@@ -130,6 +126,9 @@ const AdminCategoryForm = props => {
 	const handleInputChange = (e, index) => {
 		const { name, value } = e.target //Toma el Valor del Input
 
+		console.log("El name es ", name)
+		console.log("El value es ", value)
+
 		const updatedFields = [...fieldsFormData] //Copia el Array de Campos Personalizados
 
 		//Actualiza el Campo Personalizado
@@ -156,76 +155,90 @@ const AdminCategoryForm = props => {
 	//Envia los datos del formulario
 	const handleSubmit = async e => {
 		e.preventDefault()
-		let iconUrl = formData.icon
-		let bgUrl = formData.backgroundImage
 
-		if (iconFormData != null) {
-			iconUrl = await api.uploadCategoryImage(iconFormData, "icon").then(iconUrl => {
-				return iconUrl
-			})
+		//Check the user if wan ttop upload the data
+		const result = await Swal.fire({
+			target: document.getElementById("form-modal"),
+			title: "Are you sure?",
+			text: "You won't be able to revert this!",
+			icon: "warning",
+			showCancelButton: true,
+			cancelButtonColor: "#3085d6",
+			confirmButtonColor: "#d33",
+			cancelButtonText: "Cancel",
+			confirmButtonText: "Yes, save it!"
+		})
+
+		if (result.isConfirmed) {
+			//Send the data to the database
+
+			let iconUrl = formData.icon
+			let bgUrl = formData.backgroundImage
+
+			if (iconFormData != null) {
+				iconUrl = await api.uploadCategoryImage(iconFormData, "icon").then(iconUrl => {
+					return iconUrl
+				})
+			}
+
+			if (backgroundImageFormData != null) {
+				bgUrl = await api.uploadCategoryImage(backgroundImageFormData, "backgroundImage").then(bgUrl => {
+					return bgUrl
+				})
+			}
+
+			const newFormData = {
+				id: formData.id,
+				name: formData.name,
+				description: formData.description,
+				icon: iconUrl,
+				backgroundImage: bgUrl,
+				personalizedFields: fieldsFormData,
+				status: formData.status
+			}
+
+			//Si el id esta vacio, crea una nueva categoria
+			//Si no la actualiza
+			if (newFormData.id === "") {
+				//console.log("Creando nueva categoria")
+				await api.addNewCategory(newFormData).then(() => {
+					// props.onClose()
+				})
+			} else {
+				//console.log("Actualizando categoria");
+				//Si el id no esta vacio, actualiza la categoria
+				await api.updateCategoryData(newFormData).then(() => {
+					// props.onClose()
+				})
+			}
+
+			//Limpiamos los datos del formulario
+			setFormData(initialFormData)
+			setIconFormData(null)
+			setBackgroundImageFormData(null)
+			setFieldsFormData([initialField])
+
+			props.setLoading(true)
 		}
-
-		if (backgroundImageFormData != null) {
-			bgUrl = await api.uploadCategoryImage(backgroundImageFormData, "backgroundImage").then(bgUrl => {
-				return bgUrl
-			})
-		}
-
-		const newFormData = {
-			id: formData.id,
-			name: formData.name,
-			description: formData.description,
-			icon: iconUrl,
-			backgroundImage: bgUrl,
-			personalizedFields: fieldsFormData,
-			status: formData.status
-		}
-
-		//Si el id esta vacio, crea una nueva categoria
-		//Si no la actualiza
-		if (newFormData.id === "") {
-			//console.log("Creando nueva categoria")
-			await api.addNewCategory(newFormData).then(() => {
-				// props.onClose()
-			})
-		} else {
-			//console.log("Actualizando categoria");
-			//Si el id no esta vacio, actualiza la categoria
-			await api.updateCategoryData(newFormData).then(() => {
-				// props.onClose()
-			})
-		}
-
-		//Limpiamos los datos del formulario
-		setFormData(initialFormData)
-		setIconFormData(null)
-		setBackgroundImageFormData(null)
-		setFieldsFormData([initialField])
-
-		props.setLoading(true)
 	}
 
 	const handleClose = () => {
-
-
 		Swal.fire({
-			target: document.getElementById('form-modal'),
-			title: 'You have unsaved changes!',
+			target: document.getElementById("form-modal"),
+			title: "You have unsaved changes!",
 			text: "Are you sure you want to leave without saving?",
-			icon: 'warning',
+			icon: "warning",
 			showCancelButton: true,
-			cancelButtonColor: '#3085d6',
-			confirmButtonColor: '#d33',
-			cancelButtonText:'Stay on this Page',
-			confirmButtonText: 'Discard Changes'
-		}).then((result) => {
+			cancelButtonColor: "#3085d6",
+			confirmButtonColor: "#d33",
+			cancelButtonText: "Stay on this Page",
+			confirmButtonText: "Discard Changes"
+		}).then(result => {
 			if (result.isConfirmed) {
 				props.closeModal()
-				
 			}
 		})
-
-	} 
+	}
 
 	return (
 		<>
@@ -240,7 +253,6 @@ const AdminCategoryForm = props => {
 				<DialogContent dividers>
 					<form onSubmit={handleSubmit}>
 						<Grid id="FormContainer" container spacing={1}>
-
 							<Grid id="Title-Exit" container xs={12}>
 								<Grid id="Title" xs={10}>
 									<h3>Category Form</h3>
@@ -338,7 +350,7 @@ const AdminCategoryForm = props => {
 											<TextField
 												InputLabelProps={{ shrink: true }}
 												label="Attribute Type"
-												name="attributeType"
+												name="type"
 												value={field.type}
 												onChange={e => handleInputChange(e, index)}
 												select
@@ -349,6 +361,15 @@ const AdminCategoryForm = props => {
 												<MenuItem value="number">Number</MenuItem>
 												<MenuItem value="size">Size</MenuItem>
 											</TextField>
+
+											{/* <FormControl fullWidth>
+												<InputLabel>Type</InputLabel>
+												<Select name="type" value={field.type} onChange={e => handleInputChange(e, index)}>
+													<MenuItem value="text">Texto</MenuItem>
+													<MenuItem value="number">Número</MenuItem>
+													<MenuItem value="size">Tamaño</MenuItem>
+												</Select>
+											</FormControl> */}
 
 											<IconButton onClick={() => handleRemoveField(index)} color="secondary" aria-label="Eliminar">
 												<DeleteIcon />
