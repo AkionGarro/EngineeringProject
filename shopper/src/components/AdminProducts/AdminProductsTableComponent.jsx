@@ -13,6 +13,7 @@ import {
 	TablePagination,
 	Box,
 	IconButton,
+	Button
 } from "@mui/material"
 
 //MUI Icons
@@ -20,32 +21,84 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
 
-import { firestore } from "../../firebase"
-import { collection, getDocs } from "firebase/firestore"
+import Chip from "@mui/material/Chip"
+import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt"
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
+import CircularProgress from "@mui/material/CircularProgress"
+
+import FilterBar from "../ProductCategoryFilter/FilterBar"
+
+import { useFirebase } from "../../context/DatabaseContext"
+import AdminProductForm from "./AdminProductForm"
+
+const Filters = [
+	{ key: 0, label: "All" },
+	{ key: 1, label: "Active" },
+	{ key: 2, label: "Inactive" }
+]
 
 const AdminProductsTableComponent = memo(props => {
+
+	const [filter, setFilter] = useState("Active")
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [products, setProducts] = useState([])
 	const [loading, setLoading] = useState(true)
 
-	const collectionRef = collection(firestore, "products")
+	const [open, setOpen] = useState(false)
+	const [editProduct, setEditProduct] = useState(null)
+
+	const api = useFirebase()
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const querySnapshot = await getDocs(collectionRef)
-				const newData = querySnapshot.docs.map(doc => doc.data())
-				setProducts(newData)
+				let querySnapshot = null
+				if(filter === "Active"){
+					querySnapshot = await api.getProductsByStatus(1)
+				}else if(filter === "Inactive"){
+					querySnapshot = await api.getProductsByStatus(0)
+				}else{
+					querySnapshot = await api.getAllProducts()
+				}
+				console.log("QuerySnapshot: ", querySnapshot);
+				setProducts(querySnapshot)
 				setLoading(false)
-				console.log("Datos Obtenidos de Firebase", newData)
 			} catch (error) {
-				console.log("Error al Obtener Datos de Firebase", error)
+				console.log("Error al Obtener Datos de productos de Firebase", error)
 			}
 		}
-
 		fetchData()
-	}, [])
+		setEditProduct(null)
+		setOpen(false)
+	}, [loading, filter])
+
+
+	const handleDelete = item => {
+		console.log("Desactivar producto:", item)
+
+		api.deactivateProduct(item.id).then(() => {
+			setLoading(true)
+		})
+	}
+
+	const handleEdit = item => {
+		//Vamos a abrir el modal para editar la categoria seleccionada
+		setEditProduct(item)
+		setOpen(true)
+	}
+
+	const handleOpenForm = item => {
+		setEditProduct(item)
+		setOpen(true)
+	}
+
+	const handleCloseform = () => {
+		setEditProduct(null)
+		setOpen(false)
+		setLoading(true)
+	}
+
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage)
@@ -56,66 +109,101 @@ const AdminProductsTableComponent = memo(props => {
 		setPage(0)
 	}
 
+	const handleFilterChange = event => {
+		setFilter(event.target.innerText)
+		setLoading(true)
+		console.log("Filter: ", event.target.innerText);
+	}
+
+
 	const startIndex = page * rowsPerPage
 	const endIndex = startIndex + rowsPerPage
 
 	return (
 		<>
-			<IconButton aria-label="add">
-				<AddIcon />
-			</IconButton>
-			<TableContainer component={Paper}>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell>Nombre</TableCell>
-							<TableCell>Categoria</TableCell>
-							<TableCell>Precio</TableCell>
-							<TableCell>Estado</TableCell>
-							<TableCell>Campos</TableCell>
-							<TableCell>Acciones</TableCell>
-						</TableRow>
-					</TableHead>
+			{loading ? (
+				<Box sx={{ display: "flex" }}>
+					<CircularProgress />
+				</Box>
+			) : (
+				<>
 
-					<TableBody>
-						{loading ? (
-							<TableRow>
-								<TableCell colSpan={5}>Cargando...</TableCell>
-							</TableRow>
-						) : (
-							products.slice(startIndex, endIndex).map((item, index) => (
-								<TableRow key={index}>
-									<TableCell>{item.name}</TableCell>
-									<TableCell>Categoria</TableCell>
-									<TableCell>{item.price}</TableCell>
-									<TableCell>{item.status}</TableCell>
-									<TableCell>Campos Personalizados</TableCell>
-									<TableCell>
-										<Box sx={{ display: "flex", gap: 1 }}>
-											<IconButton aria-label="delete">
-												<DeleteIcon />
-											</IconButton>
-											<IconButton aria-label="edit">
-												<EditIcon />
-											</IconButton>
-										</Box>
-									</TableCell>
+					<FilterBar FilterList={Filters} filter={filter} handleFilterChange={handleFilterChange} />
+
+					<Button variant="contained" onClick={() => handleOpenForm()} startIcon={<AddIcon />} sx={{mt:2, mb:2}}>
+						Add Product
+					</Button>
+
+					<TableContainer component={Paper}>
+						<Table>
+							<TableHead>
+								<TableRow>
+									<TableCell>Name</TableCell>
+									<TableCell className="hide-on-mobile " >Category</TableCell>
+									<TableCell className="hide-on-mobile " >Price</TableCell>
+									<TableCell className="hide-on-mobile ">State</TableCell>
+									{/* <TableCell>Attributes</TableCell> */}
+									<TableCell>Actions</TableCell>
 								</TableRow>
-							))
-						)}
-					</TableBody>
-				</Table>
-			</TableContainer>
+							</TableHead>
 
-			<TablePagination
-				rowsPerPageOptions={[5, 10, 25]}
-				component="div"
-				count={products.length}
-				rowsPerPage={rowsPerPage}
-				page={page}
-				onPageChange={handleChangePage}
-				onRowsPerPageChange={handleChangeRowsPerPage}
-			/>
+							<TableBody>
+								{products.slice(startIndex, endIndex).map((item, index) => (									
+									<TableRow key={index}>
+										<TableCell>{item.name}</TableCell>
+										<TableCell className="hide-on-mobile " >{item.categoryName}</TableCell>
+										<TableCell className="hide-on-mobile " >{"$" + item.price}</TableCell>
+										{item.status === 1 ? (
+											<TableCell className="hide-on-mobile " align="center">
+												<Chip
+													id="status-chip"
+													icon={<SentimentSatisfiedAltIcon />}
+													label="  Active"
+													color="success"
+													size="small"
+												/>
+											</TableCell>
+										) : (
+											<TableCell className="hide-on-mobile " align="center">
+												<Chip
+													id="status-chip"
+													icon={<SentimentVeryDissatisfiedIcon />}
+													label="Inactive"
+													color="error"
+													size="small"
+												/>
+											</TableCell>
+										)}
+										{/* <TableCell>{item.personalizedFields.length}</TableCell>  */}
+										<TableCell>
+											<Box sx={{ display: "flex", gap: 1 }}>
+												<IconButton aria-label="delete" onClick={() => handleDelete(item)}>
+													<DeleteIcon />
+												</IconButton>
+												<IconButton aria-label="edit" onClick={() => handleEdit(item)}>
+													<EditIcon />
+												</IconButton>
+											</Box>
+										</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					</TableContainer>
+
+					<TablePagination
+						rowsPerPageOptions={[5, 10, 25]}
+						component="div"
+						count={products.length}
+						rowsPerPage={rowsPerPage}
+						page={page}
+						onPageChange={handleChangePage}
+						onRowsPerPageChange={handleChangeRowsPerPage}
+					/>
+
+					<AdminProductForm setLoading={setLoading} open={open} closeForm={handleCloseform} product={editProduct} />
+				</>
+			)}
 		</>
 	)
 })
