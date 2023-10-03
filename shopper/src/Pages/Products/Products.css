@@ -2,3 +2,12 @@
 
   width: 100%;
 }
+
+
+@media (max-width: 600px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+  
+}
+

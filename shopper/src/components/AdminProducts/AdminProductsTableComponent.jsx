@@ -139,9 +139,9 @@ const AdminProductsTableComponent = memo(props => {
 							<TableHead>
 								<TableRow>
 									<TableCell>Name</TableCell>
-									<TableCell>Category</TableCell>
-									<TableCell>Price</TableCell>
-									<TableCell>State</TableCell>
+									<TableCell className="hide-on-mobile " >Category</TableCell>
+									<TableCell className="hide-on-mobile " >Price</TableCell>
+									<TableCell className="hide-on-mobile ">State</TableCell>
 									{/* <TableCell>Attributes</TableCell> */}
 									<TableCell>Actions</TableCell>
 								</TableRow>
@@ -151,10 +151,10 @@ const AdminProductsTableComponent = memo(props => {
 								{products.slice(startIndex, endIndex).map((item, index) => (									
 									<TableRow key={index}>
 										<TableCell>{item.name}</TableCell>
-										<TableCell>{item.categoryName}</TableCell>
-										<TableCell>{item.price}</TableCell>
+										<TableCell className="hide-on-mobile " >{item.categoryName}</TableCell>
+										<TableCell className="hide-on-mobile " >{"$" + item.price}</TableCell>
 										{item.status === 1 ? (
-											<TableCell align="center">
+											<TableCell className="hide-on-mobile " align="center">
 												<Chip
 													id="status-chip"
 													icon={<SentimentSatisfiedAltIcon />}
@@ -164,7 +164,7 @@ const AdminProductsTableComponent = memo(props => {
 												/>
 											</TableCell>
 										) : (
-											<TableCell align="center">
+											<TableCell className="hide-on-mobile " align="center">
 												<Chip
 													id="status-chip"
 													icon={<SentimentVeryDissatisfiedIcon />}

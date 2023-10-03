@@ -136,15 +136,15 @@ const AdminCategoriesTableComponent = props => {
 					</Button>
 
 
-					<TableContainer component={Paper}>
+					<TableContainer component={Paper} >
 						<Table>
 							<TableHead>
 								<TableRow>
 									<TableCell>Name</TableCell>
-									<TableCell>Description</TableCell>
-									<TableCell>Status</TableCell>
-									<TableCell>Personalized Fields</TableCell>
-									<TableCell>Background Image</TableCell>
+									<TableCell className="hide-on-mobile ">Description</TableCell>
+									<TableCell className="hide-on-mobile ">Status</TableCell>
+									<TableCell className="hide-on-mobile ">Personalized Fields</TableCell>
+									<TableCell className="hide-on-mobile ">Background Image</TableCell>
 									<TableCell>Icon Image</TableCell>
 									<TableCell>Actions</TableCell>
 								</TableRow>
@@ -154,9 +154,9 @@ const AdminCategoriesTableComponent = props => {
 								{categories.slice(startIndex, endIndex).map((item, index) => (
 									<TableRow key={item.id}>
 										<TableCell>{item.name}</TableCell>
-										<TableCell>{item.description}</TableCell>
+										<TableCell className="hide-on-mobile ">{item.description}</TableCell>
 										{item.status === 1 ? (
-											<TableCell align="center">
+											<TableCell className="hide-on-mobile " align="center">
 												<Chip
 													id="status-chip"
 													icon={<SentimentSatisfiedAltIcon />}
@@ -166,7 +166,7 @@ const AdminCategoriesTableComponent = props => {
 												/>
 											</TableCell>
 										) : (
-											<TableCell align="center">
+											<TableCell className="hide-on-mobile " align="center">
 												<Chip
 													id="status-chip"
 													icon={<SentimentVeryDissatisfiedIcon />}
@@ -176,8 +176,8 @@ const AdminCategoriesTableComponent = props => {
 												/>
 											</TableCell>
 										)}
-										<TableCell>{item.personalizedFields.length}</TableCell>
-										<TableCell>
+										<TableCell className="hide-on-mobile " >{item.personalizedFields.length}</TableCell>
+										<TableCell className="hide-on-mobile " >
 											<img src={item.backgroundImage} width={"70px"} alt="BG" />
 										</TableCell>
 										<TableCell>
