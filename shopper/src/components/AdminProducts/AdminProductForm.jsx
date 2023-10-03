@@ -63,6 +63,7 @@ const AdminProductForm = props => {
 	const [productCategory, setProductCategory] = useState(null)
 	//Actualiza los datos del formulario
 
+	
 	//Para cambair categorias
 	const [openCategoryBox, setOpenCategoryBox] = useState(false)
 	const [categoryOptions, setCategoryOptions] = useState([])
