@@ -20,7 +20,6 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
     const estados = ['Pendiente de confirmación', 'En proceso', 'Pendiente de pago', 'Cancelado', 'Pagado', 'Enviado', 'Recibido'];
     const [pedido, setPedido] = useState([]);
     const [productos, setProductos] = useState([]);
-    const rows = productos;
     const columns = [
         { field: 'description', headerName: 'Descripción', width: 200 },
         {field: 'image',
@@ -156,7 +155,7 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
               </Select>
             </div>
           </div>
-          <div style={{ display: "flex" }}>
+          <div className="info_container" style={{ display: "flex" }}>
             <div style={{ flex: 1 }}>
               <h3 className="subtitlle_details">
                 Información del cliente y entrega
@@ -183,7 +182,7 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
           </div>
           <h3 className="subtitlle_details">Productos</h3>
           <DataGrid
-            rows={rows}
+            rows={productos}
             columns={columns}
             getRowId={(row) => row.description}
             initialState={{
@@ -195,14 +194,25 @@ export default function DetallePedidoModal({ visible, onCancel, idModal }) {
             autoHeight
           />
           <Container style={{ textAlign: "left", marginTop: "15px" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={openModal}
-              className="add-button"
-            >
-              + Agregar otro producto
-            </Button>
+            <div className="botones">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={openModal}
+                className="add-button"
+              >
+                + Agregar otro producto
+              </Button>
+
+              <Button
+                variant="contained"
+                color="error"
+                onClick={onCancel}
+                className="cancel-modal"
+              >
+                Cancelar
+              </Button>
+            </div>
           </Container>
           <Container style={{ textAlign: "center", marginTop: "15px" }}>
             <Button

@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Stack from "@mui/material/Stack";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
-import DetallePedidoModal from "../../components/EditOnlineOrder/OrderDetailsModal";
+import DetallePedidoOnlineModal from "../../components/EditOnlineOrder/OnlineOrderDetailsModal";
 
 function VerPedidosOnline() {
   const [pedidos, setPedidos] = useState([]);
@@ -106,7 +106,7 @@ function VerPedidosOnline() {
           autoHeight
         />
         {pedidoSeleccionado && (
-          <DetallePedidoModal
+          <DetallePedidoOnlineModal
             visible={modalVisible}
             onCancel={closeModal}
             idModal={idselc}
