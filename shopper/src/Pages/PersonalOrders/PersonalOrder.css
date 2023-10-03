@@ -138,14 +138,42 @@
   margin-bottom: 20px;
 }
 
-opciones-botones
+.users_container{
+  display: flex;
+  flex-direction: row;
+  align-items: center; 
+  justify-content: center;
+  gap: 4rem;
+}
 
-.opciones-direccion {
+
+opciones-botones .opciones-direccion {
   display: flex;
   justify-content: flex-start;
-  margin-bottom: 2rem;
+  align-items: center;
 }
 
 .texto {
   color: #837d7d;
 }
+
+
+
+.addUser__button{
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+
+}
+.addUser__button :hover{
+  cursor: pointer;
+  }
+
+.addUser__button p {
+  margin: 0 auto;  
+  }
+
+  .opciones-direccion {
+    margin-bottom: 0 ;
+  }

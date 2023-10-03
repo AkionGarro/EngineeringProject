@@ -5,3 +5,15 @@
 .container__permissions{
 margin: 0 auto;
 }
+
+.boxButton{
+    
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 0;
+
+
+
+}
