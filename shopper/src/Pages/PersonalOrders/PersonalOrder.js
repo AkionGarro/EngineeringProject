@@ -187,23 +187,23 @@ function Personal_Order() {
           >
             Vaciar pedido
           </Button>
-      </div>
+        </div>
         <div className="opciones-direccion">
-        <Select
-          fullWidth
-          variant="outlined"
-          value={direction}
-          onChange={handleDirectionOnSelect}
-          displayEmpty
-          id="seleccionar"
-        >
-          <MenuItem value="" disabled>
-            Seleccionar dirección
-          </MenuItem>
-          <MenuItem value="rojo">Rojo</MenuItem>
-          <MenuItem value="azul">Azul</MenuItem>
-          <MenuItem value="verde">Verde</MenuItem>
-        </Select>
+          <Select
+            fullWidth
+            variant="outlined"
+            value={direction}
+            onChange={handleDirectionOnSelect}
+            displayEmpty
+            id="seleccionar"
+          >
+            <MenuItem value="" disabled>
+              Seleccionar dirección
+            </MenuItem>
+            <MenuItem value="rojo">Rojo</MenuItem>
+            <MenuItem value="azul">Azul</MenuItem>
+            <MenuItem value="verde">Verde</MenuItem>
+          </Select>
       </div>
 
       <div className="botones-opciones">
