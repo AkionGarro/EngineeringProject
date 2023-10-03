@@ -61,6 +61,7 @@ const AdminProductsTableComponent = memo(props => {
 				}else{
 					querySnapshot = await api.getAllProducts()
 				}
+				console.log("QuerySnapshot: ", querySnapshot);
 				setProducts(querySnapshot)
 				setLoading(false)
 			} catch (error) {
@@ -95,6 +96,7 @@ const AdminProductsTableComponent = memo(props => {
 	const handleCloseform = () => {
 		setEditProduct(null)
 		setOpen(false)
+		setLoading(true)
 	}
 
 
@@ -146,10 +148,10 @@ const AdminProductsTableComponent = memo(props => {
 							</TableHead>
 
 							<TableBody>
-								{products.slice(startIndex, endIndex).map((item, index) => (
+								{products.slice(startIndex, endIndex).map((item, index) => (									
 									<TableRow key={index}>
 										<TableCell>{item.name}</TableCell>
-										<TableCell>Categoria</TableCell>
+										<TableCell>{item.categoryName}</TableCell>
 										<TableCell>{item.price}</TableCell>
 										{item.status === 1 ? (
 											<TableCell align="center">

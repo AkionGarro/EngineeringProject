@@ -79,7 +79,7 @@ const AdminCategoriesTableComponent = props => {
 	// Primero busca el elemento en la lista y lo elimina
 	// Luego actualiza la base de datos
 	const handleDelete = item => {
-		console.log("Desactivar categoria:", item)
+		//console.log("Desactivar categoria:", item)
 
 		api.deactivateCategory(item.id).then(() => {
 			setLoading(true)
@@ -109,12 +109,13 @@ const AdminCategoriesTableComponent = props => {
 	const handleCloseModal = () => {
 		setEditCategory(null)
 		setOpen(false)
+		setLoading(true)
 	}
 
 	const handleFilterChange = event => {
 		setLoading(true)
 		setFilter(event.target.innerText)
-		console.log("Filter: ", event.target.innerText)
+		//console.log("Filter: ", event.target.innerText)
 	}
 
 	const startIndex = page * rowsPerPage

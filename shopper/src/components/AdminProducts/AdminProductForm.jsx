@@ -94,8 +94,7 @@ const AdminProductForm = props => {
 	}, [openCategoryBox])
 
 	useEffect(() => {
-
-		console.log("Producto:", props.product );
+		console.log("Producto:", props.product)
 
 		const fetchProductCategory = async categoryRef => {
 			try {
@@ -108,12 +107,18 @@ const AdminProductForm = props => {
 
 		if (props.product) {
 			//Crea un array de imagenes con los datos del producto
-			const imageList = props.product.images.map(image => {
-				return {
-					url: image,
-					file: null
-				}
-			})
+
+			if (props.product.images.length > 0) {
+				const imageList = props.product.images.map(image => {
+					return {
+						url: image,
+						file: null
+					}
+				})
+
+				setImagesFormData(imageList)
+			}
+
 
 			setFormData({
 				id: props.product.id,
@@ -125,7 +130,6 @@ const AdminProductForm = props => {
 			})
 
 			fetchProductCategory(props.product.category)
-			setImagesFormData(imageList)
 		} else {
 			setFormData(initialFormData)
 			setImagesFormData([])
@@ -204,35 +208,47 @@ const AdminProductForm = props => {
 	const handleSubmit = async e => {
 		e.preventDefault()
 
+		const result = await Swal.fire({
+			target: document.getElementById("form-modal"),
+			title: "Are you sure?",
+			text: "You won't be able to revert this!",
+			icon: "warning",
+			showCancelButton: true,
+			cancelButtonColor: "#d33",
+			confirmButtonColor: "#3085d6",
+			cancelButtonText: "Cancel",
+			confirmButtonText: "Yes, save it!"
+		})
 
-		let newImages = formData.images
+		if (result.isConfirmed) {
+			
+			console.log("Product Category: ", productCategory)
 
-		if (newImages === null || newImages.length === 0) {
-			newImages = []
+			const newImages = imagesFormData.map(image => image.url !== "")
+
+			const newProduct = {
+				id: formData.id,
+				name: formData.name,
+				category: api.getCategoryReference(productCategory),
+				images: newImages,
+				price: Number(formData.price),
+				status: formData.status,
+				personalizedFields: formData.personalizedFields,
+				categoryName: productCategory.name
+			}
+
+			console.log("Submitting this product: ", newProduct)
+
+			if (newProduct.id) {
+				//Edita el producto
+				await api.updateProductData(newProduct)
+			} else {
+				//Crea el producto
+				await api.addNewProduct(newProduct)
+			}
+
+			props.closeForm()
 		}
-
-
-		const newProduct = {
-			id: formData.id,
-			name: formData.name,
-			category: api.getCategoryReference(productCategory),
-			images: newImages,
-			price: Number(formData.price),
-			status: formData.status,
-			personalizedFields: formData.personalizedFields
-		}
-
-		console.log("Submitting this product: ", newProduct)
-
-
-		if (newProduct.id) {
-			//Edita el producto
-			await api.updateProductData(newProduct)
-		} else {
-			//Crea el producto
-			await api.addNewProduct(newProduct)
-		}
-		
 	}
 
 	const checkKeyDown = e => {
@@ -361,7 +377,7 @@ const AdminProductForm = props => {
 										getOptionLabel={option => option.name}
 										options={categoryOptions}
 										loading={loadingCategory}
-										value={productCategory ? productCategory : ""}
+										value={productCategory ? productCategory : null}
 										onChange={(event, newValue) => {
 											handleCategoryChange(newValue)
 										}}
@@ -390,7 +406,11 @@ const AdminProductForm = props => {
 								<Grid xs={12}>
 									<p>Product Attributes</p>
 									{!productCategory ? (
-										<Alert severity="error"> We can't show you the product attributes until you select a category.<br/> Please choose a category first. </Alert>
+										<Alert severity="error">
+											{" "}
+											We can't show you the product attributes until you select a category.
+											<br /> Please choose a category first.{" "}
+										</Alert>
 									) : (
 										productCategory.personalizedFields.map((field, index) => (
 											<TextField

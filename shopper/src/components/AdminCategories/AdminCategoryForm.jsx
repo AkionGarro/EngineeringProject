@@ -42,7 +42,7 @@ const AdminCategoryForm = props => {
 
 	//Actualiza los datos del formulario
 	useEffect(() => {
-		console.log("Abriendo el modal de productrossjkhasdjk;hask")
+		//console.log("Abriendo el modal de productros")
 
 		if (props.category) {
 			setFormData({
@@ -126,8 +126,8 @@ const AdminCategoryForm = props => {
 	const handleInputChange = (e, index) => {
 		const { name, value } = e.target //Toma el Valor del Input
 
-		console.log("El name es ", name)
-		console.log("El value es ", value)
+		// console.log("El name es ", name)
+		// console.log("El value es ", value)
 
 		const updatedFields = [...fieldsFormData] //Copia el Array de Campos Personalizados
 
@@ -163,8 +163,8 @@ const AdminCategoryForm = props => {
 			text: "You won't be able to revert this!",
 			icon: "warning",
 			showCancelButton: true,
-			cancelButtonColor: "#3085d6",
-			confirmButtonColor: "#d33",
+			cancelButtonColor: "#d33",
+			confirmButtonColor: "#3085d6",
 			cancelButtonText: "Cancel",
 			confirmButtonText: "Yes, save it!"
 		})
@@ -218,7 +218,7 @@ const AdminCategoryForm = props => {
 			setBackgroundImageFormData(null)
 			setFieldsFormData([initialField])
 
-			props.setLoading(true)
+			props.closeModal()
 		}
 	}
 
@@ -361,15 +361,6 @@ const AdminCategoryForm = props => {
 												<MenuItem value="number">Number</MenuItem>
 												<MenuItem value="size">Size</MenuItem>
 											</TextField>
-
-											{/* <FormControl fullWidth>
-												<InputLabel>Type</InputLabel>
-												<Select name="type" value={field.type} onChange={e => handleInputChange(e, index)}>
-													<MenuItem value="text">Texto</MenuItem>
-													<MenuItem value="number">Número</MenuItem>
-													<MenuItem value="size">Tamaño</MenuItem>
-												</Select>
-											</FormControl> */}
 
 											<IconButton onClick={() => handleRemoveField(index)} color="secondary" aria-label="Eliminar">
 												<DeleteIcon />

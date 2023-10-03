@@ -270,6 +270,7 @@ export function DatabaseProvider({ children }) {
       
       let querySnapshot = await getDoc(categoryRef)
       const category = querySnapshot.data()
+      category.id = querySnapshot.id
       return category;
     } catch (error) {
       console.log("Error getting documents: ", error)
@@ -485,7 +486,8 @@ export function DatabaseProvider({ children }) {
           images: data.images,
           price: data.price,
           personalizedFields: data.personalizedFields,
-          status: data.status
+          status: data.status,
+          categoryName: data.categoryName,
         });
         console.log("Producto actualizado con éxito.")
       } catch (error) {
@@ -502,7 +504,8 @@ export function DatabaseProvider({ children }) {
         images: data.images,
         price: data.price,
         personalizedFields: data.personalizedFields,
-        status: data.status
+        status: data.status,
+        categoryName: data.categoryName,
       };
       
       try {
