@@ -170,16 +170,19 @@ const AdminProductForm = props => {
 	}
 
 	const handleAddImage = e => {
-		const file = e.target.files[0]
+		const files = e.target.files
 
-		if (file) {
-			const newImage = {
-				url: URL.createObjectURL(file),
-				file: file
-			}
-
-			setImagesFormData([...imagesFormData, newImage])
+		//add multipe files
+		if (files) {
+			const newImages = Array.from(files).map(file => {
+				return {
+					url: URL.createObjectURL(file),
+					file: file
+				}
+			})
+			setImagesFormData([...imagesFormData, ...newImages])
 		}
+	
 	}
 
 	const handleRemoveImage = item => {
@@ -221,10 +224,28 @@ const AdminProductForm = props => {
 		})
 
 		if (result.isConfirmed) {
+
+			//Upload Images to Firebae Storage
+
 			
 			console.log("Product Category: ", productCategory)
 
-			const newImages = imagesFormData.map(image => image.url !== "")
+			//Filter images with a file
+			const imagesWithFile = imagesFormData.filter(image => image.file !== null).map(image => image.file)
+
+			//filter images without a file but get only the url 
+			const imagesWithoutFile = imagesFormData.filter(image => image.file === null).map(image => image.url)
+
+			
+
+			//Upload images to firebase storage
+			const imagesURL = await api.uploadProductImages(imagesWithFile).then(urls => {
+				return urls
+			})
+
+			//Add the new images to the images array
+			const newImages = [...imagesURL, ...imagesWithoutFile]
+
 
 			const newProduct = {
 				id: formData.id,

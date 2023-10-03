@@ -4,6 +4,12 @@
 }
 
 
+.MuiImageListItem-img{
+  background-color: #e8e6e6;
+  object-fit: contain !important;
+  height: 1rem !important;
+}
+
 @media (max-width: 600px) {
   .hide-on-mobile {
     display: none !important;

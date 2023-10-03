@@ -388,7 +388,7 @@ export function DatabaseProvider({ children }) {
       if (type === "icon") {
         storagePath = "productCategories/icons/" + Date.now() + "-" + file.name;
       } else if (type === "backgroundImage") {
-        storagePath = "productCategories/backgroundImages/" + file.name;
+        storagePath = "productCategories/backgroundImages/" + Date.now() + "-" + file.name;
       } else {
         console.error("Invalid 'type' parameter");
         return null; // Return early or handle the error as needed
@@ -516,6 +516,50 @@ export function DatabaseProvider({ children }) {
       }
     }
 
+    const uploadProductImages = async (files) => {
+    
+      // Listen for state changes, errors, and completion of the upload.
+  
+        console.log("Uploading Product Images")
+        let storagePath = ""
+        let imageUrl = ""
+        const storage = getStorage()
+
+        //Upload files
+        const promises = files.map(async (file) => {
+          storagePath = "products/" + Date.now() + "-" + file.name;
+          const storageRef = ref(storage, storagePath)
+          // const uploadTask = uploadBytes(storageRef, file)
+          imageUrl = await uploadBytes(storageRef, file)
+            .then(snapshot => {
+              return getDownloadURL(snapshot.ref)
+            })
+            .then(downloadURL => {
+            return downloadURL
+          })
+          return imageUrl
+        })
+
+        const urls = await Promise.all(promises)
+
+        return urls
+
+  
+      //   storagePath = "products/" + Date.now() + "-" + file.name;
+  
+      //   const storageRef = ref(storage, storagePath)
+      //   // const uploadTask = uploadBytes(storageRef, file)
+      //   imageUrl = await uploadBytes(storageRef, file)
+      //     .then(snapshot => {
+      //       return getDownloadURL(snapshot.ref)
+      //     })
+      //     .then(downloadURL => {
+      //     return downloadURL
+      //   })
+  
+      // return imageUrl
+    }
+
   /**************************************************************** 
   * FIN de Productos para la Vista de Administrador *
   ****************************************************************/
@@ -550,7 +594,8 @@ export function DatabaseProvider({ children }) {
         deactivateProduct,
         activateProduct,
         updateProductData,
-        addNewProduct
+        addNewProduct,
+        uploadProductImages
       }}
     >
       {children}
