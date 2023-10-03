@@ -39,6 +39,7 @@ const StyledTableCell = withStyles((theme) => ({
 }))(TableCell);
 
 function Orders() {
+  
   const opcionesFiltro = [
     "Todos",
     "Pendiente de confirmación",
