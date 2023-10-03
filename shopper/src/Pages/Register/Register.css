@@ -11,3 +11,11 @@
     align-items: center;
     justify-content: center;
   }
+
+  .container__address{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin : 0.8rem 0;
+    gap: 1rem;
+}
