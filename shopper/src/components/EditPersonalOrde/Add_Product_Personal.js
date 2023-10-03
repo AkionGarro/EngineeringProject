@@ -18,6 +18,7 @@ import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import "./Add_Product_Personal.css";
 import Swal from "sweetalert2";
+import UploadImageInput from "../AdminCategories/UploadImageInput"
 
 
 const style = {
@@ -35,6 +36,8 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [selectedFile, setSelectedFile] = useState("");
+  const [fileURL, setfileURL] = useState("");
+
 
   const VisuallyHiddenInput = styled('input')`
     clip: rect(0 0 0 0);
@@ -53,15 +56,10 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
     console.log("Fio")
   };
 
-  const handleImageUpload = (event) => {
-    const archivo = event.target.files[0];
-    setFile(archivo);
-    setSelectedFile(archivo.name);
-  };
-
   const cleanData = () => {
     setDescription("");
     setSelectedFile("");
+    setfileURL(null);
     setFile(null);
   };
 
@@ -69,6 +67,17 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
     cleanData();
     onCancelModal();
   }
+
+  const handleImageUpload = (event) => {
+		const archivo = event.target.files[0]
+
+		if (archivo) {
+			setFile(archivo);
+      const iconImageUrl = URL.createObjectURL(archivo);
+      setfileURL(iconImageUrl);
+      setSelectedFile(archivo.name);
+		}
+	}
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -144,20 +153,13 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
               />
             </Grid>
             <Grid item xs={4}>
-            <Button
-              component="label"
-              variant="contained"
-              startIcon={<CloudUploadIcon />}
-              htmlFor="file-upload-input"
-            >
-              {selectedFile ? selectedFile : "Upload a file"}
-              <input
-                id="file-upload-input"
-                type="file"
-                style={{ display: 'none' }}
-                onChange={(e) => handleImageUpload(e)}
+              <UploadImageInput
+                imageUrl={fileURL}
+                buttonTitle={selectedFile}
+                label={null}
+                onChange={(e) =>
+                  handleImageUpload(e)}
               />
-            </Button>
             </Grid>
             <Grid item xs={2}>
               <DeleteIcon

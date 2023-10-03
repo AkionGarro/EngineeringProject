@@ -12,50 +12,43 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { styled } from '@mui/material/styles';
 import { useState } from 'react';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { auth } from "../../firebase"; 
 import Swal from "sweetalert2";
 import DeleteIcon from "@mui/icons-material/Delete";
+import UploadImageInput from "../../components/AdminCategories/UploadImageInput"
 
 function Personal_Order() {
 
-  const [fields, setFields] = useState([{ description: '', image: null }]);
+  const [fields, setFields] = useState([{ description: '', image: null , url_file:null, url_fire: null}]);
+  const [imagenes, setImagenes] = useState([]);
   const [direction, setDirection] = useState("");
   const referencia =  collection(firestore, "pedidosPersonales");
   const user = auth.currentUser;
 
-  const VisuallyHiddenInput = styled('input')`
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    white-space: nowrap;
-    width: 1px;
-  `;
-
-
-  const handleFieldChange = (index, fieldName, value, nombre) => {
+  const handleFieldChange = (index , fieldName,value ) => {
     const updatedFields = [...fields];
     updatedFields[index][fieldName] = value;
-    updatedFields[index]["img_name"] = nombre;
     setFields(updatedFields);
   };
-  
-  const handleImageUpload = async(index, event) => {
-    const archivo = event.target.files[0];
-    const refArchivo = ref(storage,`pedidosPersonales/${archivo.name}` )
-    await uploadBytes(refArchivo, archivo)
-    const file = await getDownloadURL(refArchivo)
-    handleFieldChange(index, 'image', file, archivo.name);
-  };
+
+  const handleIconChange = (index, event) => {
+		const archivo = event.target.files[0]
+
+		if (archivo) {
+			const iconImageUrl = URL.createObjectURL(archivo)
+			const updatedFields = [...fields];
+      updatedFields[index]["image"] = archivo.name;
+      updatedFields[index]["url_file"] = iconImageUrl;
+      const updatedImagenes = [...imagenes];
+      updatedImagenes[index] = archivo;
+      setFields(updatedFields);
+      setImagenes(updatedImagenes);
+		}
+	}
 
   const addFields = () => {
-    setFields([...fields, { description: '', image: null }]);
+    setFields([...fields, { description: '', image: null , url_file:null, url_fire: null }]);
   };
 
   const removeFields = (index) => {
@@ -71,6 +64,11 @@ function Personal_Order() {
         const updatedFields = [...fields];
         updatedFields.splice(index, 1);
         setFields(updatedFields);
+        const updatedImagenes = [...imagenes];
+        updatedImagenes.splice(index, 1);
+        setImagenes(updatedImagenes);
+        console.log(fields);
+        console.log(imagenes);
       }
     });
   };
@@ -85,7 +83,7 @@ function Personal_Order() {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        setFields([{ description: "", image: "" }]);
+        setFields([{ description: '', image: null , url_file: null, url_fire: null }]);
       }
     });
   };
@@ -96,7 +94,18 @@ function Personal_Order() {
   };
 
   const handleSubmit = async(event) => {
+    console.log(fields)
     event.preventDefault();
+
+    for (let i = 0; i < imagenes.length; i++) {
+      const foto = imagenes[i];
+      const refArchivo = ref(storage,`pedidosPersonales/${foto.name}` )
+      await uploadBytes(refArchivo, foto)
+      const file = await getDownloadURL(refArchivo)
+      const updatedFields = [...fields];
+      updatedFields[i]["url_fire"] = file;
+      setFields(updatedFields);
+    }
 
     let data = {
       usuario : user.email,
@@ -119,7 +128,7 @@ function Personal_Order() {
   };
   
   const cleanData = () => {
-    setFields([{ description: '', image: null }]);
+    setFields([{ description: '', image: null ,url_file: null, url_fire: null }]);
     setDirection("");
   }
   
@@ -143,17 +152,13 @@ function Personal_Order() {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button
-              component="label"
-              variant="contained"
-              startIcon={<CloudUploadIcon />}
-              name={`image${index}`}
-              href="#file-upload"
-              onChange={(e) => handleImageUpload(index, e)}
-            >
-              {fields[index].image ? fields[index].img_name : 'Upload a file'}
-              <VisuallyHiddenInput type="file" />
-            </Button>  
+            <UploadImageInput
+              imageUrl={fields[index]["url_file"]}
+              buttonTitle={fields[index]["image"]}
+              label={null}
+              onChange={(e) =>
+                handleIconChange(index, e)}
+            />
           </Grid>
           <Grid item xs={12} className="button-container">
             <DeleteIcon
@@ -183,8 +188,6 @@ function Personal_Order() {
             Vaciar pedido
           </Button>
       </div>
-        
-
         <div className="opciones-direccion">
         <Select
           fullWidth

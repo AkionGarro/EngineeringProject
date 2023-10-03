@@ -23,6 +23,10 @@ const UploadImageInput = props => {
 		imageUrl = "https://via.placeholder.com/150"
 	}
 
+	if (buttonTitle === null || buttonTitle === "") {
+		buttonTitle = "Cargar Imagen"
+	}
+
 	return (
 
 		<Grid item container
@@ -30,9 +34,11 @@ const UploadImageInput = props => {
 		justifyContent="center"
 		alignItems="center"
 		xs>
-			<p>{label}</p>
+			{label !== null && (
+				<p>{label}</p>
+			)}
 			<img src={imageUrl} width={"150px"} height={"150px"} style={{objectFit: 'contain' }} alt="" />
-			<Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+			<Button component="label" style={{marginTop:"7px"}} variant="contained" startIcon={<CloudUploadIcon />}>
 				{buttonTitle}
 				<VisuallyHiddenInput type="file" accept="image/*" onChange={props.onChange} />
 			</Button> 
