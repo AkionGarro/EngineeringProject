@@ -17,7 +17,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useFirebase } from "../../context/DatabaseContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
-import { auth } from "../../firebase";
 import AddUserModalOnline from "./AddUserModalOnline";
 import "./PedidoOnline.css";
 
@@ -32,7 +31,6 @@ const PedidoOnline = () => {
   const ref = collection(firestore, "pedidosOnline");
   const [linkFields, setLinkFields] = useState([{ link: "", comentario: "" }]);
   const [direction, setDirection] = useState("");
-  const user = auth.currentUser;
 
   const cleanData = () => {
     setLinkFields([{ link: "", comentario: "" }]);
