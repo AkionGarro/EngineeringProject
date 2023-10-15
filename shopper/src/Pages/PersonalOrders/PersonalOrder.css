@@ -1,6 +1,8 @@
-.container {
+.container_personal {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 30px;
+  background-color: rgba(255, 255, 255, 0.945);
+  padding-left: 50px !important;
 }
 
 .grid-container {
@@ -29,11 +31,11 @@
 .iconoEliminar:hover {
   background-color: lightgray;
   cursor: pointer;
-  box-shadow: 0px 0px 10px 3px rgba(0,0,0,0.5);
+  box-shadow: 0px 0px 10px 3px rgba(200, 81, 81, 0.763);
   border-radius: 50%;
 }
 
-.container .opciones-direccion {
+.container_personal .opciones-direccion {
   width: 50%;
 }
 
@@ -55,7 +57,7 @@
     white-space: normal;
   }
 
-  .container {
+  .container_personal {
     padding: 40px !important;
     display: flex;
     justify-content: center;
@@ -80,16 +82,16 @@
     align-items: center;
   }
 
-  .container .description {
+  .container_personal .description {
     width: 100%;
   }
 
-  .container .opciones-direccion {
+  .container_personal .opciones-direccion {
     width: 100%;
   }
 }
 
-.container .opciones-direccion {
+.container_personal .opciones-direccion {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -108,18 +110,18 @@
   width: 50% !important;
 }
 
-.container .add-button {
+.container_personal .add-button {
   margin-bottom: 20px;
   width: 250px;
 }
 
-.container .send-button {
+.container_personal .send-button {
   margin-top: 20px;
   margin-bottom: 3rem;
   width: 250px;
 }
 
-.container .button-container {
+.container_personal .button-container {
   margin-bottom: 20px;
 }
 
@@ -131,39 +133,47 @@
   justify-content: center;
 }
 
-.container .add-button {
+.container_personal .add-button {
   margin-top: 10px;
   margin-bottom: 20px;
 }
 
-.opciones-direccion {
+.users_container{
+  display: flex;
+  flex-direction: row;
+  align-items: center; 
+  justify-content: center;
+  gap: 4rem;
+}
+
+
+opciones-botones .opciones-direccion {
   display: flex;
   justify-content: flex-start;
-  margin-bottom: 2rem;
+  align-items: center;
 }
 
 .texto {
-  color: rgba(69, 123, 157, 1);
-}
-/*
-.container .send-button {
-  margin-top: 10px;
+  color: #837d7d;
 }
 
-.seleccionar {
-  width: 50% !important;
-}
 
-.botones-opciones {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: center;
-  justify-content: center;
-}
 
-.opciones-direccion {
-  display: flex;
-  justify-content: flex-start;
+.addUser__button{
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+
 }
-*/
+.addUser__button :hover{
+  cursor: pointer;
+  }
+
+.addUser__button p {
+  margin: 0 auto;  
+  }
+
+  .opciones-direccion {
+    margin-bottom: 0 ;
+  }

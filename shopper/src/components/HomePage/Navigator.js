@@ -22,43 +22,43 @@ import Categories from "../../Pages/Categories/Categories";
 import Orders from "../../Pages/Orders/Orders";
 import Account from "../../Pages/Account/Account";
 import NewAdmin from "../../Pages/NewAdmin/NewAdmin";
-import PedidoPersonal from "../../Pages/Personal_orders/personal_order";
+import PedidoPersonal from "../../Pages/PersonalOrders/PersonalOrder";
 import PedidoOnline from "../../Pages/PedidoOnline/PedidoOnline";
 import PedidoNormal from "../../Pages/PedidoNormal/PedidoNormal";
 
 const categories = [
   {
-    id: "Options:",
+    id: "Opciones:",
     children: [
       {
-        id: "Orders",
+        id: "Pedidos",
         icon: <SellIcon />,
         route: <Orders />,
-        tittle: "Manage Orders",
+        tittle: "Gestionar Pedidos",
       },
       {
-        id: "Products",
+        id: "Productos",
         icon: <InventoryIcon />,
         route: <Products />,
-        tittle: "Manage Products",
+        tittle: "Gestionar productos",
       },
       {
-        id: "Categories",
+        id: "Categorías",
         icon: <CategoryIcon />,
         route: <Categories />,
-        tittle: "Manage Categories",
+        tittle: "Gestionar Categorías",
       },
       {
-        id: "Personal Orders",
+        id: "Pedido Personal",
         icon: <ShoppingCartIcon />,
         route: <PedidoPersonal />,
-        tittle: "Manage Personal Orders",
+        tittle: "Gestionar Pedido Personal",
       },
       {
-        id: "Online Orders",
+        id: "Pedido en línea",
         icon: <ShoppingCartIcon />,
         route: <PedidoOnline />,
-        tittle: "Manage Online Orders",
+        tittle: "Gestionar Pedido en línea ",
       },
       {
         id: "Common Orders",
@@ -72,16 +72,16 @@ const categories = [
     id: "Users",
     children: [
       {
-        id: "My Account",
+        id: "Mi cuenta",
         icon: <AccountCircleIcon />,
         route: <Account />,
-        tittle: "My Account",
+        tittle: "Mi Perfil",
       },
       {
-        id: "New Admin",
+        id: "Gestión de administradores",
         icon: <PersonAddIcon />,
         route: <NewAdmin />,
-        tittle: "New Admin",
+        tittle: "Gestión de administradores",
       },
     ],
   },
@@ -121,11 +121,6 @@ export default function Navigator(props) {
           sx={{ ...item, ...itemCategory, fontSize: 22, color: "#fff" }}
         >
           VeroCamShop
-        </ListItem>
-        <ListItem sx={{ ...item, ...itemCategory }}>
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
         </ListItem>
         {categories.map(({ id, children }) => (
           <Box key={id} sx={{ bgcolor: "#101F33" }}>

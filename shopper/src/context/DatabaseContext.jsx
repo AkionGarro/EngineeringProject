@@ -108,13 +108,14 @@ export const useFirebase = () => {
 };
 
 export function DatabaseProvider({ children }) {
-  const registerDataUser = async (fullnameF, emailF, phoneF) => {
+  const registerDataUser = async (fullnameF, emailF, phoneF,identificationF) => {
     const ref = collection(firestore, "users");
     let data = {
       fullName: fullnameF,
       email: emailF,
       phone: phoneF,
       userType: "user",
+      identification:identificationF
     };
 
     try {
@@ -124,6 +125,24 @@ export function DatabaseProvider({ children }) {
       console.error("Error adding document: ", e);
     }
   };
+
+  const addAddressToUser = async (data) => {
+    const ref = collection(firestore, "users");
+    const addressCollection = collection(firestore, "usersAddress");
+    const q = query(ref, where("email", "==", data.email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.docs.length === 0) {
+      console.log("Usuario no encontrado.");
+      return;
+    }else{
+      const docRef = await addDoc(addressCollection, data);
+      console.log("Document written with ID: ", docRef.id);
+    }
+
+  };
+
+
 
   const changeStateOrder = async (orderId, newState) => {
     const db = firestore;
@@ -398,6 +417,27 @@ export function DatabaseProvider({ children }) {
   * Categorias de productos para la Vista de Administrador *
   *********************************************************/
 
+  const getCategoryReference = (category) => {
+
+
+    const categoryRef = doc(firestore, "productCategories", category.id)
+    
+    return categoryRef
+
+  }
+
+  const getCategoryByID = async (categoryRef) => {
+    try {
+      
+      let querySnapshot = await getDoc(categoryRef)
+      const category = querySnapshot.data()
+      category.id = querySnapshot.id
+      return category;
+    } catch (error) {
+      console.log("Error getting documents: ", error)
+    }
+  };
+
   //Trae los documentos de las categorias de productos
   const getAllCategories = async() =>{
     console.log("Get all categories")
@@ -412,11 +452,11 @@ export function DatabaseProvider({ children }) {
   }
 
   //Traer todos los documentos de categorias de productos donde el status sea 1 
-  const getCategories_Status1= async() =>{
-    console.los("Get all categories with Status 1 ");
+  const getCategoriesByStatus= async(status) =>{
+    console.log("Get all categories with Status: ", status);
     try{
       const ref = collection(firestore, "productCategories")
-      const q = query(ref, where("status", "==", 1))
+      const q = query(ref, where("status", "==", status))
       const querySnapshot = await getDocs(q)
       const listCategories = querySnapshot.docs.map(doc => ({id:doc.id, ...doc.data()}))
       return listCategories
@@ -509,7 +549,7 @@ export function DatabaseProvider({ children }) {
       if (type === "icon") {
         storagePath = "productCategories/icons/" + Date.now() + "-" + file.name;
       } else if (type === "backgroundImage") {
-        storagePath = "productCategories/backgroundImages/" + file.name;
+        storagePath = "productCategories/backgroundImages/" + Date.now() + "-" + file.name;
       } else {
         console.error("Invalid 'type' parameter");
         return null; // Return early or handle the error as needed
@@ -531,6 +571,161 @@ export function DatabaseProvider({ children }) {
   /**************************************************************** 
   * FIN de Categorias de productos para la Vista de Administrador *
   ****************************************************************/
+
+
+  /********************************************************* 
+  * Productos para la Vista de Administrador               *
+  *********************************************************/
+
+    //Trae los documentos de las categorias de productos
+    const getAllProducts = async() =>{
+      console.log("Get all products")
+      try{
+        const ref = collection(firestore, "products")
+        const snapshot = await getDocs(ref)
+        const productList = snapshot.docs.map(doc => ({id:doc.id, ...doc.data()}))
+        return productList
+      } catch(e){
+        console.log(e)
+      }
+    }
+  
+    //Traer todos los documentos de categorias de productos donde el status sea 1 
+    const getProductsByStatus= async(status) =>{
+      console.log("Get all Products with Status: ", status);
+      try{
+        const ref = collection(firestore, "products")
+        const q = query(ref, where("status", "==", status))
+        const querySnapshot = await getDocs(q)
+        const productList = querySnapshot.docs.map(doc => ({id:doc.id, ...doc.data()}))
+        return productList
+      } catch(e){
+        console.log(e)
+      }
+    }
+  
+    //Elimina una categoria de productos por su id 
+    //Cambia el estado de la categoria de 1 a 0
+    const deactivateProduct = async(id) =>{
+      console.trace("Try to delete product with id:", id)  
+      try {
+        const productRef = doc(firestore, "products", id)
+        await updateDoc(productRef, {
+          status: 0
+        })
+        
+      } catch (error) {
+        console.error("Error al desactivar el producto:", error)
+      }
+    }
+  
+    //Activa una categoria de productos por su id 
+    //Cambia el estado de la categoria de 0 a 1
+    const activateProduct = async(id) =>{
+      console.trace("Try to activate product with id:", id)  
+      try {
+        const productRef = doc(firestore, "products", id)
+        await updateDoc(productRef, {
+          status: 1
+        })
+        
+      } catch (error) {
+        console.error("Error al eliminar la categoria:", error)
+      }
+    }
+  
+    //Actualiza los datos de una categoria de productos
+    const updateProductData = async (data) => {
+      console.log("Update product data with:", data)
+    
+      const productRef = doc(firestore, "products", data.id)
+  
+      try {
+        await updateDoc(productRef, {
+          name: data.name,
+          category: data.category,
+          images: data.images,
+          price: data.price,
+          personalizedFields: data.personalizedFields,
+          status: data.status,
+          categoryName: data.categoryName,
+        });
+        console.log("Producto actualizado con éxito.")
+      } catch (error) {
+        console.error("Error al actualizar el Producto:", error)
+      }
+    }
+  
+    //Agrega una nueva categoria de productos
+    const addNewProduct = async (data) => {
+      const ref = collection(firestore, "products")
+      let productData = {
+        name: data.name,
+        category: data.category,
+        images: data.images,
+        price: data.price,
+        personalizedFields: data.personalizedFields,
+        status: data.status,
+        categoryName: data.categoryName,
+      };
+      
+      try {
+        const docRef = await addDoc(ref, productData)
+        console.log(" New Product Added: Document written with ID: ", docRef.id)
+      } catch (e) {
+        console.error("Error adding product Document: ", e)
+      }
+    }
+
+    const uploadProductImages = async (files) => {
+    
+      // Listen for state changes, errors, and completion of the upload.
+  
+        console.log("Uploading Product Images")
+        let storagePath = ""
+        let imageUrl = ""
+        const storage = getStorage()
+
+        //Upload files
+        const promises = files.map(async (file) => {
+          storagePath = "products/" + Date.now() + "-" + file.name;
+          const storageRef = ref(storage, storagePath)
+          // const uploadTask = uploadBytes(storageRef, file)
+          imageUrl = await uploadBytes(storageRef, file)
+            .then(snapshot => {
+              return getDownloadURL(snapshot.ref)
+            })
+            .then(downloadURL => {
+            return downloadURL
+          })
+          return imageUrl
+        })
+
+        const urls = await Promise.all(promises)
+
+        return urls
+
+  
+      //   storagePath = "products/" + Date.now() + "-" + file.name;
+  
+      //   const storageRef = ref(storage, storagePath)
+      //   // const uploadTask = uploadBytes(storageRef, file)
+      //   imageUrl = await uploadBytes(storageRef, file)
+      //     .then(snapshot => {
+      //       return getDownloadURL(snapshot.ref)
+      //     })
+      //     .then(downloadURL => {
+      //     return downloadURL
+      //   })
+  
+      // return imageUrl
+    }
+
+  /**************************************************************** 
+  * FIN de Productos para la Vista de Administrador *
+  ****************************************************************/
+
+
   return (
     <databaseContext.Provider
       value={{
@@ -544,16 +739,27 @@ export function DatabaseProvider({ children }) {
         changeToUser,
         getUserData,
         updateUserData,
+        addAddressToUser,
         //Categorias de productos para la Vista de Administrador
+        getCategoryReference,
         getAllCategories,
-        getCategories_Status1,
+        getCategoriesByStatus,
         deactivateCategory,
         activateCategory,
         updateCategoryData,
         addNewCategory,
         uploadCategoryImage,
         getAllOrdersWithID,
-        setTestDatabase
+        setTestDatabase,
+        getCategoryByID,
+        //Productos para la Vista de Administrador
+        getAllProducts,
+        getProductsByStatus,
+        deactivateProduct,
+        activateProduct,
+        updateProductData,
+        addNewProduct,
+        uploadProductImages
       }}
     >
       {children}

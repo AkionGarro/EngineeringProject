@@ -18,6 +18,7 @@ import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import "./Add_Product_Personal.css";
 import Swal from "sweetalert2";
+import UploadImageInput from "../AdminCategories/UploadImageInput"
 
 
 const style = {
@@ -35,6 +36,8 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [selectedFile, setSelectedFile] = useState("");
+  const [fileURL, setfileURL] = useState("");
+
 
   const VisuallyHiddenInput = styled('input')`
     clip: rect(0 0 0 0);
@@ -53,15 +56,10 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
     console.log("Fio")
   };
 
-  const handleImageUpload = (event) => {
-    const archivo = event.target.files[0];
-    setFile(archivo);
-    setSelectedFile(archivo.name);
-  };
-
   const cleanData = () => {
     setDescription("");
     setSelectedFile("");
+    setfileURL(null);
     setFile(null);
   };
 
@@ -70,40 +68,63 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
     onCancelModal();
   }
 
+  const handleImageUpload = (event) => {
+		const archivo = event.target.files[0]
+
+		if (archivo) {
+			setFile(archivo);
+      const iconImageUrl = URL.createObjectURL(archivo);
+      setfileURL(iconImageUrl);
+      setSelectedFile(archivo.name);
+		}
+	}
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const archivo = file;
-    const refArchivo = ref(storage, `pedidosPersonales/${archivo.name}`)
-    await uploadBytes(refArchivo, archivo)
-    const fileURL = await getDownloadURL(refArchivo)
+    if (archivo != null){
+      const refArchivo = ref(storage, `pedidosPersonales/${archivo.name}`)
+      await uploadBytes(refArchivo, archivo)
+      const fileURL = await getDownloadURL(refArchivo)
 
-    let data = {
-      description: description,
-      image: fileURL,
-      img_name: selectedFile
-    }
+      let data = {
+        description: description,
+        image: fileURL,
+        img_name: selectedFile
+      }
 
-    try {
-      const documentoRef = doc(firestore, 'pedidosPersonales', id);
-      await updateDoc(documentoRef, {
-        productos: arrayUnion(data),
-      });
+      try {
+        const documentoRef = doc(firestore, 'pedidosPersonales', id);
+        await updateDoc(documentoRef, {
+          productos: arrayUnion(data),
+        });
+        Swal.fire({
+          icon: "success",
+          title: "¡Producto agregado!",
+          text: "El producto se ha agregado al pedido.",
+          customClass: {
+            container: 'swal-custom' // Aplica la clase personalizada
+          }
+        })
+        cleanData();
+      } catch (e) {
+        Swal.fire({
+          icon: "error",
+          title: "¡Error al guardar el producto!"
+        });
+      }
+    }else{
       Swal.fire({
-        icon: "success",
-        title: "¡Producto agregado!",
-        text: "El producto se ha agregado al pedido.",
+        icon: "error",
+        title: "¡Error!",
+        text: "Debes agregar una foto.",
         customClass: {
           container: 'swal-custom' // Aplica la clase personalizada
         }
       })
-      cleanData();
-    } catch (e) {
-      Swal.fire({
-        icon: "error",
-        title: "¡Error al guardar el producto!"
-      });
     }
+
   };
 
   return (
@@ -117,7 +138,7 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
           <Container style={{ textAlign: 'right' }}>
             <Button onClick={closeModal} startIcon={<CancelIcon />}></Button>
           </Container>
-          <h3 style={{ textAlign: 'center' }}>Agregar un nuevo producto al pedido</h3>
+          <h3 className="titlle_details">Agregar un nuevo producto al pedido</h3>
           <Grid container spacing={3} className="grid-container2">
             <Grid item xs={6}>
               <TextField
@@ -132,20 +153,13 @@ export default function Add_Product({ visibleModal, onCancelModal, id }) {
               />
             </Grid>
             <Grid item xs={4}>
-            <Button
-              component="label"
-              variant="contained"
-              startIcon={<CloudUploadIcon />}
-              htmlFor="file-upload-input"
-            >
-              {selectedFile ? selectedFile : "Upload a file"}
-              <input
-                id="file-upload-input"
-                type="file"
-                style={{ display: 'none' }}
-                onChange={(e) => handleImageUpload(e)}
+              <UploadImageInput
+                imageUrl={fileURL}
+                buttonTitle={selectedFile}
+                label={null}
+                onChange={(e) =>
+                  handleImageUpload(e)}
               />
-            </Button>
             </Grid>
             <Grid item xs={2}>
               <DeleteIcon

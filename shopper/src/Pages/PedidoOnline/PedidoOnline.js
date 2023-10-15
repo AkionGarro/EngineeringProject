@@ -104,11 +104,10 @@ const PedidoOnline = () => {
 
   return (
     <Container className="container">
-      <h2 className="texto">Pedido Online</h2>
-      <h4 className="texto">
+      <h2 className="texto">
         Envía los links de los productos que deseas comprar y estos llegaran a
         tu puerta
-      </h4>
+      </h2>
       {linkFields.map((field, index) => (
         <Grid container spacing={2} key={index} className="grid-container">
           <Grid item xs={12}>
