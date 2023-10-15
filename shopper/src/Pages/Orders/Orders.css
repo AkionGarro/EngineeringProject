@@ -54,7 +54,6 @@
   background-color: aqua;
 }
 .row-table{
-  background-color: blue;
   width: 98%;
   overflow-x: auto;
 }
@@ -67,6 +66,7 @@
     padding-right: 1rem;
     padding-left: 1rem;
     justify-content: left; /* Centra los botones horizontalmente */
+    margin-bottom: 5px;
   }
 .filter-button {
   background-color: rgb(233, 226, 226);

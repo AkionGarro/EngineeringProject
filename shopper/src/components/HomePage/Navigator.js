@@ -24,6 +24,7 @@ import Account from "../../Pages/Account/Account";
 import NewAdmin from "../../Pages/NewAdmin/NewAdmin";
 import PedidoPersonal from "../../Pages/Personal_orders/personal_order";
 import PedidoOnline from "../../Pages/PedidoOnline/PedidoOnline";
+import PedidoNormal from "../../Pages/PedidoNormal/PedidoNormal";
 
 const categories = [
   {
@@ -58,6 +59,12 @@ const categories = [
         icon: <ShoppingCartIcon />,
         route: <PedidoOnline />,
         tittle: "Manage Online Orders",
+      },
+      {
+        id: "Common Orders",
+        icon: <ShoppingCartIcon />,
+        route: <PedidoNormal />,
+        tittle: "Manage Common Orders",
       },
     ],
   },

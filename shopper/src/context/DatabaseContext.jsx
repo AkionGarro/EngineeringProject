@@ -14,6 +14,83 @@ import {
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"; 
 
+const orders = [
+  {
+    direccion: "Dirección A",
+    estado: "0",
+    usuario: "a6ENLApVIUVE0fxYVRV3"
+  },
+  {
+    direccion: "Dirección B",
+    estado: "1",
+    usuario: "a6ENLApVIUVE0fxYVRV3"
+  },
+  {
+    direccion: "Dirección C",
+    estado: "2",
+    usuario: "UiWsWa6VYHLzWHGNC0bZ"
+  },
+  {
+    direccion: "Dirección D",
+    estado: "3",
+    usuario: "UiWsWa6VYHLzWHGNC0bZ"
+  },
+  {
+    direccion: "Dirección E",
+    estado: "4",
+    usuario: "SbhqxrHmPPcWax1ZNA1k"
+  },
+  {
+    direccion: "Dirección F",
+    estado: "1",
+  },
+  {
+    direccion: "Dirección G",
+    estado: "2",
+    usuario: "SbhqxrHmPPcWax1ZNA1k"
+  },
+  {
+    direccion: "Dirección H",
+    estado: "3",
+    usuario: "SbhqxrHmPPcWax1ZNA1k"
+  },
+  {
+    direccion: "Dirección I",
+    estado: "4",
+    usuario: "SbhqxrHmPPcWax1ZNA1k"
+  },
+  {
+    direccion: "Dirección J",
+    estado: "1",
+    usuario: "GI0khObDJbj1jt67DZsF"
+  },
+  {
+    direccion: "Dirección K",
+    estado: "3",
+    usuario: "GI0khObDJbj1jt67DZsF"
+  },
+  {
+    direccion: "Dirección L",
+    estado: "3",
+    usuario: "GI0khObDJbj1jt67DZsF"
+  },
+  {
+    direccion: "Dirección M",
+    estado: "1",
+    usuario: "s4gHRcWCwVE0ZSNFwYxD"
+  },
+  {
+    direccion: "Dirección N",
+    estado: "2",
+    usuario: "s4gHRcWCwVE0ZSNFwYxD"
+  },
+  {
+    direccion: "Dirección O",
+    estado: "3",
+    usuario: "s4gHRcWCwVE0ZSNFwYxD"
+  },
+  // Agrega más pedidos aquí según sea necesario
+];
 
 
 /* Creating a context object. */
@@ -50,53 +127,71 @@ export function DatabaseProvider({ children }) {
 
   const changeStateOrder = async (orderId, newState) => {
     const db = firestore;
-    const ordersCollectionRef = collection(db, "pedidosTest");
+    const collections = ["pedidosTest", "pedidosPersonales", "pedidosOnline"];
   
-    try {
-      const querySnapshot = await getDocs(
-        query(ordersCollectionRef, where("pedido.id", "==", orderId))
-      );
+    for (const collectionName of collections) {
+      const ordersCollectionRef = collection(db, collectionName);
   
-      querySnapshot.forEach(async (doc) => {
-        const orderRef = doc.ref;
-        const currentData = doc.data();
-        
-        // Actualiza el estado de la orden en la copia local de los datos
-        currentData.pedido.estado = newState;
+      try {
+        const orderRef = doc(ordersCollectionRef, orderId);
+        const orderDoc = await getDoc(orderRef);
   
-        try {
-          // Actualiza el documento en Firestore
-          await updateDoc(orderRef, currentData);
+        if (orderDoc.exists()) {
+          const currentData = orderDoc.data();
   
-          console.log(`Orden con ID ${orderId} actualizada correctamente`);
-        } catch (error) {
-          console.error("Error al actualizar la orden:", error);
+          // Actualiza el estado de la orden en el documento existente
+          const updatedData = { estado: newState };
+  
+          try {
+            // Actualiza el documento en Firestore
+            await updateDoc(orderRef, updatedData);
+  
+            console.log(`Orden con ID ${orderId} actualizada correctamente en la colección ${collectionName}`);
+            return true;
+          } catch (error) {
+            console.error("Error al actualizar la orden:", error);
+            return false;
+          }
         }
-      });
-  
-      if (querySnapshot.empty) {
-        console.log(`No se encontró ninguna orden con ID ${orderId}`);
-        return false;
+      } catch (error) {
+        console.error(`Error al buscar la orden en la colección ${collectionName}:`, error);
       }
-      return true;
-    } catch (error) {
-      console.error("Error al actualizar la orden:", error);
-      return false;
     }
+  
+    console.log(`No se encontró ninguna orden con ID ${orderId} en ninguna de las colecciones`);
+    return false;
   };  
 
   const getOrder = async (orderId) => {
-    console.log("ORDER ID: ", orderId);
+    console.log("ORDER ID:" + orderId.toString() + ".");
     let order = null;
-    let ref = collection(firestore, "pedidosTest");
-    let q = query(ref, where("pedido.id", "==", parseInt(orderId)));
-    let querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-
-      order = doc.data();
-    });
+  
+    const collections = ["pedidosTest", "pedidosPersonales", "pedidosOnline"];
+  
+    for (const collectionName of collections) {
+      const db = firestore; // Obtén la instancia de Firestore
+      let orderRef = doc(db, collectionName, orderId); // Utiliza doc() para referenciar un documento específico
+  
+      try {
+        const orderDoc = await getDoc(orderRef);
+        console.log("ORDER DOC in collection " + collectionName + ": ", orderDoc);
+        if (orderDoc.exists()) {
+          order = { id: orderDoc.id, ...orderDoc.data() };
+          break; // Si encontramos la orden en una colección, salimos del bucle
+        }
+      } catch (error) {
+        console.error("Error al obtener la orden en la colección " + collectionName + ":", error);
+      }
+    }
+  
+    if (!order) {
+      console.log(`No se encontró ninguna orden con ID ${orderId} en ninguna de las colecciones`);
+    }
+  
     return order;
   };
+  
+  
 
   const getAllUsers = async () => {
     try {
@@ -206,7 +301,7 @@ export function DatabaseProvider({ children }) {
 
     // Aplicar el filtro solo si el filtroParametro no es nulo
     if (filtroParametro !== "Todos") {
-      ref = query(ref, where("pedido.estado", "==", filtroParametro));
+      ref = query(ref, where("estado", "==", filtroParametro));
     }
 
     const snapshot = await getDocs(ref);
@@ -221,6 +316,53 @@ export function DatabaseProvider({ children }) {
 
     return orders;
   };
+
+  const getAllOrdersWithID = async (filtroParametro, filtroParametro2) => {
+    let orders = [];
+  
+    let collections = null;
+    if(filtroParametro2 === "Todos"){
+      collections = ["pedidosTest", "pedidosPersonales", "pedidosOnline"];
+    }else{
+      collections = [filtroParametro2];
+    }
+    console.log("Filtro 1: ", filtroParametro)
+    console.log("Filtro 2: ", collections)
+  
+    for (const collectionName of collections) {
+      const collectionRef = collection(firestore, collectionName);
+  
+      if (filtroParametro !== "Todos") {
+        const queryRef = query(collectionRef, where("estado", "==", filtroParametro));
+        const snapshot = await getDocs(queryRef);
+        snapshot.forEach((doc) => {
+          orders.push({ id: doc.id, ...doc.data() });
+        });
+      } else {
+        const snapshot = await getDocs(collectionRef);
+        snapshot.forEach((doc) => {
+          orders.push({ id: doc.id, ...doc.data() });
+        });
+      }
+    }
+  
+    console.log("ORDERS: ", orders);
+    return orders;
+  };
+  
+
+  const setTestDatabase = async () => {
+    //agregar cada diccionario en orders a la base de datos, a la tabla pedidosTest
+    const ref = collection(firestore, "pedidosTest");
+    orders.forEach(async (order) => {
+      try {
+        const docRef = await addDoc(ref, order);
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    });
+  };  
 
   const deleteOrder = async (orderId) => {
     const db = firestore; // Obtén la instancia de Firestore
@@ -409,7 +551,9 @@ export function DatabaseProvider({ children }) {
         activateCategory,
         updateCategoryData,
         addNewCategory,
-        uploadCategoryImage
+        uploadCategoryImage,
+        getAllOrdersWithID,
+        setTestDatabase
       }}
     >
       {children}
