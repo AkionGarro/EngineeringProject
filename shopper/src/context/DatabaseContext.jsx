@@ -189,9 +189,9 @@ export function DatabaseProvider({ children }) {
   
     for (const collectionName of collections) {
       const db = firestore; // Obtén la instancia de Firestore
-      let orderRef = doc(db, collectionName, orderId); // Utiliza doc() para referenciar un documento específico
-  
       try {
+      let orderRef = doc(db, collectionName, orderId); // Utiliza doc() para referenciar un documento específico
+      
         const orderDoc = await getDoc(orderRef);
         console.log("ORDER DOC in collection " + collectionName + ": ", orderDoc);
         if (orderDoc.exists()) {
@@ -217,6 +217,7 @@ export function DatabaseProvider({ children }) {
       const ref = collection(firestore, "users");
       const snapshot = await getDocs(ref);
       const listUsers = snapshot.docs.map((doc) => doc.data());
+      console.log("Usuarios: ", listUsers);
       return listUsers;
     } catch (e) {
       console.log(e);
@@ -584,7 +585,8 @@ export function DatabaseProvider({ children }) {
         const ref = collection(firestore, "products")
         const snapshot = await getDocs(ref)
         const productList = snapshot.docs.map(doc => ({id:doc.id, ...doc.data()}))
-        return productList
+        console.log("Pruducs Fire: ", productList);
+        return productList;
       } catch(e){
         console.log(e)
       }
@@ -603,6 +605,19 @@ export function DatabaseProvider({ children }) {
         console.log(e)
       }
     }
+
+    const getProductsByCategory = async (category) =>{
+      try {
+        const ref = collection(firestore, "products");
+        const q = query(ref, where("categoryName", "==", category))
+        const querySnapshot = await getDocs(q)
+        const productList = querySnapshot.docs.map(doc => ({id:doc.id, ...doc.data()}))
+        return productList
+
+      } catch (error) {
+        console.log(error)
+      }
+    };
   
     //Elimina una categoria de productos por su id 
     //Cambia el estado de la categoria de 1 a 0
@@ -759,7 +774,8 @@ export function DatabaseProvider({ children }) {
         activateProduct,
         updateProductData,
         addNewProduct,
-        uploadProductImages
+        uploadProductImages,
+        getProductsByCategory
       }}
     >
       {children}
