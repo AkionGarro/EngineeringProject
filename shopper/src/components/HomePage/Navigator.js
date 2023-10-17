@@ -24,6 +24,7 @@ import Account from "../../Pages/Account/Account";
 import NewAdmin from "../../Pages/NewAdmin/NewAdmin";
 import PedidoPersonal from "../../Pages/PersonalOrders/PersonalOrder";
 import PedidoOnline from "../../Pages/PedidoOnline/PedidoOnline";
+import PedidoNormal from "../../Pages/PedidoNormal/PedidoNormal";
 
 const categories = [
   {
@@ -57,7 +58,13 @@ const categories = [
         id: "Pedido en línea",
         icon: <ShoppingCartIcon />,
         route: <PedidoOnline />,
-        tittle: "Gestionar Pedido en línea ",
+        tittle: "Gestionar Pedido en Línea ",
+      },
+      {
+        id: "Pedido común",
+        icon: <ShoppingCartIcon />,
+        route: <PedidoNormal />,
+        tittle: "Gestionar Pedido Común",
       },
     ],
   },

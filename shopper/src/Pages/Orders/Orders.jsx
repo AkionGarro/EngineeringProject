@@ -13,7 +13,10 @@ import { useFirebase } from '../../context/DatabaseContext';
 import TablePagination from '@mui/material/TablePagination';
 import Swal from "sweetalert2";
 import EditModal from './EditModal.jsx';
-
+import Stack from "@mui/material/Stack";
+import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
+import { DataGrid } from '@mui/x-data-grid';
+import { firestore } from '../../firebase.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,14 +48,25 @@ function Orders() {
     "Pendiente de confirmación",
     "En proceso",
     "Pendiente de pago",
+    "Cancelado",
     "Pagado",
     "Enviado",
     "Recibido",
   ];
 
-  const [filtroSeleccionado, setFiltroSeleccionado] = useState("Todos");
-  const childRef = React.useRef();
+  const opcionesFiltro2 = [
+    "Todos",
+    "Pedidos online",
+    "Pedidos personalizados",
+    "Pedidos comunes",
+  ];
 
+  const [filtroSeleccionado, setFiltroSeleccionado] = useState("Todos");
+  const [filtroSeleccionado2, setFiltroSeleccionado2] = useState("Todos");
+  const [filtroSeleccionadoFire, setFiltroSeleccionadoFire] = useState("Todos");
+  const [filtroSeleccionado2Fire, setFiltroSeleccionado2Fire] = useState("Todos");
+  const childRef = React.useRef();
+  const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -68,8 +82,10 @@ function Orders() {
     return idOrder;
   }
   const handleEditClick = (id) => {
-    console.log("ID handleEditClick: ", id);
+    console.log("ID handleEditClick objeto:", id);
+    console.log("ID handleEditClick:"+ toString(id));
     setOrderId(id);
+    setPedidoSeleccionado(firebase.getOrder(id));
     // Abre el modal de edición cuando se hace clic en el icono de editar
     setIsEditModalOpen(true);
   };
@@ -87,14 +103,102 @@ function Orders() {
     setIsEditModalOpen(false);
   };
 
-  const getOrders = async (filtroParametro) => {
-    console.log("FILTRO: ", filtroParametro);
-    if(filtroParametro !== null){
-      setFiltroSeleccionado(filtroParametro)
+  const getOrders2 = async (filtroParametro) => {
+    let filtro2 = filtroSeleccionado2;
+    switch (filtroParametro) {
+      case "Todos":
+        filtro2 = "Todos";
+        setFiltroSeleccionado2("Todos");
+        setFiltroSeleccionado2Fire("Todos");
+        break;
+      case "Pedidos online":
+        filtro2 = "pedidosOnline";
+        setFiltroSeleccionado2("Pedidos online");
+        setFiltroSeleccionado2Fire("pedidosOnline");
+        break;
+      case "Pedidos personalizados":
+        filtro2 = "pedidosPersonales";
+        setFiltroSeleccionado2("Pedidos personalizados");
+        setFiltroSeleccionado2Fire("pedidosPersonales");
+        break;
+      case "Pedidos comunes":
+        filtro2 = "pedidosTest";
+        setFiltroSeleccionado2("Pedidos comunes");
+        setFiltroSeleccionado2Fire("pedidosTest");
+        break;
+      default:
+        filtro2 = "Todos";
+        setFiltroSeleccionado2("Todos");
+        setFiltroSeleccionado2Fire("Todos");
+        break;
     }
+
+
     let data;
     const setData = async () => {
-      data = await firebase.getAllOrders(filtroParametro);
+      data = await firebase.getAllOrdersWithID(filtroSeleccionadoFire, filtro2);
+      setOrders(data);
+    }
+
+    await Promise.all([setData()]);
+  };
+
+  const  getOrders = async (filtroParametro) => {
+    let filtro = filtroSeleccionado;
+  
+    // Llama a la función auxiliar para actualizar el estado del filtro
+    switch (filtroParametro) {
+      case "Todos":
+        filtro = "Todos";
+        setFiltroSeleccionado("Todos");
+        setFiltroSeleccionadoFire("Todos");
+        break;
+      case "Pendiente de confirmación":
+        filtro = "0";
+        setFiltroSeleccionado("Pendiente de confirmación");
+        setFiltroSeleccionadoFire("0");
+        break;
+      case "En proceso":
+        filtro = "1";
+        setFiltroSeleccionado("En proceso");
+        setFiltroSeleccionadoFire("1");
+        break;
+      case "Pendiente de pago":
+        filtro = "2";
+        setFiltroSeleccionado("Pendiente de pago");
+        setFiltroSeleccionadoFire("2");
+        break;
+      case "Cancelado":
+        filtro = "3";
+        setFiltroSeleccionado("Cancelado")
+        setFiltroSeleccionadoFire("3");
+        break;
+      case "Pagado":
+        filtro = "4";
+        setFiltroSeleccionado("Pagado");
+        setFiltroSeleccionadoFire("4");
+        break;
+      case "Enviado":
+        filtro = "5";
+        setFiltroSeleccionado("Enviado");
+        setFiltroSeleccionadoFire("5");
+        break;
+      case "Recibido":
+        filtro = "6";
+        setFiltroSeleccionado("Recibido");
+        setFiltroSeleccionadoFire("6");
+        break;
+      default:
+        filtro = "Todos";
+        setFiltroSeleccionado("Todos");
+        setFiltroSeleccionadoFire("Todos");
+        break;
+    }
+
+
+    let data;
+    const setData = async () => {
+      data = await firebase.getAllOrdersWithID(filtro, filtroSeleccionado2Fire);
       setOrders(data);
     }
 
@@ -105,22 +209,21 @@ function Orders() {
       try {
         let fecha = order.pedido.fecha.toDate();
         if (fecha < fechaMenor) {
-          console.log("FECHA: ", fecha, " MENOR: ", fechaMenor);
+
           setFechaMenor(fecha);
         }
         if (fecha > fechaMayor) {
-          console.log("FECHA: ", fecha, " MAYOR: ", fechaMayor);
+ 
           setFechaMayor(fecha);
         }
       } catch (error) {
-        console.log("ERROR TO GET ORDER'S DATE: ", error);
+        //console.log("ERROR TO GET ORDER'S DATE: ", error);
       }
     });
 
     // Espera a que todas las fechas se procesen antes de actualizar la fecha en la interfaz de usuario
     await Promise.all(fechaPromises);
-    console.log("FECHA MENOR: ", fechaMenor);
-    console.log("FECHA MAYOR: ", fechaMayor);
+
     setFecha(fechaMenor.toLocaleDateString() + " - " + fechaMayor.toLocaleDateString());
   };
 
@@ -128,30 +231,32 @@ function Orders() {
 
   useEffect(() => {
     // Esta función se ejecutará solo en el montaje inicial del componente
-    firebase.getAllOrders("Todos").then((data) => {
+    // firebase.getAllOrders("Todos").then((data) => {
+    //   data.forEach((order) => {
+    //     try {
+    //       let fecha = order.pedido.fecha.toDate();
+    //       console.log("FECHA: INCIO");
+    //       if (fecha > fechaMenor) {
+    //         console.log("FECHA: ", fecha, " MENOR: ", fechaMenor);
+    //         setFechaMenor(fecha);
+    //       }
+    //       if (fecha < fechaMayor) {
+    //         console.log("FECHA: ", fecha, " MAYOR: ", fechaMayor);
+    //         setFechaMayor(fecha);
+    //       }
+    //       setFecha(fechaMenor.toLocaleDateString() + " - " + fechaMayor.toLocaleDateString());
+    //       console.log("FECHA: FIN");
+    //     } catch (error) {
+    //       console.log("ERROR TO GET ORDER'S DATE: ", error);
+    //       setFecha(fechaMenor.toLocaleDateString() + " - " + fechaMayor.toLocaleDateString());
+    //     }
+    //   });
+    // });
+
+    firebase.getAllOrdersWithID("Todos", "Todos").then((data) => {
       setOrders(data);
-      data.forEach((order) => {
-        try {
-          let fecha = order.pedido.fecha.toDate();
-          console.log("FECHA: INCIO");
-          if (fecha > fechaMenor) {
-            console.log("FECHA: ", fecha, " MENOR: ", fechaMenor);
-            setFechaMenor(fecha);
-          }
-          if (fecha < fechaMayor) {
-            console.log("FECHA: ", fecha, " MAYOR: ", fechaMayor);
-            setFechaMayor(fecha);
-          }
-          setFecha(fechaMenor.toLocaleDateString() + " - " + fechaMayor.toLocaleDateString());
-          console.log("FECHA: FIN");
-        } catch (error) {
-          console.log("ERROR TO GET ORDER'S DATE: ", error);
-          setFecha(fechaMenor.toLocaleDateString() + " - " + fechaMayor.toLocaleDateString());
-        }
-      });
+      console.log("ORDERS WITH ID: ", data);
     });
-
-
   }, []);
 
   //console.log("ORDERS: ", orders[0].then((data) => console.log(data)));
@@ -195,6 +300,31 @@ function Orders() {
     }
   }
 
+  const columns = [
+    { field: "id", headerName: "ID", width: 200 },
+    { field: "cliente", headerName: "Cliente", width: 150 },
+    { field: "telefono", headerName: "Telefono", width: 100 },
+    { field: "direccion",headerName: "Dirección",width: 300,},
+    { field: "estado", headerName: "Estado", width: 90 },
+    {
+      headerName: "Acciones",
+      width: 300,
+      renderCell: (params) => (
+        <div>
+          <Stack direction="row" spacing={2}>
+            <Button onClick={() => deleteOrder(params.row.id)} variant="outlined" startIcon={<DeleteIcon />}></Button>
+            <Button
+              variant="outlined"
+              id = {params.row.id}
+              onClick={() => handleEditClick(params.row.id)}
+              startIcon={<BorderColorRoundedIcon />}
+            ></Button>
+          </Stack>
+        </div>
+      ),
+    },
+  ];
+
 
   return (
     <div className='row container'>
@@ -210,6 +340,18 @@ function Orders() {
           </button>
         ))}
       </div>
+      <div className="row filtro-buttons">
+        
+        {opcionesFiltro2.map((opcion) => (
+          <button
+            key={opcion}
+            className={`filter-button ${filtroSeleccionado2 === opcion ? "selected" : ""
+              }`}
+            onClick={() => getOrders2(opcion)}
+          >{opcion}
+          </button>
+        ))}
+      </div>
       <div className="row row-search">
         <div className='div-search'><SearchInputField  placeholder="Buscar por ID de orden" searchFunc={onChangeInput} /></div>
         <div className='div-search'>
@@ -219,7 +361,24 @@ function Orders() {
         </div>
       </div>
       <div className="row-table">
-        <TableContainer component={Paper} className={classes.root}>
+      {orders.length > 0 ? (
+        <div style={{ width: "90%", overflowX: "auto" }}>
+          <DataGrid
+            rows={orders}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10, 15]}
+            autoHeight
+          />
+        </div>
+      ) : (
+        <p>No hay órdenes para mostrar.</p>
+      )}
+        {/* <TableContainer component={Paper} className={classes.root}>
           <Table className={classes.table} aria-label="Ordenes de Compra">
             <TableHead>
               <TableRow>
@@ -267,7 +426,7 @@ function Orders() {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-        </TableContainer>
+        </TableContainer> */}
       </div>
       <EditModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} idOrderModal = {idOrder} getIdFunc = {getIdForModal} getOrdersFunc={getOrders} filter = {filtroSeleccionado}/>
 
