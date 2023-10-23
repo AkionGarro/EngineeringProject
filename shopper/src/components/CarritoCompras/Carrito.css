@@ -1,0 +1,82 @@
+.carrito {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 350px;
+  height: 600px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 999; /* Ajusta el valor de z-index a uno alto */
+}
+
+.image-product {
+  width: 100px;
+  height: auto;
+}
+
+.carrito h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.carrito-items {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.card img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+}
+
+.card h3 {
+  font-size: 1.2rem;
+  margin: 5px 0;
+}
+
+.card p {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.card-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.carrito-resumen {
+  background-color: #f7f7f7;
+  padding: 15px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.carrito-resumen h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.carrito-resumen p {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.carrito-resumen button {
+  margin-top: 10px;
+}

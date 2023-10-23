@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { useEffect } from "react";
 import {
   Button,
@@ -20,14 +21,30 @@ import Swal from "sweetalert2";
 import AddUserModalOnline from "./AddUserModalOnline";
 import "./PedidoOnline.css";
 
+/*
+Codigo para carrito
+*/
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Carrito from "../../components/CarritoCompras/Carrito";
+
 const PedidoOnline = () => {
+  const [carritoVisible, setCarritoVisible] = useState(false);
+
+  const toggleCarrito = () => {
+    setCarritoVisible(!carritoVisible);
+  };
+
+  /*
+=================================
+
+  */
+
   const api = useFirebase();
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
   const [flagUpdate, setFlagUpdate] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
-
   const ref = collection(firestore, "pedidosOnline");
   const [linkFields, setLinkFields] = useState([{ link: "", comentario: "" }]);
   const [direction, setDirection] = useState("");
@@ -140,6 +157,16 @@ const PedidoOnline = () => {
 
   return (
     <Container className="container">
+      {/* Codigo Para el carrito */}
+
+      <div className="App">
+        <Button variant="contained" color="primary" onClick={toggleCarrito}>
+          <ShoppingCartIcon />
+        </Button>
+        {carritoVisible && <Carrito />}
+      </div>
+
+      {/* Codigo Para el carrito */}
       <h2 className="texto">
         Envía los links de los productos que deseas comprar y estos llegaran a
         tu puerta
