@@ -1,22 +1,10 @@
 import React from "react";
-import { CircularProgress } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles(() => ({
-  loaderContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "300px",
-  },
-}));
+import "./Loader.css"; // Importa tu archivo de estilos CSS
 
 const Loader = () => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.loaderContainer}>
-      <CircularProgress />
+    <div className="loader-container">
+      <div className="loader"></div>
     </div>
   );
 };

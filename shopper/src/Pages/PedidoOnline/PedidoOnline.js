@@ -34,6 +34,8 @@ const PedidoOnline = () => {
     setCarritoVisible(!carritoVisible);
   };
 
+  const cantidadEnCarrito = 6;
+
   /*
 =================================
 
@@ -161,7 +163,10 @@ const PedidoOnline = () => {
 
       <div className="App">
         <Button variant="contained" color="primary" onClick={toggleCarrito}>
-          <ShoppingCartIcon />
+          <div className="inside-button-products">
+            <ShoppingCartIcon />
+            Carrito de compras
+          </div>
         </Button>
         {carritoVisible && <Carrito />}
       </div>
