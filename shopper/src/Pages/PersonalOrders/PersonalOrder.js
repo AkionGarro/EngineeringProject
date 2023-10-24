@@ -1,13 +1,12 @@
 import React from "react"
 import { useEffect } from "react"
-
 import { firestore } from "../../firebase"
-import { addDoc, collection } from "firebase/firestore"
+import { addDoc, collection,getDocs,  where, query } from "firebase/firestore"
 import { storage } from "../../firebase"
 import SearchIcon from "@mui/icons-material/Search"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import PersonAddIcon from "@mui/icons-material/PersonAdd"
-import { Button, Container, Grid, Autocomplete, TextField } from "@mui/material"
+import { Button, Container, Grid, Autocomplete, TextField, Select ,MenuItem} from "@mui/material"
 import { styled } from "@mui/material/styles"
 import { useState } from "react"
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
@@ -26,9 +25,10 @@ function Personal_Order() {
 
 	const [fields, setFields] = useState([{ description: "", image: null, url_file: null, url_fire: null }])
 	const [imagenes, setImagenes] = useState([])
-
+  const [opcionesDirec, setOpcionesDirec] = useState()
 	const [direction, setDirection] = useState("")
 	const [flagUpdate, setFlagUpdate] = useState(false)
+  const [flagUpdateDirect, setFlagUpdateDirect] = useState(false)
 	const [searchQuery, setSearchQuery] = useState("")
 	const [selectedUser, setSelectedUser] = useState("")
 	const referencia = collection(firestore, "pedidosPersonales")
@@ -128,7 +128,7 @@ function Personal_Order() {
 		}
 
 		let data = {
-			usuario: user.email,
+			usuario: selectedUser.email,
 			direccion: direction,
 			productos: fields,
 			estado: 0
@@ -155,6 +155,36 @@ function Personal_Order() {
 	const handleOpenModal = () => {
 		setOpen(true)
 	}
+
+  const selectUusario = async(evento, newValue) => {
+		setSelectedUser(newValue);
+    setFlagUpdateDirect(true);
+	}
+
+  const handleChange = (event) => {
+    // Aquí puedes manejar el evento de cambio de selección
+    console.log(opcionesDirec);
+  };
+
+  useEffect(() => {
+		const fetchDataDirec = async () => {
+			try {
+				const ref = collection(firestore, "usersAddress");
+        const q = query(ref, where("email", "==", selectedUser.email));
+        const querySnapshot = await getDocs(q);
+        setOpcionesDirec(querySnapshot);
+			} catch (error) {
+				Swal.fire({
+					icon: "error",
+					title: "Error al obtener las direcciones",
+					text: error
+				})
+			}
+		}
+		setFlagUpdateDirect(false)
+
+		fetchDataDirec()
+	}, [flagUpdateDirect])
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -228,9 +258,7 @@ function Personal_Order() {
 							options={users}
 							getOptionLabel={user => user.email}
 							value={selectedUser}
-							onChange={(event, newValue) => {
-								setSelectedUser(newValue)
-							}}
+							onChange={ (e,newValue) => selectUusario(e, newValue) }
 							renderInput={params => (
 								<TextField
 									{...params}
@@ -268,6 +296,14 @@ function Personal_Order() {
 						<p>Agregar usuario</p>
 					</div>
 				</div>
+
+        <Select onChange={handleChange}>
+          {opcionesDirec && opcionesDirec.map((opcion) => (
+            <MenuItem key={opcion.email} value={opcion.canton}>
+              {opcion.address}
+            </MenuItem>
+          ))}
+        </Select>
 
 				<div className="botones-opciones">
 					<Button variant="contained" color="success" onClick={handleSubmit} className="send-button">
