@@ -10,7 +10,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 
 
 import CategoriesPage from './../Categories/CategoriesPage.jsx';
-import Blog from './HomePage.jsx';
+import Blog from './HomePage.js';
 
 
 //Lista con las opciones del navbar

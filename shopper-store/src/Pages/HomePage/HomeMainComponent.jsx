@@ -7,7 +7,7 @@ import Header from "./Header.js"
 import Footer from "./Footer.js"
 
 //Imports del HomePage
-import Blog from "./HomePage.jsx"
+import Blog from "./HomePage.js"
 
 
 
