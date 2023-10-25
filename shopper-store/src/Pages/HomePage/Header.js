@@ -8,8 +8,32 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import AdbIcon from '@mui/icons-material/Adb';
 
-function Header(props) {
-  const { sections } = props;
+
+import CategoriesPage from './../Categories/CategoriesPage.jsx';
+import Blog from './HomePage.jsx';
+
+
+//Lista con las opciones del navbar
+const sections = [
+
+  { id: "Pedido", title: 'Realizar pedido', route: <Blog goTo={2}/> },
+  { id: "About", title: 'Acerca de', route: <Blog goTo={3} /> },
+  { id: "Contact", title: 'Contacto', route: <Blog goTo={1}/> },
+  { id: "Categories", title: 'Categorías', route: <CategoriesPage /> },
+
+];
+
+
+
+const Header = (props) => {
+  
+  
+
+  const {navOptions } = props;
+
+  const handleNavoptions = (route, title) => {
+    navOptions(route, title);
+  }
 
   return (
     <React.Fragment>
@@ -25,7 +49,11 @@ function Header(props) {
         >
           Verocam_shop
         </Typography>
-        <Button variant="outlined" size="small">
+        <Button
+         variant="outlined" 
+         size="small"
+         onClick={() => handleNavoptions(<Blog />, "Inicio")}
+         >
           Inicio
         </Button>
         <Button variant="outlined" size="small">
@@ -38,16 +66,26 @@ function Header(props) {
         sx={{ justifyContent: 'space-between', overflowX: 'auto' }}
       >
         {sections.map((section) => (
-          <Link
+
+          // <Link
+          //   color="inherit"
+          //   noWrap
+          //   key={section.title}
+          //   variant="body2"
+          //   href={section.url}
+          //   sx={{ p: 1, flexShrink: 0 }}
+          // >
+          //   {section.title}
+          // </Link>
+
+          <Button
+            key={section.id}
             color="inherit"
-            noWrap
-            key={section.title}
-            variant="body2"
-            href={section.url}
-            sx={{ p: 1, flexShrink: 0 }}
+            onClick={() => handleNavoptions(section.route, section.title)}  
           >
             {section.title}
-          </Link>
+          </Button>
+
         ))}
       </Toolbar>
     </React.Fragment>

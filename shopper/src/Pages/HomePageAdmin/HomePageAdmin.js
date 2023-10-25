@@ -311,6 +311,7 @@ export default function HomePageAdmin(props) {
           >
             {componentToRender}
           </Box>
+          
           <Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>
             <Copyright />
           </Box>

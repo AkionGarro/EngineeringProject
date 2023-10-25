@@ -126,6 +126,8 @@ export default function Navigator(props) {
           <Box key={id} sx={{ bgcolor: "#101F33" }}>
             <ListItem sx={{ py: 2, px: 3 }}>
               <ListItemText sx={{ color: "#fff" }}>{id}</ListItemText>
+
+
             </ListItem>
             {children.map(({ id: childId, icon, active, route, tittle }) => (
               <ListItem disablePadding key={childId}>
@@ -152,4 +154,6 @@ export default function Navigator(props) {
       </List>
     </Drawer>
   );
+
+
 }
