@@ -6,7 +6,7 @@ import { DatabaseProvider } from "./context/DatabaseContext";
 import HomeMainComponent from "./Pages/HomePage/HomeMainComponent";
 import Cuenta from "./Pages/Account/Account";
 import VerPedidosPersonal from "./Pages/PersonalOrdersStore/PersonalOrderStore";
-import CategoriesPage from "./Pages/Categories/CategoriesPage";
+import ProductsPage from "./Pages/Categories/ProductsPage";
 
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
             <Route path="/" element={<HomeMainComponent />} />
             <Route path="/Cuenta" element={<Cuenta />} />
             <Route path="/PedidosPersonal" element={<VerPedidosPersonal />} />
-            <Route path="/Categorias" element={<CategoriesPage />} />
+            <Route path="/Products" element={<ProductsPage />} />
           </Routes>
         </Router>
       </DatabaseProvider>

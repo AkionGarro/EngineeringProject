@@ -9,7 +9,7 @@ import Link from '@mui/material/Link';
 import AdbIcon from '@mui/icons-material/Adb';
 
 
-import CategoriesPage from './../Categories/CategoriesPage.jsx';
+import ProductsPage from './../Categories/ProductsPage.jsx';
 import Blog from './HomePage.js';
 
 
@@ -19,7 +19,7 @@ const sections = [
   { id: "Pedido", title: 'Realizar pedido', route: <Blog goTo={2}/> },
   { id: "About", title: 'Acerca de', route: <Blog goTo={3} /> },
   { id: "Contact", title: 'Contacto', route: <Blog goTo={1}/> },
-  { id: "Categories", title: 'Categorías', route: <CategoriesPage /> },
+  { id: "Categories", title: 'Categorías', route: <ProductsPage /> },
 
 ];
 

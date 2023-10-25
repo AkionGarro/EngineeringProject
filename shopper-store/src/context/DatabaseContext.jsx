@@ -618,6 +618,18 @@ export function DatabaseProvider({ children }) {
         console.log(error)
       }
     };
+
+    const getActiveProductsByCategory = async (category) =>{
+      try {
+        const ref = collection(firestore, "products");
+        const q = query(ref, where("categoryName", "==", category), where("status", "==", 1))
+        const querySnapshot = await getDocs(q)
+        const productList = querySnapshot.docs.map(doc => ({id:doc.id, ...doc.data()}))
+        return productList
+      } catch (error) {
+        console.log(error)
+      }
+    };
   
     //Elimina una categoria de productos por su id 
     //Cambia el estado de la categoria de 1 a 0
@@ -775,7 +787,9 @@ export function DatabaseProvider({ children }) {
         updateProductData,
         addNewProduct,
         uploadProductImages,
-        getProductsByCategory
+        getProductsByCategory,
+        //Productos Para la Vista de Usuario
+        getActiveProductsByCategory,
       }}
     >
       {children}

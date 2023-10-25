@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react'
 
 // Componentes para el Card
 import Card from "@mui/material/Card"
@@ -7,33 +7,38 @@ import CardMedia from "@mui/material/CardMedia"
 import Typography from "@mui/material/Typography"
 import { CardActionArea } from "@mui/material"
 
-const CategoryCard = props => {
+const ProductCard = (props) => {
 
-	const {categoryInfo} = props
+  const {productInfo} = props
 
 
-	return (
-		<Card key={categoryInfo.id} sx={{ maxWidth: 345 }}>
+
+  return (
+
+    <Card key={productInfo.id} sx={{ maxWidth: 345 }}>
 			<CardActionArea>
 				<CardMedia
 					component="img"
 					height="100"
-					image={categoryInfo.icon}
+					image={productInfo.images[0]}
 					alt="Category Icon"
 				/>
 				<CardContent>
 					<Typography gutterBottom variant="h5" component="div">
-						{categoryInfo.name}
+						{productInfo.name}
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
-						{categoryInfo.description}
+						${productInfo.price}
 					</Typography>
 				</CardContent>
 			</CardActionArea>
 		</Card>
-	)
+
+
+  )
+
 
 
 }
 
-export default CategoryCard
+export default ProductCard
