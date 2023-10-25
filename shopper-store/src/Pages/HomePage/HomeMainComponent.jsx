@@ -10,7 +10,8 @@ import Footer from "./Footer.js"
 import Blog from "./HomePage.js"
 
 
-
+//Componente Principal de la Página
+//Acá se renderiza el Navbar, el componente principal y el footer
 const HomeMainComponent = () => {
   
   //Este State contiene el Componente que se está renderizando 

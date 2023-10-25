@@ -24,13 +24,14 @@ const sections = [
 ];
 
 
-
+// Es el Navbar
 const Header = (props) => {
   
   
 
   const {navOptions } = props;
 
+  //Maneja el cambio del Componente principal
   const handleNavoptions = (route, title) => {
     navOptions(route, title);
   }

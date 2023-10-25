@@ -83,6 +83,9 @@ const Blog = props => {
 	const section2 = React.useRef(null)
 	const section3 = React.useRef(null)
 
+
+	//Scrolea a la seccion indicada
+	//Hay que mejorarlo, cuando yo cambio el componente, no hace scroll
 	const scrollToSection = () => {
 
     let targetRef = null 
@@ -110,12 +113,6 @@ const Blog = props => {
 		if (targetRef.current) {
       targetRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-
-		// window.scrollTo({
-		// 	top: elementRef.current.offsetTop,
-		// 	behavior: "smooth"
-		// })
-
 	}
 
 	return (
