@@ -14,6 +14,8 @@ import Sidebar from './Sidebar';
 import Footer from './Footer';
 import post1 from './blog-post.1.md';
 import Carrousel from './Carrousel';
+import Inicio from "../HomePage/Inicio";
+import Box from "@mui/material/Box";
 
 const sections = [
   { title: 'Realizar pedido', url: '#' },
@@ -85,28 +87,37 @@ const sidebar = {
 const defaultTheme = createTheme();
 
 export default function Blog() {
+  const [componentToRender, setComponentToRender] = (<Inicio />);
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <Container maxWidth="lg">
         <Header title="Blog" sections={sections} />
         <main>
-          <Carrousel/>
-          <Grid container spacing={4}>
-            {featuredPosts.map((post) => (
-              <FeaturedPost key={post.title} post={post} />
-            ))}
-          </Grid>
-          
-          <Grid container spacing={5} sx={{ mt: 3 }}>
-            <Main title="From the firehose" posts={posts} />
-            <Sidebar
-              title={sidebar.title}
-              description={sidebar.description}
-              archives={sidebar.archives}
-              social={sidebar.social}
-            />
-          </Grid>
+        <Box
+            component="main"
+            //quitar el padding de arriba
+            padding={"0px"}
+            margin={"0px"}
+            sx={{
+              flex: 1,
+              py: 6,
+              px: 4,
+              bgcolor: "#eaeff1",
+              marginTop: "0px",
+              marginLeft: "0px",
+              marginRight: "0px",
+              marginBottom: "0px",
+              paddingLeft: "0px",
+              paddingRight: "0px",
+              paddingBottom: "0px",
+              paddingTop: "0px",
+              backgroundColor:"#FFFF" 
+            }}
+          >
+            {componentToRender}
+          </Box>
         </main>
       </Container>
       <Footer
