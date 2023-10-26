@@ -9,13 +9,17 @@ import { CardActionArea } from "@mui/material"
 
 const ProductCard = (props) => {
 
-  const {productInfo} = props
+  const {productInfo, onClickHandler} = props
+
+	const onProductClick = () => {
+		onClickHandler(productInfo)
+	}
 
 
 
   return (
 
-    <Card key={productInfo.id} sx={{ maxWidth: 345 }}>
+    <Card key={productInfo.id} sx={{ maxWidth: 345 }} onClick={onProductClick}>
 			<CardActionArea>
 				<CardMedia
 					component="img"
@@ -33,10 +37,7 @@ const ProductCard = (props) => {
 				</CardContent>
 			</CardActionArea>
 		</Card>
-
-
   )
-
 
 
 }

@@ -8,7 +8,7 @@ import Stack from "@mui/material/Stack"
 import CircularProgress from "@mui/material/CircularProgress"
 import {Box} from "@mui/material"
 
-const Categories = () => {
+const Categories = (props) => {
 	const [categories, setCategories] = useState([])
 	const [loading, setLoading] = useState(true)
 
@@ -28,11 +28,15 @@ const Categories = () => {
 		fetchData()
 	}, [])
 
+	const onCategoryClick = category => {
+		props.handleCategoryChange(category)
+	}
+
 	const createCategoryComponents = () => {
 		let mappedCategories = []
 
 		categories.forEach(element => {
-			mappedCategories.push(<CategoryCard categoryInfo={element} />)
+			mappedCategories.push(<CategoryCard categoryInfo={element} onCategoryClick={onCategoryClick} />)
 		})
 
 		return mappedCategories

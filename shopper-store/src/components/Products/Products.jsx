@@ -7,31 +7,50 @@ import {Box} from "@mui/material"
 import CircularProgress from "@mui/material/CircularProgress"
 
 
-const Products = () => {
+const Products = (props) => {
+
+  const {category, handleProductClick} = props
 	const [products, setProducts] = useState([])
 	const [loading, setLoading] = useState(true)
 
 	const api = useFirebase()
 
 	useEffect(() => {
+    
+    setLoading(true)
+
 		const fetchData = async () => {
 			try {
-				const querySnapshot = await api.getProductsByStatus(1)
+
+        let querySnapshot = null
+
+        if( category === "all"){
+          querySnapshot = await api.getProductsByStatus(1)
+        }else{
+          querySnapshot = await api.getActiveProductsByCategory(category.name)
+        }
+
 				setProducts(querySnapshot)
 				setLoading(false)
+
+
 			} catch (error) {
 				console.log("Error al obtener los Datos de los Productos")
 			}
 		}
 
 		fetchData()
-	}, [])
+	}, [category])
+
+
+
+
 
 	const createProductComponents = () => {
 		let mappedProducts = []
 
 		products.forEach(element => {
-			mappedProducts.push(<ProductCard productInfo={element} />)
+			mappedProducts.push(<ProductCard productInfo={element} onClickHandler={handleProductClick} />)
 		})
 
 		return mappedProducts

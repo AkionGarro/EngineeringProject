@@ -9,11 +9,11 @@ import { CardActionArea } from "@mui/material"
 
 const CategoryCard = props => {
 
-	const {categoryInfo} = props
+	const {categoryInfo, onCategoryClick} = props
 
 
 	return (
-		<Card key={categoryInfo.id} sx={{ maxWidth: 345 }}>
+		<Card key={categoryInfo.id} sx={{ maxWidth: 345 }} onClick={() => onCategoryClick(categoryInfo)}>
 			<CardActionArea>
 				<CardMedia
 					component="img"
