@@ -16,7 +16,7 @@ const Categories = () => {
 				const querySnapshot = await api.getCategoriesByStatus(1)
 
 				setCategories(querySnapshot)
-				setLoading(False)
+				setLoading(false)
 
 			}catch (error) {
 				console.log("Error al obtener los Datos de las Categorias")
