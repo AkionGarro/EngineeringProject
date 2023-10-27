@@ -49,26 +49,13 @@ function SwipeableTextMobileStepper() {
   };
 
   return (
-    <Box sx={{flexGrow: 1 , marginY: 5}}>
-      <Paper
-        square
-        elevation={0}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          height: 50,
-          pl: 2,
-          bgcolor: 'background.default',
-        }}
-      >
-        <Typography>{images[activeStep].label}</Typography>
-      </Paper>
+    <Box sx={{flexGrow: 1}}>
       <AutoPlaySwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={activeStep}
         onChangeIndex={handleStepChange}
         enableMouseEvents
-        style={{ width: '100%', overflow: 'hidden' }}
+        style={{ width: '100%', overflow: 'hidden' , marginTop:"40px",marginBottom:"40px", borderRadius:"3%"}}
       >
         {images.map((step, index) => (
           <div key={step.label}>

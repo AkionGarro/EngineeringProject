@@ -1,8 +1,6 @@
 import React, { Component, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-
-
 import Header from "./Header.js"
 import Footer from "./Footer.js"
 
@@ -13,10 +11,10 @@ import Blog from "./HomePage.js"
 //Componente Principal de la Página
 //Acá se renderiza el Navbar, el componente principal y el footer
 const HomeMainComponent = () => {
-  
+
   //Este State contiene el Componente que se está renderizando 
   // el cambio se hace en el Header
-  const [componentToRender, setComponentToRender] = useState(<Blog goTo={1}/>)
+  const [componentToRender, setComponentToRender] = useState(<Blog goTo={1} />)
   const auth = useAuth();
   const navigate = useNavigate();
 
@@ -26,25 +24,21 @@ const HomeMainComponent = () => {
     setComponentToRender(route);
   };
 
-	return (
-		<>
+  return (
+    <>
+      {/* //NavBar de la Pagina. Siempre va a estar presente. */}
+      <Header title="NAVBAR" navOptions={navigatorOptions} />
 
-    {/* //NavBar de la Pagina. Siempre va a estar presente. */}
-    <Header title="NAVBAR" navOptions={navigatorOptions} />
+      {/* //Acá es dónde se va a renderizar el componente que se quiere mostrar al usuario */}
+      {componentToRender}
 
-
-    {/* //Acá es dónde se va a renderizar el componente que se quiere mostrar al usuario */}
-    {componentToRender}
-
-
-    {/* //Footer de la Pagina. Siempre va a estar presente. */}
-    <Footer
+      {/* //Footer de la Pagina. Siempre va a estar presente. */}
+      <Footer
         title="Footer"
         description="Something here to give the footer a purpose!"
       />
-			
-		</>
-	)
+    </>
+  )
 }
 
 export default HomeMainComponent
