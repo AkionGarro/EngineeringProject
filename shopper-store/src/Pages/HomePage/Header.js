@@ -37,7 +37,7 @@ const Header = (props) => {
   }
 
   return (
-    <React.Fragment>
+    <>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }}} />
       <Typography
@@ -89,7 +89,7 @@ const Header = (props) => {
 
         ))}
       </Toolbar>
-    </React.Fragment>
+    </>
   );
 }
 
