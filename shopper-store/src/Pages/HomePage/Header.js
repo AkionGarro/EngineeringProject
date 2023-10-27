@@ -19,7 +19,7 @@ const sections = [
   { id: "Pedido", title: 'Realizar pedido', route: <Blog goTo={2}/> },
   { id: "About", title: 'Acerca de', route: <Blog goTo={3} /> },
   { id: "Contact", title: 'Contacto', route: <Blog goTo={1}/> },
-  // { id: "Categories", title: 'Categorías', route: <ProductsPage /> },
+  { id: "Categories", title: 'Categorías', route: <ProductsPage /> },
 
 ];
 
