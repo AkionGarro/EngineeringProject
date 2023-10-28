@@ -29,7 +29,9 @@ function Header(props) {
           Inicio
         </Button>
         <Button variant="outlined" size="small">
+          <Link href="/Login" variant="body1" >
           Iniciar Sesion
+          </Link>
         </Button>
       </Toolbar>
       <Toolbar
