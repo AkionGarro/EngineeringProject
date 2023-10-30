@@ -1,31 +1,42 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
-import SearchInputField from '../../components/SearchInputField.jsx';
-import './Orders.css';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import OrdenesDeCompraTable from '../../components/OrdenesDeCompraTable.jsx'
-import { makeStyles, withStyles } from '@mui/styles';
-import { Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Paper, Button, IconButton, Hidden } from '@mui/material';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useFirebase } from '../../context/DatabaseContext';
-import TablePagination from '@mui/material/TablePagination';
+import * as React from "react";
+import { useState, useEffect } from "react";
+import SearchInputField from "../../components/SearchInputField.jsx";
+import "./Orders.css";
+import DateRangeIcon from "@mui/icons-material/DateRange";
+import OrdenesDeCompraTable from "../../components/OrdenesDeCompraTable.jsx";
+import { makeStyles, withStyles } from "@mui/styles";
+import {
+  Table,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+  Button,
+  IconButton,
+  Hidden,
+} from "@mui/material";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useFirebase } from "../../context/DatabaseContext";
+import TablePagination from "@mui/material/TablePagination";
 import Swal from "sweetalert2";
-import EditModal from './EditModal.jsx';
+import EditModal from "./EditModal.jsx";
 import Stack from "@mui/material/Stack";
-import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
-import { DataGrid } from '@mui/x-data-grid';
-import { firestore } from '../../firebase.js';
+import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
+import { DataGrid } from "@mui/x-data-grid";
+import { firestore } from "../../firebase.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
-    overflowX: 'auto',
+    width: "100%",
+    overflowX: "auto",
   },
   table: {
     minWidth: 650,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       minWidth: 265, // Cambia el ancho mínimo en pantallas pequeñas
     },
   },
@@ -42,7 +53,6 @@ const StyledTableCell = withStyles((theme) => ({
 }))(TableCell);
 
 function Orders() {
-  
   const opcionesFiltro = [
     "Todos",
     "Pendiente de confirmación",
@@ -64,7 +74,8 @@ function Orders() {
   const [filtroSeleccionado, setFiltroSeleccionado] = useState("Todos");
   const [filtroSeleccionado2, setFiltroSeleccionado2] = useState("Todos");
   const [filtroSeleccionadoFire, setFiltroSeleccionadoFire] = useState("Todos");
-  const [filtroSeleccionado2Fire, setFiltroSeleccionado2Fire] = useState("Todos");
+  const [filtroSeleccionado2Fire, setFiltroSeleccionado2Fire] =
+    useState("Todos");
   const childRef = React.useRef();
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
   const classes = useStyles();
@@ -73,17 +84,19 @@ function Orders() {
   var [orders, setOrders] = useState([]);
   const [fechaMenor, setFechaMenor] = useState(new Date());
   const [fechaMayor, setFechaMayor] = useState(new Date(2000, 1, 1));
-  const [fecha, setFecha] = useState(fechaMenor.toLocaleDateString() + " - " + fechaMayor.toLocaleDateString());
+  const [fecha, setFecha] = useState(
+    fechaMenor.toLocaleDateString() + " - " + fechaMayor.toLocaleDateString()
+  );
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [order, setOrder] = useState(null);
   const [idOrder, setOrderId] = useState(0);
-  
-  const getIdForModal = () =>{
+
+  const getIdForModal = () => {
     return idOrder;
-  }
+  };
   const handleEditClick = (id) => {
     console.log("ID handleEditClick objeto:", id);
-    console.log("ID handleEditClick:"+ toString(id));
+    console.log("ID handleEditClick:" + toString(id));
     setOrderId(id);
     setPedidoSeleccionado(firebase.getOrder(id));
     // Abre el modal de edición cuando se hace clic en el icono de editar
@@ -93,7 +106,7 @@ function Orders() {
   const onChangeInput = async (idOrder) => {
     console.log("ID ORDER onChangeInput: ", idOrder);
     const data = await firebase.getOrder(idOrder);
-    if (data !== null){
+    if (data !== null) {
       setOrders([data]);
     }
   };
@@ -133,19 +146,18 @@ function Orders() {
         break;
     }
 
-
     let data;
     const setData = async () => {
       data = await firebase.getAllOrdersWithID(filtroSeleccionadoFire, filtro2);
       setOrders(data);
-    }
+    };
 
     await Promise.all([setData()]);
   };
 
-  const  getOrders = async (filtroParametro) => {
+  const getOrders = async (filtroParametro) => {
     let filtro = filtroSeleccionado;
-  
+
     // Llama a la función auxiliar para actualizar el estado del filtro
     switch (filtroParametro) {
       case "Todos":
@@ -170,7 +182,7 @@ function Orders() {
         break;
       case "Cancelado":
         filtro = "3";
-        setFiltroSeleccionado("Cancelado")
+        setFiltroSeleccionado("Cancelado");
         setFiltroSeleccionadoFire("3");
         break;
       case "Pagado":
@@ -195,12 +207,11 @@ function Orders() {
         break;
     }
 
-
     let data;
     const setData = async () => {
       data = await firebase.getAllOrdersWithID(filtro, filtroSeleccionado2Fire);
       setOrders(data);
-    }
+    };
 
     await Promise.all([setData()]);
 
@@ -209,11 +220,9 @@ function Orders() {
       try {
         let fecha = order.pedido.fecha.toDate();
         if (fecha < fechaMenor) {
-
           setFechaMenor(fecha);
         }
         if (fecha > fechaMayor) {
- 
           setFechaMayor(fecha);
         }
       } catch (error) {
@@ -224,7 +233,9 @@ function Orders() {
     // Espera a que todas las fechas se procesen antes de actualizar la fecha en la interfaz de usuario
     await Promise.all(fechaPromises);
 
-    setFecha(fechaMenor.toLocaleDateString() + " - " + fechaMayor.toLocaleDateString());
+    setFecha(
+      fechaMenor.toLocaleDateString() + " - " + fechaMayor.toLocaleDateString()
+    );
   };
 
   const firebase = useFirebase();
@@ -298,13 +309,13 @@ function Orders() {
         });
       }
     }
-  }
+  };
 
   const columns = [
     { field: "id", headerName: "ID", width: 200 },
     { field: "cliente", headerName: "Cliente", width: 150 },
     { field: "telefono", headerName: "Telefono", width: 100 },
-    { field: "direccion",headerName: "Dirección",width: 300,},
+    { field: "direccion", headerName: "Dirección", width: 300 },
     { field: "estado", headerName: "Estado", width: 90 },
     {
       headerName: "Acciones",
@@ -312,10 +323,14 @@ function Orders() {
       renderCell: (params) => (
         <div>
           <Stack direction="row" spacing={2}>
-            <Button onClick={() => deleteOrder(params.row.id)} variant="outlined" startIcon={<DeleteIcon />}></Button>
+            <Button
+              onClick={() => deleteOrder(params.row.id)}
+              variant="outlined"
+              startIcon={<DeleteIcon />}
+            ></Button>
             <Button
               variant="outlined"
-              id = {params.row.id}
+              id={params.row.id}
               onClick={() => handleEditClick(params.row.id)}
               startIcon={<BorderColorRoundedIcon />}
             ></Button>
@@ -325,59 +340,67 @@ function Orders() {
     },
   ];
 
-
   return (
-    <div className='row container'>
+    <div className="row container">
       <div className="row filter-tittle">Filtros</div>
       <div className="row filtro-buttons">
         {opcionesFiltro.map((opcion) => (
           <button
             key={opcion}
-            className={`filter-button ${filtroSeleccionado === opcion ? "selected" : ""
-              }`}
+            className={`filter-button ${
+              filtroSeleccionado === opcion ? "selected" : ""
+            }`}
             onClick={() => getOrders(opcion)}
-          >{opcion}
+          >
+            {opcion}
           </button>
         ))}
       </div>
       <div className="row filtro-buttons">
-        
         {opcionesFiltro2.map((opcion) => (
           <button
             key={opcion}
-            className={`filter-button ${filtroSeleccionado2 === opcion ? "selected" : ""
-              }`}
+            className={`filter-button ${
+              filtroSeleccionado2 === opcion ? "selected" : ""
+            }`}
             onClick={() => getOrders2(opcion)}
-          >{opcion}
+          >
+            {opcion}
           </button>
         ))}
       </div>
       <div className="row row-search">
-        <div className='div-search'><SearchInputField  placeholder="Buscar por ID de orden" searchFunc={onChangeInput} /></div>
-        <div className='div-search'>
+        <div className="div-search">
+          <SearchInputField
+            placeholder="Buscar por ID de orden"
+            searchFunc={onChangeInput}
+          />
+        </div>
+        <div className="div-search">
           <div className="fecha">
-            <DateRangeIcon className="date-icon" />{fecha}
+            <DateRangeIcon className="date-icon" />
+            {fecha}
           </div>
         </div>
       </div>
       <div className="row-table">
-      {orders.length > 0 ? (
-        <div style={{ width: "90%", overflowX: "auto" }}>
-          <DataGrid
-            rows={orders}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10, 15]}
-            autoHeight
-          />
-        </div>
-      ) : (
-        <p>No hay órdenes para mostrar.</p>
-      )}
+        {orders.length > 0 ? (
+          <div style={{ width: "90%", overflowX: "auto" }}>
+            <DataGrid
+              rows={orders}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              pageSizeOptions={[5, 10, 15]}
+              autoHeight
+            />
+          </div>
+        ) : (
+          <p>No hay órdenes para mostrar.</p>
+        )}
         {/* <TableContainer component={Paper} className={classes.root}>
           <Table className={classes.table} aria-label="Ordenes de Compra">
             <TableHead>
@@ -428,8 +451,14 @@ function Orders() {
           />
         </TableContainer> */}
       </div>
-      <EditModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} idOrderModal = {idOrder} getIdFunc = {getIdForModal} getOrdersFunc={getOrders} filter = {filtroSeleccionado}/>
-
+      <EditModal
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
+        idOrderModal={idOrder}
+        getIdFunc={getIdForModal}
+        getOrdersFunc={getOrders}
+        filter={filtroSeleccionado}
+      />
     </div>
   );
 }
