@@ -8,6 +8,9 @@ import Cuenta from "./Pages/Account/Account";
 import VerPedidosPersonal from "./Pages/PersonalOrdersStore/PersonalOrderStore";
 import Register from "./Pages/Register/Register";
 import Login from "./Pages/Login/Login";
+//import HomePage from "./Pages/HomePage/HomePage";
+import ProductsPage from "./Pages/Categories/ProductsPage";
+
 function App() {
   
   return (
@@ -15,7 +18,7 @@ function App() {
       <DatabaseProvider>
         <Router className="App">
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<HomeMainComponent />} />
             <Route path="/Register" element={<Register />} />
             <Route path="/Login" element={< Login/>} />
             <Route path="/Cuenta" element={<Cuenta />} />
