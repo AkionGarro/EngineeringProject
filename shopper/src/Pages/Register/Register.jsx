@@ -143,7 +143,7 @@ const Register = () => {
             <Grid container spacing={1.5}>
               <Grid item xs={12}>
                 <TextField
-                InputLabelProps={{ shrink: true }}
+                  InputLabelProps={{ shrink: true }}
                   name="fullName"
                   required
                   fullWidth
@@ -155,7 +155,7 @@ const Register = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                InputLabelProps={{ shrink: true }}
+                  InputLabelProps={{ shrink: true }}
                   required
                   fullWidth
                   id="email"
@@ -166,7 +166,7 @@ const Register = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                InputLabelProps={{ shrink: true }}
+                  InputLabelProps={{ shrink: true }}
                   required
                   fullWidth
                   name="password"
@@ -178,7 +178,7 @@ const Register = () => {
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                InputLabelProps={{ shrink: true }}
+                  InputLabelProps={{ shrink: true }}
                   required
                   fullWidth
                   id="phone"
@@ -191,7 +191,7 @@ const Register = () => {
 
               <Grid item xs={6}>
                 <TextField
-                InputLabelProps={{ shrink: true }}
+                  InputLabelProps={{ shrink: true }}
                   required
                   fullWidth
                   id="identification"
@@ -214,7 +214,7 @@ const Register = () => {
 
             <div className="container__address">
               <TextField
-              InputLabelProps={{ shrink: true }}
+                InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
                 id="country"
@@ -225,7 +225,7 @@ const Register = () => {
               />
 
               <TextField
-              InputLabelProps={{ shrink: true }}
+                InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
                 id="province"
@@ -238,7 +238,7 @@ const Register = () => {
 
             <div className="container__address">
               <TextField
-              InputLabelProps={{ shrink: true }}
+                InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
                 id="canton"
@@ -248,7 +248,7 @@ const Register = () => {
                 onChange={(e) => setCanton(e.target.value)}
               />
               <TextField
-              InputLabelProps={{ shrink: true }}
+                InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
                 id="district"
@@ -261,7 +261,7 @@ const Register = () => {
 
             <div className="container__address">
               <TextField
-              InputLabelProps={{ shrink: true }}
+                InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
                 id="address"
@@ -292,6 +292,6 @@ const Register = () => {
       </Container>
     </ThemeProvider>
   );
-}
+};
 
 export default Register;
