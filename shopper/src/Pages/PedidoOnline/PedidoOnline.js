@@ -165,7 +165,6 @@ const PedidoOnline = () => {
         <Button variant="contained" color="primary" onClick={toggleCarrito}>
           <div className="inside-button-products">
             <ShoppingCartIcon />
-            Carrito de compras
           </div>
         </Button>
         {carritoVisible && <Carrito />}

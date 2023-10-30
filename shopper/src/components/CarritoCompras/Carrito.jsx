@@ -13,6 +13,7 @@ const Carrito = () => {
   const api = useFirebase();
   const [carrito, setCarrito] = useState([]);
   const [montoTotal, setMontoTotal] = useState(0);
+  const [cantidadArt, setCantidadArt] = useState(0);
   const [cantidadFlag, setCantidadFlag] = useState(true);
   const [loading, setLoading] = useState(true);
 
@@ -30,10 +31,8 @@ const Carrito = () => {
         break;
       }
     }
-
-    console.log("Seteando nuevo cantidad en Jeans ");
-    console.log(nuevoCarrito);
     setCarrito(nuevoCarrito);
+    calcularArticulos(nuevoCarrito);
   };
 
   const eliminarDelCarrito = (indice) => {
@@ -76,6 +75,15 @@ const Carrito = () => {
     setMontoTotal(monto);
   };
 
+  const calcularArticulos = () => {
+    let total = 0;
+    for (let i = 0; i < carrito.length; i++) {
+      let product = carrito[i];
+      total += product.cantidad;
+    }
+    setCantidadArt(total);
+  };
+
   const deleteAll = () => {
     Swal.fire({
       title: "¿Estás seguro?",
@@ -106,6 +114,7 @@ const Carrito = () => {
       setLoading(false);
     }
     calcularMonto();
+    calcularArticulos();
   }, [carrito]);
 
   return (
@@ -122,7 +131,7 @@ const Carrito = () => {
           <div className="carrito-resumen">
             <h3>Detalle de Compra</h3>
             <p className="parrafo-resumen">
-              Total de artículos: <strong>{carrito.length}</strong>
+              Total de artículos: <strong>{cantidadArt}</strong>
             </p>
             <p className="parrafo-resumen">
               Total a Pagar: <strong>${montoTotal} </strong>
