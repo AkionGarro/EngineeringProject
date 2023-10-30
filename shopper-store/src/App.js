@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { AuthProvider } from "./context/AuthContext";
 import { DatabaseProvider } from "./context/DatabaseContext";
-
 import HomePage from "./Pages/HomePage/HomePage";
 import Cuenta from "./Pages/Account/Account";
 import VerPedidosPersonal from "./Pages/PersonalOrdersStore/PersonalOrderStore";

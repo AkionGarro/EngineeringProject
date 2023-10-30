@@ -10,6 +10,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
+
 /* Creating a context object. */
 export const authContext = createContext();
 
@@ -65,11 +66,13 @@ export function AuthProvider({ children }) {
   };
 
   const loginWithGoogle = async () => {
+    const responseGoogle = new GoogleAuthProvider();
+    responseGoogle.setCustomParameters({ prompt: 'select_account' });
     try {
-      const responseGoogle = new GoogleAuthProvider();
+      
       return await signInWithPopup(auth, responseGoogle);
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 

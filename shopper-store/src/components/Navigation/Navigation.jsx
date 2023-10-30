@@ -17,7 +17,7 @@ import "./Navigation.css";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom"; 
 
-const pages = [{name:"Inicio",route:"/"},{name:"Servicios",route:"#"}, {name:"Contacto",route:"#"}];
+const pages = [{name:"Inicio",route:"/"},{name:"Servicios",route:"#"}, {name:"Contacto",route:"#2"}];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -33,9 +33,9 @@ function ResponsiveAppBar() {
   return (
     <AppBar position="static">
       <Container
-        maxWidth="xl"
         sx={{
           backgroundColor: "#457B9D",
+          maxWidth: "xl",
         }}
       >
         <Toolbar disableGutters>
@@ -71,6 +71,7 @@ function ResponsiveAppBar() {
               <MenuIcon />
             </IconButton>
             <Menu
+            
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
@@ -114,7 +115,7 @@ function ResponsiveAppBar() {
           >
             VeroCampShop
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }} className="container-nav">
             {pages.map((page) => (
               <Link
                 to={`${page.route.toLowerCase()}`}

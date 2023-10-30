@@ -1,8 +1,17 @@
-.logo__navigation{
-    max-width: 2rem;
-    max-height: 2rem;
+#root > header {
+background-color: #457B9D;
+
+}
+#root > header > div{
+    min-width: 100vw;
 }
 
-.container__nav{
-    background-color: red !important;
+
+.container-nav{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 3rem;
+
+
 }
