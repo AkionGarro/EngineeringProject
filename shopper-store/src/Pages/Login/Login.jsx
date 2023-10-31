@@ -24,6 +24,7 @@ const defaultTheme = createTheme();
 export default function Login() {
   const navigate = useNavigate();
   const auth = useAuth();
+  
   const goToHomePageAdmin = () => {
     navigate("/");
   };

@@ -18,24 +18,28 @@ import online from "../../imagenes/online.png"
 import personal from "../../imagenes/pedidoPersonal.png"
 import tienda from "../../imagenes/tienda.png"
 
+import Personal_Order from "../PersonalOrdersStore/PersonalOrderStore"
+
+
 const tiposPedidos = [
 	{
 		title: "Pedido Online",
 		description: "Envía los links de los productos que deseas comprar y estos llegaran a tu puerta",
 		image: online,
-		direccion: "../Categories/ProductsPage"
+		route: <Personal_Order />
+
 	},
 	{
 		title: "Pedido Personal",
 		description: "Envía la descripción y imágenes de los productos que quieras buscar.",
 		image: personal,
-		direccion: "../Categories/ProductsPage"
+		route: <Personal_Order />
 	},
 	{
 		title: "Pedido en la tienda",
 		description: "Adquiere productos de nuestra lista de productos disponibles ",
 		image: tienda,
-		direccion: <ProductsPage />
+		route: <ProductsPage />
 	}
 ]
 
@@ -110,7 +114,7 @@ const Blog = props => {
 						</Typography>
 						<Grid container spacing={4}>
 							{tiposPedidos.slice(0, 2).map((post) => (
-								<Pedidos key={post.title} post={post} />
+								<Pedidos key={post.title} post={post}  />
 							))}
 							<Grid item xs={12} md={3}></Grid> {/* Espacio para centrar la tercera tarjeta */}
 							{tiposPedidos.slice(2).map((post) => (

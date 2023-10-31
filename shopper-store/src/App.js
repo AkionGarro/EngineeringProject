@@ -10,22 +10,28 @@ import Register from "./Pages/Register/Register";
 import Login from "./Pages/Login/Login";
 //import HomePage from "./Pages/HomePage/HomePage";
 import ProductsPage from "./Pages/Categories/ProductsPage";
+import { GlobalProvider } from "./GlobalContext/GlobalContext";
 
 function App() {
   
   return (
     <AuthProvider>
       <DatabaseProvider>
-        <Router className="App">
-          <Routes>
-            <Route path="/" element={<HomeMainComponent />} />
-            <Route path="/Register" element={<Register />} />
-            <Route path="/Login" element={< Login/>} />
-            <Route path="/Cuenta" element={<Cuenta />} />
-            <Route path="/PedidosPersonal" element={<VerPedidosPersonal />} />
-            <Route path="/Products" element={<ProductsPage />} />
-          </Routes>
-        </Router>
+
+        <GlobalProvider>
+          <Router className="App">
+            <Routes>
+              <Route path="/" element={<HomeMainComponent />} />
+              <Route path="/Register" element={<Register />} />
+              <Route path="/Login" element={< Login/>} />
+              <Route path="/Cuenta" element={<Cuenta />} />
+              <Route path="/PedidosPersonal" element={<VerPedidosPersonal />} />
+              <Route path="/Products" element={<ProductsPage />} />
+            </Routes>
+          </Router>
+        </GlobalProvider>
+
+        
       </DatabaseProvider>
     </AuthProvider>
   );

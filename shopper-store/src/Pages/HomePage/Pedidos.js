@@ -6,13 +6,22 @@ import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
+import {useGlobalContext} from "../../GlobalContext/GlobalContext"
 
 function Pedidos(props) {
   const { post } = props;
 
+  const { setComponentToRender } = useGlobalContext()
+
+  const handleNavoptions = () => {
+
+		setComponentToRender(post.route)
+
+	}
+
   return (
     <Grid item xs={12} md={6}>
-      <CardActionArea component="a" href={post.direccion}>
+      <CardActionArea component="a" href={post.direccion} onClick={handleNavoptions}>
         <Card sx={{ display: 'flex' , height:200}}>
           <CardContent sx={{ flex: 1 }}>
             <Typography component="h2" variant="h5">

@@ -13,7 +13,7 @@ import Blog from "./HomePage.js"
 import logo from "../../imagenes/logo.png"
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-
+import {useGlobalContext} from "../../GlobalContext/GlobalContext"
 
 //Lista con las opciones del navbar
 const sections = [
@@ -23,13 +23,19 @@ const sections = [
 	{ id: "Categories", title: "Categorías", route: <ProductsPage /> }
 ]
 
+
 // Es el Navbar
 const Header = props => {
-	const { navOptions, onClickCarrito } = props
+	const {onClickCarrito } = props
+
+	const {setComponentToRender} = useGlobalContext()
+
 
 	//Maneja el cambio del Componente principal
 	const handleNavoptions = (route, title) => {
-		navOptions(route, title)
+
+		setComponentToRender(route)
+
 	}
 
 	return (

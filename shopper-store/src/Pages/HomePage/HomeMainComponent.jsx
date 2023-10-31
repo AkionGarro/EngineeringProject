@@ -1,15 +1,16 @@
-import React, { Component, useState } from "react"
+import React, { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import Header from "./Header.js"
 import Footer from "./Footer.js"
+
 
 //Imports del HomePage
 import Blog from "./HomePage.js"
 
 //Lo del carrito
 import Carrito from "./../../components/CarritoCompras/Carrito"
-
+import { useGlobalContext } from "./../../GlobalContext/GlobalContext.js"
 
 
 //Componente Principal de la Página
@@ -18,7 +19,11 @@ const HomeMainComponent = () => {
 
   //Este State contiene el Componente que se está renderizando 
   // el cambio se hace en el Header
-  const [componentToRender, setComponentToRender] = useState(<Blog goTo={1} />)
+  const {componentToRender, setComponentToRender} = useGlobalContext();
+  console.log(componentToRender)
+
+
+
   const auth = useAuth();
   const navigate = useNavigate();
 
@@ -42,18 +47,17 @@ const HomeMainComponent = () => {
   return (
     <>
       {/* //NavBar de la Pagina. Siempre va a estar presente. */}
-      <Header title="NAVBAR" navOptions={navigatorOptions} onClickCarrito={toggleCarrito}/>
+      <Header title="NAVBAR" onClickCarrito={toggleCarrito}/>
 
 
       {/* Carrito de la Pagina */}
       {carritoVisible && <Carrito />}
 
-     
-
-
+  
 
       {/* //Acá es dónde se va a renderizar el componente que se quiere mostrar al usuario */}
       {componentToRender}
+
 
       {/* //Footer de la Pagina. Siempre va a estar presente. */}
       <Footer
