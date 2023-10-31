@@ -7,6 +7,10 @@ import Footer from "./Footer.js"
 //Imports del HomePage
 import Blog from "./HomePage.js"
 
+//Lo del carrito
+import Carrito from "./../../components/CarritoCompras/Carrito"
+
+
 
 //Componente Principal de la Página
 //Acá se renderiza el Navbar, el componente principal y el footer
@@ -24,10 +28,29 @@ const HomeMainComponent = () => {
     setComponentToRender(route);
   };
 
+
+  //Carrito de compras 
+
+  const [carritoVisible, setCarritoVisible] = useState(false);
+
+  const toggleCarrito = () => {
+    setCarritoVisible(!carritoVisible);
+  };
+
+  const cantidadEnCarrito = 6;
+
   return (
     <>
       {/* //NavBar de la Pagina. Siempre va a estar presente. */}
-      <Header title="NAVBAR" navOptions={navigatorOptions} />
+      <Header title="NAVBAR" navOptions={navigatorOptions} onClickCarrito={toggleCarrito}/>
+
+
+      {/* Carrito de la Pagina */}
+      {carritoVisible && <Carrito />}
+
+     
+
+
 
       {/* //Acá es dónde se va a renderizar el componente que se quiere mostrar al usuario */}
       {componentToRender}
