@@ -1,31 +1,31 @@
-.search-input-container{
-    /* hacer que los div se pongan juntos */
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding-top: 0%;
+
+
+.search-input {
+  width: 80%;; /* Ancho predeterminado para todos los tamaños de pantalla */
+  margin-bottom: 20px;
 }
 
-.search-input{
-    /* si es pc witdh 50% si es movil with 100% */
-    width: 100%;
-    margin-right: 0.5rem;
-}
-.container{
-  width: 100%;
+/* Media query para pantallas pequeñas (<= 600px) */
+@media (max-width: 600px) {
+  .search-input {
+    width: 100%; /* Ancho para pantallas pequeñas */
+  }
 }
 
-.div-izq{
-
-  padding: 0%;
-  width: 100%;
-  height: 4rem;
-  align-items: center;
-  padding-top: 0.3rem;
+/* Media query para pantallas medianas (601px - 960px) */
+@media (min-width: 601px) and (max-width: 960px) {
+  .search-input {
+    width: 80%; /* Ancho para pantallas medianas */
+  }
 }
 
+/* Media query para pantallas extra grandes (> 1920px) */
+@media (min-width: 960px) {
+  .search-input {
+    width: 80%; /* Ancho para pantallas extra grandes */
+    
+  }
+}
 
 /* Estilos para el icono de búsqueda */
 .MuiInputAdornment-positionStart {

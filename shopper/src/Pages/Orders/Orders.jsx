@@ -17,7 +17,10 @@ import Stack from "@mui/material/Stack";
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import { DataGrid } from '@mui/x-data-grid';
 import { firestore } from '../../firebase.js';
-
+//bootstrap
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Box, { BoxProps } from '@mui/material/Box';
+import { Container } from '@mui/system';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -42,7 +45,7 @@ const StyledTableCell = withStyles((theme) => ({
 }))(TableCell);
 
 function Orders() {
-  
+
   const opcionesFiltro = [
     "Todos",
     "Pendiente de confirmación",
@@ -77,13 +80,11 @@ function Orders() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [order, setOrder] = useState(null);
   const [idOrder, setOrderId] = useState(0);
-  
-  const getIdForModal = () =>{
+
+  const getIdForModal = () => {
     return idOrder;
   }
   const handleEditClick = (id) => {
-    console.log("ID handleEditClick objeto:", id);
-    console.log("ID handleEditClick:"+ toString(id));
     setOrderId(id);
     setPedidoSeleccionado(firebase.getOrder(id));
     // Abre el modal de edición cuando se hace clic en el icono de editar
@@ -93,7 +94,7 @@ function Orders() {
   const onChangeInput = async (idOrder) => {
     console.log("ID ORDER onChangeInput: ", idOrder);
     const data = await firebase.getOrder(idOrder);
-    if (data !== null){
+    if (data !== null) {
       setOrders([data]);
     }
   };
@@ -143,9 +144,9 @@ function Orders() {
     await Promise.all([setData()]);
   };
 
-  const  getOrders = async (filtroParametro) => {
+  const getOrders = async (filtroParametro) => {
     let filtro = filtroSeleccionado;
-  
+
     // Llama a la función auxiliar para actualizar el estado del filtro
     switch (filtroParametro) {
       case "Todos":
@@ -213,7 +214,7 @@ function Orders() {
           setFechaMenor(fecha);
         }
         if (fecha > fechaMayor) {
- 
+
           setFechaMayor(fecha);
         }
       } catch (error) {
@@ -301,11 +302,11 @@ function Orders() {
   }
 
   const columns = [
-    { field: "id", headerName: "ID", width: 200 },
-    { field: "cliente", headerName: "Cliente", width: 150 },
-    { field: "telefono", headerName: "Telefono", width: 100 },
-    { field: "direccion",headerName: "Dirección",width: 300,},
-    { field: "estado", headerName: "Estado", width: 90 },
+    { field: "id", headerName: "ID", width: 95 },
+    { field: "cliente", headerName: "Cliente", width: 140 },
+    { field: "telefono", headerName: "Telefono", width: 140 },
+    { field: "direccion", headerName: "Dirección", width: 200, },
+    { field: "estado", headerName: "Estado", width: 140 },
     {
       headerName: "Acciones",
       width: 300,
@@ -315,7 +316,7 @@ function Orders() {
             <Button onClick={() => deleteOrder(params.row.id)} variant="outlined" startIcon={<DeleteIcon />}></Button>
             <Button
               variant="outlined"
-              id = {params.row.id}
+              id={params.row.id}
               onClick={() => handleEditClick(params.row.id)}
               startIcon={<BorderColorRoundedIcon />}
             ></Button>
@@ -324,113 +325,113 @@ function Orders() {
       ),
     },
   ];
+  const commonStyles = {
+    bgcolor: 'background.paper',
+    mb: 1,
+    borderColor: 'text.primary',
+    width: '100%',
+
+  };
 
 
   return (
-    <div className='row container'>
-      <div className="row filter-tittle">Filtros</div>
-      <div className="row filtro-buttons">
-        {opcionesFiltro.map((opcion) => (
-          <button
-            key={opcion}
-            className={`filter-button ${filtroSeleccionado === opcion ? "selected" : ""
-              }`}
-            onClick={() => getOrders(opcion)}
-          >{opcion}
-          </button>
-        ))}
-      </div>
-      <div className="row filtro-buttons">
-        
-        {opcionesFiltro2.map((opcion) => (
-          <button
-            key={opcion}
-            className={`filter-button ${filtroSeleccionado2 === opcion ? "selected" : ""
-              }`}
-            onClick={() => getOrders2(opcion)}
-          >{opcion}
-          </button>
-        ))}
-      </div>
-      <div className="row row-search">
-        <div className='div-search'><SearchInputField  placeholder="Buscar por ID de orden" searchFunc={onChangeInput} /></div>
-        <div className='div-search'>
-          <div className="fecha">
-            <DateRangeIcon className="date-icon" />{fecha}
-          </div>
-        </div>
-      </div>
-      <div className="row-table">
-      {orders.length > 0 ? (
-        <div style={{ width: "90%", overflowX: "auto" }}>
-          <DataGrid
-            rows={orders}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10, 15]}
-            autoHeight
-          />
-        </div>
-      ) : (
-        <p>No hay órdenes para mostrar.</p>
-      )}
-        {/* <TableContainer component={Paper} className={classes.root}>
-          <Table className={classes.table} aria-label="Ordenes de Compra">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>ID</StyledTableCell>
-                <StyledTableCell>Cliente</StyledTableCell>
-                <StyledTableCell>Teléfono</StyledTableCell>
-                <StyledTableCell className="hide-on-mobile">Dirección</StyledTableCell>
-                <StyledTableCell className="hide-on-mobile">Estado</StyledTableCell>
-                <StyledTableCell className="hide-on-mobile">Acción</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => (
-                <TableRow key={order.pedido.id}>
-                  <TableCell>{order.pedido.id}</TableCell>
-                  <TableCell>{order.pedido.cliente}</TableCell>
-                  <TableCell>
-                    <a href={`https://wa.me/${order.pedido.telefono}`} target="_blank" rel="noopener noreferrer">
-                      <IconButton color="primary" aria-label="Chat en WhatsApp">
-                        <WhatsAppIcon />
-                      </IconButton>
-                    </a>
-                  </TableCell>
-                  <TableCell className="hide-on-mobile">{order.pedido.direccion}</TableCell>
-                  <TableCell className="hide-on-mobile">{order.pedido.estado}</TableCell>
-                  <TableCell className="hide-on-mobile">
-                    <IconButton color="primary" aria-label="Editar" onClick={() => handleEditClick(order.pedido.id)}>
-                      <EditIcon />
-                    </IconButton>
+    <Container maxWidth="xl">
+      <Box component="div" ><h4>Filtros</h4></Box>
+      <Box sx={{ display: 'block', gridTemplateRows: 'repeat(3, 1fr)' }}>
 
-                    <IconButton onClick={() => deleteOrder(order.pedido.id)} color="secondary" aria-label="Borrar">
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
+        <div>
+          <Box component="div" className='filtro-buttons' sx={{
+            ...commonStyles,
+            display: {
+              xs: 'flex',  // Para pantallas pequeñas (extra small), display es 'block'
+              md: 'block',   // Para pantallas medianas (medium), display es 'flex'
+              lg: 'block'
+            },
+            verticalAlign: 'middle', border: 1
+          }}>
+
+            <Box sx={{ textAlign: '', m: '0.1rem 0' }}>
+              {opcionesFiltro.map((opcion) => (
+                <button
+                  key={opcion}
+                  className={`filter-button ${filtroSeleccionado === opcion ? "selected" : ""}`}
+                  onClick={() => getOrders(opcion)}
+                >
+                  {opcion}
+                </button>
               ))}
-            </TableBody>
-          </Table>
-          <TablePagination
-            rowsPerPageOptions={[10, 25, 50]}
-            component="div"
-            count={orders.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </TableContainer> */}
-      </div>
-      <EditModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} idOrderModal = {idOrder} getIdFunc = {getIdForModal} getOrdersFunc={getOrders} filter = {filtroSeleccionado}/>
+            </Box>
+          </Box>
+          <Box component="div" className='filtro-buttons' sx={{
+            ...commonStyles,
+            display: {
+              xs: 'flex',  // Para pantallas pequeñas (extra small), display es 'block'
+              md: 'block',   // Para pantallas medianas (medium), display es 'flex'
+              lg: 'block'
+            },
+            verticalAlign: 'middle',
+            border: 1
+          }}>
 
-    </div>
+            <Box sx={{ textAlign: '', m: '0.1rem auto' }}>
+              {opcionesFiltro2.map((opcion) => (
+                <button
+                  key={opcion}
+                  className={`filter-button ${filtroSeleccionado2 === opcion ? "selected" : ""}`}
+                  onClick={() => getOrders2(opcion)}
+                >
+                  {opcion}
+                </button>
+              ))}
+            </Box>
+          </Box>
+
+        </div>
+        <div style={{ display: 'block' }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', textAlign: 'center' }}>
+            <div>
+              <SearchInputField placeholder="Buscar por ID de orden" searchFunc={onChangeInput} />
+            </div>
+            <div style={{paddingTop: 9}}>
+              <Box sx={{
+                ...commonStyles, display: 'inline',borderRadius:'5px', p:1, textAlign: 'center',  verticalAlign: 'middle',
+                border: 1
+              }}>
+                <DateRangeIcon sx={{ color: '#666' }} />{fecha}
+              </Box>
+            </div>
+
+          </Box>
+        </div>
+        <div style={{ display: 'block', marginTop: '7px' }}>
+
+          {orders.length > 0 ? (
+            <div style={{ overflowX: "auto", display: 'block' }}>
+              <DataGrid
+                rows={orders}
+                sx={{ maxWidth: '100%', width: { xs: '90vw', sm: '62.5vw', md: '71vw', lg: '77vw' }, textAlign: 'center' }}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 15 },
+                  },
+                }}
+                pageSizeOptions={[5, 10, 15]}
+                autoHeight
+              />
+            </div>
+
+
+          ) : (
+            <p>No hay órdenes para mostrar.</p>
+          )}
+
+          <EditModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} idOrderModal={idOrder} getIdFunc={getIdForModal} getOrdersFunc={getOrders} filter={filtroSeleccionado} />
+        </div>
+
+      </Box>
+    </Container>
+
   );
 }
 

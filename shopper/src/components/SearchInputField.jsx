@@ -30,11 +30,10 @@ function SearchInputField({ placeholder, searchFunc }) {
     };
 
     return (
-        <div className="container">
-            <div className="search-input-container">
-                <div className="div-izq">
-                <TextField
+        <div>
+            <TextField
                     className="search-input"
+                    
                     type="text"
                     placeholder={placeholder}
                     onKeyPress={handleKeyPress}
@@ -48,10 +47,6 @@ function SearchInputField({ placeholder, searchFunc }) {
                         ),
                     }}
                 />
-                </div>
-               
-                </div>
-            {/* <div className="row">{searchText}</div> */}
         </div>
     );
 }

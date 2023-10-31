@@ -40,7 +40,7 @@ const categories = [
         id: "Productos",
         icon: <InventoryIcon />,
         route: <Products />,
-        tittle: "Gestionar productos",
+        tittle: "Gestionar Productos",
       },
       {
         id: "Categorías",

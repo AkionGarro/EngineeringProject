@@ -200,7 +200,7 @@ export default function HomePageAdmin(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
   const [componentToRender, setComponentToRender] = React.useState(<Orders />);
-  const [tittle, setTittle] = React.useState("Manage Orders");
+  const [tittle, setTittle] = React.useState("Gestionar Pedidos");
   const auth = useAuth();
   const navigate = useNavigate();
 
