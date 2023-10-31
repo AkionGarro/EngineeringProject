@@ -12,6 +12,9 @@ import ProductsPage from "./../Categories/ProductsPage.jsx"
 import Blog from "./HomePage.js"
 import logo from "../../imagenes/logo.png"
 
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import {useGlobalContext} from "../../GlobalContext/GlobalContext"
+
 //Lista con las opciones del navbar
 const sections = [
 	{ id: "Pedido", title: "Realizar pedido", route: <Blog goTo={2} /> },
@@ -20,13 +23,19 @@ const sections = [
 	{ id: "Categories", title: "Categorías", route: <ProductsPage /> }
 ]
 
+
 // Es el Navbar
 const Header = props => {
-	const { navOptions } = props
+	const {onClickCarrito } = props
+
+	const {setComponentToRender} = useGlobalContext()
+
 
 	//Maneja el cambio del Componente principal
 	const handleNavoptions = (route, title) => {
-		navOptions(route, title)
+
+		setComponentToRender(route)
+
 	}
 
 	return (
@@ -63,7 +72,16 @@ const Header = props => {
 						Verocam_shop
 					</Typography>
 				</div>
+
+				<Button variant="contained" color="primary" onClick={onClickCarrito}>
+						<div className="inside-button-products">
+							<ShoppingCartIcon />
+						</div>
+					</Button>
 				<div>
+
+					
+
 					<Button
 						size="small"
 						onClick={() => handleNavoptions(<Blog />, "Inicio")}
@@ -75,6 +93,8 @@ const Header = props => {
 						}}>
 						Inicio
 					</Button>
+
+
 					<Button
 						variant="outlined"
 						size="small"
@@ -92,6 +112,8 @@ const Header = props => {
 							Iniciar Sesion
 						</Link>
 					</Button>
+
+
 				</div>
 			</Toolbar>
 			<Toolbar component="nav" variant="dense" sx={{ justifyContent: "center", overflowX: "auto" }}>
