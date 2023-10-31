@@ -6,30 +6,36 @@ import GitHubIcon from "@mui/icons-material/GitHub"
 import FacebookIcon from "@mui/icons-material/Facebook"
 import TwitterIcon from "@mui/icons-material/Twitter"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-import FeaturedPost from "./FeaturedPost"
-import Main from "./Main"
-import Sidebar from "./Sidebar"
+import Pedidos from "./Pedidos"
+import Beneficios from "./Beneficios"
+import InfoVero from "./InfoVero"
 import post1 from "./blog-post.1.md"
 import Carrousel from "./Carrousel"
 import Typography from '@mui/material/Typography';
-import StorefrontIcon from '@mui/icons-material/Storefront';
+import ProductsPage from "./../Categories/ProductsPage.jsx"
+
+import online from "../../imagenes/online.png"
+import personal from "../../imagenes/pedidoPersonal.png"
+import tienda from "../../imagenes/tienda.png"
 
 const tiposPedidos = [
 	{
 		title: "Pedido Online",
 		description: "Envía los links de los productos que deseas comprar y estos llegaran a tu puerta",
-		image: "https://source.unsplash.com/random?wallpapers",
+		image: online,
+		direccion: "../Categories/ProductsPage"
 	},
 	{
 		title: "Pedido Personal",
 		description: "Envía la descripción y imágenes de los productos que quieras buscar.",
-		image: "https://source.unsplash.com/random?wallpapers",
+		image: personal,
+		direccion: "../Categories/ProductsPage"
 	},
 	{
 		title: "Pedido en la tienda",
-		date: "Nov 11",
 		description: "Adquiere productos de nuestra lista de productos disponibles ",
-		image: "https://source.unsplash.com/random?wallpapers",
+		image: tienda,
+		direccion: <ProductsPage />
 	}
 ]
 
@@ -104,24 +110,27 @@ const Blog = props => {
 						</Typography>
 						<Grid container spacing={4}>
 							{tiposPedidos.slice(0, 2).map((post) => (
-								<FeaturedPost key={post.title} post={post} />
+								<Pedidos key={post.title} post={post} />
 							))}
 							<Grid item xs={12} md={3}></Grid> {/* Espacio para centrar la tercera tarjeta */}
 							{tiposPedidos.slice(2).map((post) => (
-								<FeaturedPost key={post.title} post={post} />
+								<Pedidos key={post.title} post={post} />
 							))}
 							</Grid>
 					</div>
 
+					<div >
+						<Typography variant="h6" gutterBottom sx={{ mt: 3, textAlign:'center', color:"#457B9D", marginTop:"50px"}}>
+							Beneficios
+						</Typography>
+						<Beneficios/>
+					</div>
+
 					<div ref={section3}>
-						<Grid container spacing={5} sx={{ mt: 3 }}>
-							<Main title="From the firehose" posts={posts} />
-							<Sidebar
-								title={sidebar.title}
-								description={sidebar.description}
-								social={sidebar.social}
-							/>
-						</Grid>
+						<Typography variant="h6" gutterBottom sx={{ mt: 3, textAlign:'center', color:"#457B9D", marginTop:"50px"}}>
+							Acerca de Vero
+						</Typography>
+						<InfoVero/>
 					</div>
 				</main>
 
