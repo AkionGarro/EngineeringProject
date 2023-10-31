@@ -24,7 +24,6 @@ const defaultTheme = createTheme();
 export default function Login() {
   const navigate = useNavigate();
   const auth = useAuth();
-
   const goToHomePageAdmin = () => {
     navigate("/");
   };
@@ -38,8 +37,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleGoogle = async (e) => {
-    e.preventDefault();
+  const handleGoogle = async () => {
     try {
       await auth.loginWithGoogle();
       if (auth.user) {
@@ -75,6 +73,7 @@ export default function Login() {
       console.error("Error adding document: ", e);
     }
   };
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -156,11 +155,7 @@ export default function Login() {
 
             <Grid container>
               <Grid item className="google__container">
-                <div
-                  onClick={(e) => {
-                    handleGoogle(e);
-                  }}
-                >
+                <div onClick={handleGoogle}>
                   <div className="google-btn">
                     <div className="google-icon-wrapper">
                       <img
@@ -174,6 +169,7 @@ export default function Login() {
                   </div>
                 </div>
               </Grid>
+
             </Grid>
           </Box>
         </Box>

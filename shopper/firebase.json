@@ -5,9 +5,25 @@
       
       {
         "source": "**",
-        "destination": "/index.html"
+        "destination": "/index.html",
+        "headers": [
+          {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin-allow-popups"
+          }
+      ]
       }
-    ],
+    ],"headers": [
+      {
+          "source": "**",
+          "headers": [
+              {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin-allow-popups"
+              }
+          ]
+      }
+  ],
     "ignore": [
       "firebase.json",
       "**/.*",
