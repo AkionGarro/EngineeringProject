@@ -10,6 +10,7 @@ import AdbIcon from "@mui/icons-material/Adb"
 
 import ProductsPage from "./../Categories/ProductsPage.jsx"
 import Blog from "./HomePage.js"
+import Pedidos from "../../components/Pedidos/Pedidos.jsx"
 import logo from "../../imagenes/logo.png"
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -92,6 +93,18 @@ const Header = props => {
 							}
 						}}>
 						Inicio
+					</Button>
+
+					<Button
+						size="small"
+						onClick={() => handleNavoptions(<Pedidos />, "Mis Pedidos")}
+						sx={{
+							color: "#457B9D",
+							"&:hover": {
+								backgroundColor: "white"
+							}
+						}}>
+						Mis pedidos
 					</Button>
 
 
