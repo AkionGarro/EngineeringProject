@@ -1,8 +1,7 @@
 .carrito {
-  position: absolute;
-  margin-top: 1rem;
-  top: 20px;
-  right: 0.1px;
+  position: fixed; /* Cambiado a "fixed" para mantenerlo en la pantalla */
+  top: 0;
+  right: 0;
   width: 350px;
   height: 100%;
   background-color: #fff;
@@ -12,34 +11,38 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start; /* Ajustado a "flex-start" para alinear elementos arriba */
   gap: 1rem;
   z-index: 999; /* Ajusta el valor de z-index a uno alto */
 }
+
 .carrito-resumen {
   background-color: #fff;
   width: 350px;
-  border: 1px solid #ccc;
+  border-top: 2px solid #ccc; /* Borde arriba */
+  border-bottom: 2px solid #ccc; /* Borde abajo */
   padding: 10px;
   text-align: center;
 }
 
 .parrafo-resumen {
-  font-size: 16px !important;
+  font-size: 16px;
 }
+
 .buttons-carrito {
-  width: 150px !important;
+  margin-bottom: 1rem !important;
+  width: 150px;
 }
 
 .opciones-button-carrito {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  flex-direction: row !important;
-  gap: 1rem !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Cambiado a "space-between" para separar elementos */
+  gap: 1rem;
 }
 
 .image-product {
-  width: 100px;
+  max-width: 100%;
   height: auto;
 }
 
@@ -55,14 +58,21 @@
 
 .card {
   border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column; /* Cambiado a "column" para apilar elementos verticalmente */
+  justify-content: flex-start; /* Ajustado a "flex-start" para alinear elementos arriba */
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 10px 0;
   padding: 10px;
 }
 
+.card-Content {
+  text-align: center;
+}
+
 .card img {
-  max-width: 100%;
+  max-width: 60%;
   height: auto;
   margin-top: 10px;
 }
@@ -95,17 +105,16 @@
 
 .carrito-resumen button {
   margin-top: 10px;
+  width: 10rem;
 }
 
 #circle_btn {
-  width: 2rem !important;
-  height: 2rem !important;
-  border-radius: 50% !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  flex-direction: column !important;
-  padding: 0 !important;
-  font-size: 20px !important;
-  background-color: rgb(149, 148, 148) !important;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  background-color: rgb(149, 148, 148);
 }

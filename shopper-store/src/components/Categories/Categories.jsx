@@ -1,61 +1,74 @@
-import React, { Component, useEffect, useState } from "react"
-import { useFirebase } from "../../context/DatabaseContext"
-import CategoryCard from "./CategoryCard"
-import { ImageList, ImageListItem } from "@mui/material"
-import Stack from "@mui/material/Stack"
+import React, { Component, useEffect, useState } from "react";
+import { useFirebase } from "../../context/DatabaseContext";
+import CategoryCard from "./CategoryCard";
+import { ImageList, ImageListItem } from "@mui/material";
+import Stack from "@mui/material/Stack";
 
-
-import CircularProgress from "@mui/material/CircularProgress"
-import {Box} from "@mui/material"
+import CircularProgress from "@mui/material/CircularProgress";
+import { Box } from "@mui/material";
 
 const Categories = (props) => {
-	const [categories, setCategories] = useState([])
-	const [loading, setLoading] = useState(true)
+  //Si carritoCompras no existe en LocalStorage, lo crea. De lo contrario no entra en el condicional.
 
-	const api = useFirebase()
+  if (!localStorage.getItem("carritoCompras")) {
+    var carritoCompras = [];
+    var carritoComprasJSON = JSON.stringify(carritoCompras);
+    localStorage.setItem("carritoCompras", carritoComprasJSON);
+  }
 
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const querySnapshot = await api.getCategoriesByStatus(1)
-				setCategories(querySnapshot)
-				setLoading(false)
+  //============================
 
-			}catch (error) {
-				console.log("Error al obtener los Datos de las Categorias")
-			}
-		}
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-		fetchData()
-	}, [])
+  const api = useFirebase();
 
-	const onCategoryClick = category => {
-		props.handleCategoryChange(category)
-	}
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await api.getCategoriesByStatus(1);
+        setCategories(querySnapshot);
+        setLoading(false);
+      } catch (error) {
+        console.log("Error al obtener los Datos de las Categorias");
+      }
+    };
 
-	const createCategoryComponents = () => {
-		let mappedCategories = []
+    fetchData();
+  }, []);
 
-		categories.forEach(element => {
-			mappedCategories.push(<CategoryCard categoryInfo={element} onCategoryClick={onCategoryClick} />)
-		})
+  const onCategoryClick = (category) => {
+    props.handleCategoryChange(category);
+  };
 
-		return mappedCategories
-	}
+  const createCategoryComponents = () => {
+    let mappedCategories = [];
 
-	return (
-		<>
-			{loading ? (
-				<Box sx={{ display: "flex" }}>
-					<CircularProgress />
-				</Box>
-			) : (
-				<Stack direction="row" spacing={2}>
-					{createCategoryComponents()}
-				</Stack>
-			)}
-		</>
-	)
-}
+    categories.forEach((element) => {
+      mappedCategories.push(
+        <CategoryCard
+          categoryInfo={element}
+          onCategoryClick={onCategoryClick}
+        />
+      );
+    });
 
-export default Categories
+    return mappedCategories;
+  };
+
+  return (
+    <>
+      {loading ? (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Stack direction="row" spacing={2}>
+          {createCategoryComponents()}
+        </Stack>
+      )}
+    </>
+  );
+};
+
+export default Categories;
