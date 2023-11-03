@@ -4,30 +4,32 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useFirebase } from "../../context/DatabaseContext";
 import Swal from "sweetalert2";
 import Loader from "./Loader";
 import "./Carrito.css";
 
 const Carrito = () => {
-  const api = useFirebase();
   const [carrito, setCarrito] = useState([]);
   const [montoTotal, setMontoTotal] = useState(0);
   const [cantidadArt, setCantidadArt] = useState(0);
   const [cantidadFlag, setCantidadFlag] = useState(true);
   const [loading, setLoading] = useState(true);
 
-  const agregarAlCarrito = (product) => {
-    console.log("Entro a agregarAlCarrito");
+  const agregarAlCarrito = (product, id) => {
     const nuevoCarrito = [...carrito];
+    var carritoComprasJSON = localStorage.getItem("carritoCompras");
+    var carritoCompras = JSON.parse(carritoComprasJSON);
+    var indiceLocalSt = carritoCompras.findIndex(function (elemento) {
+      return elemento.id === id;
+    });
+    var productoLocalSt = carritoCompras[indiceLocalSt];
 
     for (let i = 0; i < nuevoCarrito.length; i++) {
       if (nuevoCarrito[i].id === product.id) {
         const productoAumentando = nuevoCarrito[i];
-        console.log("Entra condicion id iguales");
         productoAumentando.cantidad += 1;
-        console.log(productoAumentando);
-        console.log("productoAumentando con cantd 2");
+        productoLocalSt.cantidad += 1;
+        localStorage.setItem("carritoCompras", JSON.stringify(carritoCompras));
         break;
       }
     }
@@ -35,9 +37,15 @@ const Carrito = () => {
     calcularArticulos(nuevoCarrito);
   };
 
-  const eliminarDelCarrito = (indice) => {
+  const eliminarDelCarrito = (indice, id) => {
     const nuevoCarrito = [...carrito];
     const elementoParaEliminar = nuevoCarrito[indice];
+    var carritoComprasJSON = localStorage.getItem("carritoCompras");
+    var carritoCompras = JSON.parse(carritoComprasJSON);
+
+    var productoEliminar = carritoCompras.findIndex(function (elemento) {
+      return elemento.id === id;
+    });
 
     if (elementoParaEliminar.cantidad === 1) {
       Swal.fire({
@@ -49,8 +57,14 @@ const Carrito = () => {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
+          //Actualiza carrito de compras en aplicacion y en el localStorage
           nuevoCarrito.splice(indice, 1);
           setCarrito(nuevoCarrito);
+          carritoCompras.splice(productoEliminar, 1);
+          localStorage.setItem(
+            "carritoCompras",
+            JSON.stringify(carritoCompras)
+          );
         }
       });
     } else {
@@ -60,10 +74,23 @@ const Carrito = () => {
   };
 
   const setCantidad = () => {
+    let flag = false;
     for (let i = 0; i < carrito.length; i++) {
       let product = carrito[i];
-      product["cantidad"] = 1;
+      if (!product.hasOwnProperty("cantidad")) {
+        flag = true;
+      } else {
+        flag = false;
+      }
+      if (flag) {
+        product["cantidad"] = 1;
+      }
     }
+    localStorage.setItem("carritoCompras", JSON.stringify(carrito));
+    console.log("carrito con cant");
+    var carritoComprasJSON = localStorage.getItem("carritoCompras");
+    var carritoCompras = JSON.parse(carritoComprasJSON);
+    console.log(carritoCompras);
   };
 
   const calcularMonto = () => {
@@ -95,14 +122,27 @@ const Carrito = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         setCarrito([]);
+        localStorage.setItem("carritoCompras", JSON.stringify([]));
       }
     });
   };
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const productosCarro = await api.getAllProducts();
-      setCarrito(productosCarro);
+      var carritoComprasJSON = localStorage.getItem("carritoCompras");
+
+      if (carritoComprasJSON !== null) {
+        var carritoCompras = JSON.parse(carritoComprasJSON);
+        console.log("Objetos carrito Compras");
+        console.log(carritoCompras);
+
+        setCarrito(carritoCompras);
+
+        //Si carritoCompras no esta definido, se estable CarritoCompras como array vacio
+      } else {
+        setCarrito([]);
+      }
+      setLoading(false);
     };
     fetchProducts();
   }, []);
@@ -111,7 +151,6 @@ const Carrito = () => {
     if (carrito.length > 0 && cantidadFlag) {
       setCantidad();
       setCantidadFlag(false);
-      setLoading(false);
     }
     calcularMonto();
     calcularArticulos();
@@ -150,14 +189,14 @@ const Carrito = () => {
                 color="success"
                 className="buttons-carrito"
               >
-                Realizar Compra
+                Comprar
               </Button>
             </div>
           </div>
           <div className="carrito-items">
             {carrito.map((product, index) => (
               <Card className="card" key={index}>
-                <CardContent>
+                <CardContent className="card-Content">
                   <h3>Nombre: {product.name}</h3>
                   <h3>Color: {product.personalizedFields.Color}</h3>
                   <p>Precio: ${product.price}</p>
@@ -171,7 +210,7 @@ const Carrito = () => {
                       id="circle_btn"
                       variant="contained"
                       color="secondary"
-                      onClick={() => eliminarDelCarrito(index)}
+                      onClick={() => eliminarDelCarrito(index, product.id)}
                     >
                       <RemoveIcon />
                     </Button>
@@ -180,7 +219,7 @@ const Carrito = () => {
                       id="circle_btn"
                       variant="contained"
                       color="primary"
-                      onClick={() => agregarAlCarrito(product)}
+                      onClick={() => agregarAlCarrito(product, product.id)}
                     >
                       <AddIcon />
                     </Button>
