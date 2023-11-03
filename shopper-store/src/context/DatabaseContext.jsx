@@ -369,6 +369,90 @@ export function DatabaseProvider({ children }) {
     console.log("ORDERS: ", orders);
     return orders;
   };
+
+  const getUserIdFBDoc = async (email) => {
+    const ref = collection(firestore, "users");
+    const q = query(ref, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.docs.length === 0) {
+      console.log("Usuario no encontrado.");
+      return null;
+    }
+    const userDoc = querySnapshot.docs[0];
+    return userDoc.id;
+  }
+
+  const getOrdersForUser = async (filtroParametro, filtroParametro2, email) => {
+    let orders = [];
+  
+    let collections = null;
+    if(filtroParametro2 === "Todos"){
+      collections = ["pedidosTest", "pedidosPersonales", "pedidosOnline"];
+    }else{
+      collections = [filtroParametro2];
+    }
+    console.log("Filtro 1: ", filtroParametro);
+    console.log("Filtro 2: ", collections);
+    console.log("Filtro 3: ", email);
+
+    const userDoc = await getUserIdFBDoc(email);
+    console.log("USER CODUMENT: ", userDoc);
+  
+    for (const collectionName of collections) {
+      const collectionRef = collection(firestore, collectionName);
+  
+      if (filtroParametro !== "Todos") {
+        const queryRef = query(collectionRef, 
+          where("estado", "==", filtroParametro),
+          where("usuario", "in", [email, userDoc])
+        );
+        const snapshot = await getDocs(queryRef);
+        console.log("SNAPSHOT: ", snapshot);
+        snapshot.forEach((doc) => {
+          orders.push({ id: doc.id, ...doc.data() });
+        });
+      } else {
+        const queryRef = query(collectionRef, 
+          where("usuario", "in", [email, userDoc])
+        );
+        const snapshot = await getDocs(queryRef);
+        snapshot.forEach((doc) => {
+          orders.push({ id: doc.id, ...doc.data() });
+        });
+      }
+    }
+    //recorrer el array de orders y sustituir en cada orden estado por el nombre del estado "Pendiente de confirmación", "En proceso", "Pendiente de pago", "Cancelado", "Pagado", "Enviado", "Recibido" según corresponda
+    orders.forEach((order) => {
+      switch (order.estado) {
+        case "0":
+          order.estado = "Pendiente de confirmación";
+          break;
+        case "1":
+          order.estado = "En proceso";
+          break;
+        case "2":
+          order.estado = "Pendiente de pago";
+          break;
+        case "3":
+          order.estado = "Cancelado";
+          break;
+        case "4":
+          order.estado = "Pagado";
+          break;
+        case "5":
+          order.estado = "Enviado";
+          break;
+        case "6":
+          order.estado = "Recibido";
+          break;
+        default:
+          break;
+      }
+    });
+  
+    return orders;
+  };
   
 
   const setTestDatabase = async () => {
@@ -788,6 +872,7 @@ export function DatabaseProvider({ children }) {
         addNewProduct,
         uploadProductImages,
         getProductsByCategory,
+        getOrdersForUser,
         //Productos Para la Vista de Usuario
         getActiveProductsByCategory,
       }}
