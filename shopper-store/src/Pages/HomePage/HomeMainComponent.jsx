@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import Header from "./Header.js"
 import Footer from "./Footer.js"
+import Navbar from "./NavBar.jsx"
+import ResponsiveAppBar from "../../components/Navigation/Navigation.jsx";
 
 
 //Imports del HomePage
@@ -20,9 +22,6 @@ const HomeMainComponent = () => {
   //Este State contiene el Componente que se está renderizando 
   // el cambio se hace en el Header
   const {componentToRender, setComponentToRender} = useGlobalContext();
-  console.log(componentToRender)
-
-
 
   const auth = useAuth();
   const navigate = useNavigate();
@@ -33,9 +32,7 @@ const HomeMainComponent = () => {
     setComponentToRender(route);
   };
 
-
   //Carrito de compras 
-
   const [carritoVisible, setCarritoVisible] = useState(false);
 
   const toggleCarrito = () => {
@@ -47,8 +44,8 @@ const HomeMainComponent = () => {
   return (
     <>
       {/* //NavBar de la Pagina. Siempre va a estar presente. */}
-      <Header title="NAVBAR" onClickCarrito={toggleCarrito}/>
-
+      <ResponsiveAppBar/>
+      <Navbar/>
 
       {/* Carrito de la Pagina */}
       {carritoVisible && <Carrito />}

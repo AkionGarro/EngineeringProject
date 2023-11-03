@@ -6,6 +6,7 @@ import { autoPlay } from 'react-swipeable-views-utils';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
+
 const images = [
   {
     imgPath:
@@ -36,10 +37,11 @@ function SwipeableTextMobileStepper() {
   return (
     <Box sx={{flexGrow: 1}}>
       <AutoPlaySwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        axis="x" // Establecer la dirección solo a 'x' para desplazamiento de izquierda a derecha
         index={activeStep}
         onChangeIndex={handleStepChange}
-        style={{ width: '100%', overflow: 'hidden' , marginTop:"40px",marginBottom:"40px", borderRadius:"3%"}}
+        interval={6000} // 60 segundos (1 minuto) por imagen
+        style={{ width: '100%', overflow: 'hidden', marginTop: '40px', marginBottom: '40px', borderRadius: '3%', boxShadow: '0 0 10px black' }}
       >
         {images.map((step, index) => (
           <div key={step.label}>
