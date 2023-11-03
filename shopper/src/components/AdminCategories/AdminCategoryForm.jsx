@@ -347,7 +347,7 @@ const AdminCategoryForm = props => {
 												fullWidth
 											/>
 
-											<TextField
+											{/* <TextField
 												InputLabelProps={{ shrink: true }}
 												label="Attribute Type"
 												name="type"
@@ -360,7 +360,7 @@ const AdminCategoryForm = props => {
 												<MenuItem value="text">Text</MenuItem>
 												<MenuItem value="number">Number</MenuItem>
 												<MenuItem value="size">Size</MenuItem>
-											</TextField>
+											</TextField> */}
 
 											<IconButton onClick={() => handleRemoveField(index)} color="secondary" aria-label="Eliminar">
 												<DeleteIcon />
