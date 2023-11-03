@@ -12,6 +12,5 @@ background-color: #457B9D;
     justify-content: flex-start;
     align-items: center;
     gap: 3rem;
-
-
+    justify-content: right;
 }

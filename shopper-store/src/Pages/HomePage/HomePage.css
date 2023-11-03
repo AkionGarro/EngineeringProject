@@ -2,10 +2,14 @@
     margin: 0px;
     padding: 10px;
     height: 65px;
-    background-color: #457b9d !important;
+    background-color: #eaeced !important;
 }
 .box-main{
     margin: 0px;
     padding: 0px;
 
+}
+
+.pedidos{
+    padding: 20px;
 }
