@@ -1,25 +1,31 @@
 import React from 'react';
 import { Grid, Card, CardContent, CardMedia, Typography } from '@mui/material';
-import Ahorro from "../../imagenes/ahorro.png"
+import Ahorro from "../../imagenes/ahorro.png";
+import Ahorro2 from "../../imagenes/ahorro2.jpg";
 import Personal from "../../imagenes/personal.png"
+import Personal2 from "../../imagenes/personal2.jpg"
+import Personal3 from "../../imagenes/personal3.jpg" 
 import Internacional from "../../imagenes/internacional.png"
+import Internacional2 from "../../imagenes/international2.jpg"
+
 
 const cardsData = [
     {
         title: 'Ahorro',
         description: 'Con VeroCam puedes ahorrar dinero al compraar esos productos que tanto deseas',
-        image: Ahorro,
+        image: Ahorro2,
     },
     {
         title: 'Personalización',
         description: 'VeroCam te ofrece una experiencia totalmente personalizada para tus compras',
-        image: Personal,
+        image: Personal2,
     },
     {
         title: 'Compras internacionales',
         description: 'Con VeroCam puedes acceder a productos que estén en otro país',
-        image: Internacional,
+        image: Internacional2,
     },
+
 ];
 
 function CardGrid() {
@@ -41,7 +47,7 @@ function CardGrid() {
                             >
                                 <CardMedia
                                     component="img"
-                                    sx={{ width: 180, height: 180, display: { xs: 'none', sm: 'block' } }}
+                                    sx={{height: 250, display: { xs: 'none', sm: 'block' } }}
                                     image={card.image}
                                 />
                                 <CardContent style={{ textAlign: "center" }}>
