@@ -3,15 +3,24 @@ import Categories from '../../components/Categories/Categories';
 import Products from '../../components/Products/Products';
 import ProductCard from "../../components/Products/ProductCard";
 import ProductDialog from "../../components/Products/ProductDialog";
+import "./ProductsPage.css"
 
 
-
+const emptyProduct = {
+  id: "",
+  name: "",
+  price: "",
+  images: [],
+  personalizedFields: [],
+  category: "",
+  status: "",
+}
 
 
 const ProductsPage = () => {
 
   const [category, setCategory] = useState("all")
-  const [product, setProduct] = useState("none")
+  const [product, setProduct] = useState(emptyProduct)
   const [open, setOpen] = useState(false)
 
 

@@ -1,1 +1,43 @@
 
+
+.dialog_grid_container{
+
+  height: 50vh;
+
+}
+
+.izq {
+  
+  height: 50vh;
+  
+}
+
+.der{
+
+  background-color: beige;
+  height: 50vh;
+
+}
+
+.dialog_carousel{
+  
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  
+  
+}
+
+
+.dialog_carousel_image{
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  height: 80%;
+  
+}

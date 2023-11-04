@@ -28,12 +28,17 @@ const ProductCard = (props) => {
 					alt="Category Icon"
 				/>
 				<CardContent>
+					
+
 					<Typography gutterBottom variant="h5" component="div">
 						{productInfo.name}
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
 						${productInfo.price}
 					</Typography>
+
+
+
 				</CardContent>
 			</CardActionArea>
 		</Card>
