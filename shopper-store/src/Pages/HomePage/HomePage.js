@@ -17,6 +17,7 @@ import personal from "../../imagenes/pedidoPersonal.png"
 import tienda from "../../imagenes/tienda.png"
 import Personal_Order from "../PersonalOrdersStore/PersonalOrderStore"
 
+
 import "./HomePage.css";
 
 const tiposPedidos = [
@@ -106,7 +107,7 @@ const Blog = props => {
 					</div>
 
 					<div ref={section2}>
-						<Typography variant="h6" gutterBottom sx={{ mt: 3, textAlign:'center', color:"#457B9D", marginTop:"100px"}}>
+						<Typography variant="h6" gutterBottom sx={{ mt: 3, textAlign:'center', color:"#457B9D", marginTop:"8vh"}}>
 							Acerca de Vero
 						</Typography>
 						<InfoVero/>
