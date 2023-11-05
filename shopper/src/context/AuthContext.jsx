@@ -65,11 +65,14 @@ export function AuthProvider({ children }) {
   };
 
   const loginWithGoogle = async () => {
+    const responseGoogle = new GoogleAuthProvider();
+    responseGoogle.setCustomParameters({ prompt: "select_account" });
     try {
-      const responseGoogle = new GoogleAuthProvider();
-      return await signInWithPopup(auth, responseGoogle);
+      const response = await signInWithPopup(auth, responseGoogle);
+      console.log("response login google", response);
+      return response;
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 
