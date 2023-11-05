@@ -169,6 +169,7 @@ const AdminCategoryForm = props => {
 			confirmButtonText: "Yes, save it!"
 		})
 
+		
 		if (result.isConfirmed) {
 			//Send the data to the database
 

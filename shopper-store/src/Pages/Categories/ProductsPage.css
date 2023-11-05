@@ -1,22 +1,19 @@
 
 
+#scroll-dialog-title{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .dialog_grid_container{
 
   height: 50vh;
 
 }
 
-.izq {
-  
-  height: 50vh;
-  
-}
-
 .der{
-
-  background-color: beige;
   height: 50vh;
-
 }
 
 .dialog_carousel{
@@ -27,17 +24,16 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-  
-  
 }
-
 
 .dialog_carousel_image{
 
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 400px;  
+
+  object-fit: contain;
   
 }
