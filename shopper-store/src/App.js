@@ -13,7 +13,6 @@ function App() {
   return (
     <AuthProvider>
       <DatabaseProvider>
-
         <GlobalProvider>
           <Router className="App">
             <Routes>
@@ -23,8 +22,6 @@ function App() {
             </Routes>
           </Router>
         </GlobalProvider>
-
-        
       </DatabaseProvider>
     </AuthProvider>
   );

@@ -30,13 +30,13 @@ const tiposPedidos = [
   {
     title: "Pedido Personal",
     description:
-      "Envía detalles y fotos de lo que buscas, y nosotros lo encontraremos por ti.",
+      "Envía detalles y fotos de lo que buscas y nosotros lo encontraremos por ti.",
     image: personal,
     route: <Personal_Order />,
   },
   {
     title: "Pedido en la tienda",
-    description: "Elige entre nuestros productos disponibles en la tienda",
+    description: "Elige entre los productos disponibles de la tienda.",
     image: tienda,
     route: <ProductsPage />,
   },
