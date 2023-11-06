@@ -69,8 +69,10 @@ export function AuthProvider({ children }) {
     const responseGoogle = new GoogleAuthProvider();
     responseGoogle.setCustomParameters({ prompt: 'select_account' });
     try {
-      
-      return await signInWithPopup(auth, responseGoogle);
+      const response = await signInWithPopup(auth, responseGoogle);
+      console.log("response login google", response);
+      return response;
+
     } catch (error) {
       console.log(error.message);
     }

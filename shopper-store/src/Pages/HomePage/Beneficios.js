@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Grid, Card, CardContent, CardMedia, Typography, Button } from '@mui/material';
 import Ahorro from "../../imagenes/ahorro.png";
 import Ahorro2 from "../../imagenes/ahorro2.jpg";
 import Personal from "../../imagenes/personal.png"
@@ -12,23 +12,30 @@ import Internacional2 from "../../imagenes/international2.jpg"
 const cardsData = [
     {
         title: 'Ahorro',
-        description: 'Con VeroCam puedes ahorrar dinero al compraar esos productos que tanto deseas',
+        description: 'Ahorra dinero en tus compras con ofertas exclusivas y descuentos especiales en una amplia gama de productos.',
+        cta: '¡Empieza a ahorrar ahora!',
         image: Ahorro2,
     },
     {
         title: 'Personalización',
-        description: 'VeroCam te ofrece una experiencia totalmente personalizada para tus compras',
+        description: 'Te ofrecemos una experiencia de compra totalmente personalizada, recomendándote productos que se ajusten a tus gustos y estilo.',
+        cta: '¡Descubre la personalización!',
         image: Personal2,
     },
     {
         title: 'Compras internacionales',
-        description: 'Con VeroCam puedes acceder a productos que estén en otro país',
+        description: 'Accede a productos de todo el país y amplía tus opciones de compra en Estados Unidos de forma sencilla y segura.',
+        cta: '¡Explora compras en USA!',
         image: Internacional2,
     },
 
 ];
 
 function CardGrid() {
+
+    const handleCTAClick = () => {
+        console.log("HandleClick")
+    }
     return (
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <div style={{ marginTop: "40px" }}>
@@ -43,6 +50,7 @@ function CardGrid() {
                                     flexDirection: 'column',
                                     justifyContent: 'space-between',
                                     alignItems: 'center',
+                                   
                                 }}
                             >
                                 <CardMedia
@@ -54,9 +62,13 @@ function CardGrid() {
                                     <Typography variant="h6" component="div">
                                         {card.title}
                                     </Typography>
-                                    <Typography variant="body2" color="textSecondary">
+                                    <Typography variant="body2" color="textSecondary" style={{ textAlign: "center",marginTop:'1rem' }}>
                                         {card.description}
                                     </Typography>
+
+                                    <Button variant="contained"  color="primary" style={{ margin:'1rem' ,backgroundColor:'#457B9D' }}>
+                                    {card.cta}
+                                    </Button>
                                 </CardContent>
                             </Card>
                         </Grid>

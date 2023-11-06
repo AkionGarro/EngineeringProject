@@ -14,9 +14,25 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import "./Contacto.css";
 const ContactForm = () => {
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí puedes agregar la lógica para manejar el envío del formulario
+    const dataForm = new FormData(e.currentTarget);
+    var phoneNumber = "+50685045830";
+    const data =
+    {
+      nombre: dataForm.get("nombre"),
+      mensaje: dataForm.get("mensaje"),
+
+    }
+    var url = "https://wa.me/" + phoneNumber + "?text=" 
+    +"*Nombre: "+ data.nombre + "%0a" 
+    +"*Mensaje: "+ data.mensaje + "%0a%0a"
+    +"*Enviado desde la página web de Shopper*";
+    window.open(url, '_blank').focus();
+
+    e.currentTarget.reset();
+   
+   
   };
 
   return (
@@ -38,12 +54,16 @@ const ContactForm = () => {
               fullWidth
               variant="outlined"
               margin="normal"
+              id="nombre"
+              name="nombre"
             />
             <TextField
               label="Mensaje"
               fullWidth
               variant="outlined"
               margin="normal"
+              id="mensaje"
+              name="mensaje"
               multiline
               rows={4}
             />

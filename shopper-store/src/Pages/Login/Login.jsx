@@ -24,7 +24,7 @@ const defaultTheme = createTheme();
 export default function Login() {
   const navigate = useNavigate();
   const auth = useAuth();
-  
+
   const goToHomePageAdmin = () => {
     navigate("/");
   };
@@ -38,10 +38,14 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleGoogle = async () => {
+  const handleGoogle = async (e) => {
+    e.preventDefault();
     try {
-      await auth.loginWithGoogle();
-      if (auth.user) {
+      const response = await auth.loginWithGoogle();
+      if (await response) {
+        console.log("----------------");
+        console.log(response);
+        console.log("----------------");
         goToHomePageAdmin();
       }
     } catch (e) {
@@ -57,24 +61,32 @@ export default function Login() {
       email: dataForm.get("email"),
       password: dataForm.get("password"),
     };
-
-    try {
-      await auth.login(data.email, data.password);
-      if (auth.user) {
-        setEmail("");
-        setPassword("");
-        goToHomePageAdmin();
-      }
-    } catch (e) {
+    if (data.email === "" || data.password === "") {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Usuario o contraseña incorrectos",
+        text: "Por favor, complete todos los campos",
       });
-      console.error("Error adding document: ", e);
+      return;
+    } else {
+      try {
+        await auth.login(data.email, data.password);
+        if (auth.user) {
+          console.log(auth.user);
+          setEmail("");
+          setPassword("");
+          goToHomePageAdmin();
+        }
+      } catch (e) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Usuario o contraseña incorrectos",
+        });
+        console.error("Error adding document: ", e);
+      }
     }
   };
-
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -156,7 +168,11 @@ export default function Login() {
 
             <Grid container>
               <Grid item className="google__container">
-                <div onClick={handleGoogle}>
+                <div
+                  onClick={(e) => {
+                    handleGoogle(e);
+                  }}
+                >
                   <div className="google-btn">
                     <div className="google-icon-wrapper">
                       <img
@@ -170,7 +186,6 @@ export default function Login() {
                   </div>
                 </div>
               </Grid>
-
             </Grid>
           </Box>
         </Box>
