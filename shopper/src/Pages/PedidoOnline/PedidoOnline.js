@@ -21,26 +21,7 @@ import Swal from "sweetalert2";
 import AddUserModalOnline from "./AddUserModalOnline";
 import "./PedidoOnline.css";
 
-/*
-Codigo para carrito
-*/
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import Carrito from "../../components/CarritoCompras/Carrito";
-
 const PedidoOnline = () => {
-  const [carritoVisible, setCarritoVisible] = useState(false);
-
-  const toggleCarrito = () => {
-    setCarritoVisible(!carritoVisible);
-  };
-
-  const cantidadEnCarrito = 6;
-
-  /*
-=================================
-
-  */
-
   const api = useFirebase();
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
@@ -159,18 +140,6 @@ const PedidoOnline = () => {
 
   return (
     <Container className="container">
-      {/* Codigo Para el carrito */}
-
-      <div className="App">
-        <Button variant="contained" color="primary" onClick={toggleCarrito}>
-          <div className="inside-button-products">
-            <ShoppingCartIcon />
-          </div>
-        </Button>
-        {carritoVisible && <Carrito />}
-      </div>
-
-      {/* Codigo Para el carrito */}
       <h2 className="texto">
         Envía los links de los productos que deseas comprar y estos llegaran a
         tu puerta
