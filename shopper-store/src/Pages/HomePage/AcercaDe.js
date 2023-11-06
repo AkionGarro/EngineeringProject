@@ -5,6 +5,13 @@ import "./AcercaDe.css";
 
 
 function InfoVero() {
+  const containerStyle = {
+    background: "linear-gradient(90deg, transparent, white, transparent)",
+    marginTop: "40px",
+    marginBottom: "40px",
+    boxShadow: "0 0 30px rgba(0, 0, 0, 0.5)",
+    borderRadius: "30px",
+  };
 
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 600);
 
@@ -87,5 +94,3 @@ function InfoVero() {
 }
 
 export default InfoVero;
-
-
