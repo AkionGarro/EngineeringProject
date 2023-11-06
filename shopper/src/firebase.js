@@ -27,3 +27,12 @@ const analytics = getAnalytics(app);
 export const storage = getStorage();
 export const auth = getAuth(app);
  
+//Firebase Cruds
+export const addDocument = async (ref, data) => {
+  try {
+    const docRef = await addDoc(ref, data);
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};

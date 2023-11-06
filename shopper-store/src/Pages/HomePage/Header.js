@@ -12,6 +12,8 @@ import Container from "@mui/material/Container";
 
 import ProductsPage from "./../Categories/ProductsPage.jsx"
 import Blog from "./HomePage.js"
+import Pedidos from "../../components/Pedidos/Pedidos.jsx"
+
 import logo from "../../imagenes/logo.png"
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -77,6 +79,8 @@ const Header = props => {
 							<ShoppingCartIcon />
 						</div>
 					</Button>
+
+
 					<div>
 						<Button
 							size="small"
@@ -91,6 +95,20 @@ const Header = props => {
 								Inicio
 							</Link>
 						</Button>
+
+						<Button
+						size="small"
+						onClick={() => handleNavoptions(<Pedidos />, "Mis Pedidos")}
+						sx={{
+							color: "#457B9D",
+							"&:hover": {
+								backgroundColor: "white"
+							}
+						}}>
+						Mis pedidos
+					</Button>
+
+
 						<Button
 							variant="outlined"
 							size="small"
@@ -108,7 +126,11 @@ const Header = props => {
 								Iniciar Sesion
 							</Link>
 						</Button>
+
+
 					</div>
+
+
 				</Toolbar>
 			</Container>
 		</AppBar>
