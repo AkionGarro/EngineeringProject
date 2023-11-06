@@ -2,32 +2,11 @@
   "hosting": {
     "public": "build",
     "rewrites": [
-      
       {
         "source": "**",
-        "destination": "/index.html",
-        "headers": [
-          {
-              "key": "Cross-Origin-Opener-Policy",
-              "value": "same-origin-allow-popups"
-          }
-      ]
+        "destination": "/index.html"
       }
-    ],"headers": [
-      {
-          "source": "**",
-          "headers": [
-              {
-                  "key": "Cross-Origin-Opener-Policy",
-                  "value": "same-origin-allow-popups"
-              }
-          ]
-      }
-  ],
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
+    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   }
 }

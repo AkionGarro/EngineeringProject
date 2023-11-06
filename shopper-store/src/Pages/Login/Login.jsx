@@ -38,10 +38,14 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleGoogle = async () => {
+  const handleGoogle = async (e) => {
+    e.preventDefault();
     try {
-      await auth.loginWithGoogle();
-      if (auth.user) {
+      const response = await auth.loginWithGoogle();
+      if (await response) {
+        console.log("----------------");
+        console.log(response);
+        console.log("----------------");
         goToHomePageAdmin();
       }
     } catch (e) {
@@ -164,7 +168,11 @@ export default function Login() {
 
             <Grid container>
               <Grid item className="google__container">
-                <div onClick={handleGoogle}>
+                <div
+                  onClick={(e) => {
+                    handleGoogle(e);
+                  }}
+                >
                   <div className="google-btn">
                     <div className="google-icon-wrapper">
                       <img
