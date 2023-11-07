@@ -48,7 +48,7 @@ const PedidoOnline = () => {
   useEffect(() => {
     const datosUser = async () => {
       //Direcciones
-      const direcciones = await api.getAddressUser("josuedaniel.cha@gmail.com");
+      const direcciones = await api.getUserAdress("josuedaniel.cha@gmail.com");
       setAddress(direcciones);
       //===================================================================================
       const usuario = await api.getUserData(email);

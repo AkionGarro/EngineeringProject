@@ -17,7 +17,7 @@ import personal from "../../imagenes/pedidoPersonal4.jpg";
 import tienda from "../../imagenes/tienda3.jpg";
 
 import Personal_Order from "../PersonalOrdersStore/PersonalOrderStore.js";
-
+import PedidoOnline from "../PedidoOnline/PedidoOnline.js";
 
 import "./HomePage.css";
 

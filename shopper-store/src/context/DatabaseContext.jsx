@@ -919,7 +919,7 @@ export function DatabaseProvider({ children }) {
         uploadProductImages,
         getProductsByCategory,
         getOrdersForUser,
-        getAddressUser,
+        //getAddressUser,
         //Productos Para la Vista de Usuario
         getActiveProductsByCategory,
       }}
