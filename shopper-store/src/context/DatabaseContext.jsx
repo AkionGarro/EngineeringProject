@@ -229,7 +229,7 @@ export function DatabaseProvider({ children }) {
           const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
           const opcionesDeFormato = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
           const fechaFormateada = date.toLocaleDateString('es-ES', opcionesDeFormato);
-          console.log("fechaFormateada: ", fechaFormateada);
+          
       
           order = { id: orderDoc.id, fecha: fechaFormateada, ...orderDoc.data() };
           break; // Si encontramos la orden en una colección, salimos del bucle
@@ -452,7 +452,11 @@ export function DatabaseProvider({ children }) {
         const snapshot = await getDocs(queryRef);
         console.log("SNAPSHOT: ", snapshot);
         snapshot.forEach((doc) => {
-          orders.push({ id: doc.id, ...doc.data() });
+          const timestamp = doc._document.createTime.timestamp;          ;
+          const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+          const opcionesDeFormato = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+          const fechaFormateada = date.toLocaleDateString('es-ES', opcionesDeFormato);
+          orders.push({ id: doc.id, fecha:fechaFormateada, ...doc.data() });
         });
       } else {
         const queryRef = query(
@@ -461,7 +465,11 @@ export function DatabaseProvider({ children }) {
         );
         const snapshot = await getDocs(queryRef);
         snapshot.forEach((doc) => {
-          orders.push({ id: doc.id, ...doc.data() });
+          const timestamp = doc._document.createTime.timestamp;          ;
+          const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+          const opcionesDeFormato = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+          const fechaFormateada = date.toLocaleDateString('es-ES', opcionesDeFormato);
+          orders.push({ id: doc.id, fecha:fechaFormateada, ...doc.data() });
         });
       }
     }

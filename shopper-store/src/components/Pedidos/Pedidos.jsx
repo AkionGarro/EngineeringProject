@@ -257,8 +257,7 @@ function Pedidos() {
 
   const columns = [
     { field: "id", headerName: "ID", width: 200 },
-    { field: "cliente", headerName: "Cliente", width: 150 },
-    { field: "telefono", headerName: "Telefono", width: 100 },
+    { field: "fecha", headerName: "Fecha", width: 300 },
     { field: "direccion", headerName: "Dirección", width: 300 },
     { field: "estado", headerName: "Estado", width: 200 },
     {
