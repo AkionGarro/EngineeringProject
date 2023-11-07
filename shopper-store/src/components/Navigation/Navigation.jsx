@@ -151,6 +151,11 @@ function ResponsiveAppBar(props) {
 	const renderLogout = () => {
 		return (
 			<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }} className="container-nav">
+				<Button variant="contained" disableElevation style={{backgroundColor:'#457B9D'}} onClick={onClickCarrito}>
+					<div className="inside-button-products">
+						<ShoppingCartIcon />
+					</div>
+				</Button>
 				{section.map(section => (
 					<Button key={section.name} onClick={() => handleNavoptions(section.route)} color="inherit">
 						{section.name}
@@ -164,12 +169,6 @@ function ResponsiveAppBar(props) {
         >
           Mi Cuenta
         </Button> */}
-				<Button variant="contained" disableElevation style={{backgroundColor:'#457B9D'}} onClick={onClickCarrito}>
-					<div className="inside-button-products">
-						<ShoppingCartIcon />
-					</div>
-				</Button>
-
 				{pages2.map(page => (
 					<Link to={`${page.route.toLowerCase()}`} key={page.route} style={{ textDecoration: "none" }}>
 						<Button key={page.name} onClick={page.clicked} sx={{ my: 2, color: "white", display: "block" }}>
