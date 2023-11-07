@@ -46,11 +46,11 @@ const HomeMainComponent = () => {
       <ResponsiveAppBar onClickCarrito={toggleCarrito}/>
       <Navbar/>
 
+
       {/* Carrito de la Pagina */}
       {carritoVisible && <Carrito />}
 
   
-
       {/* //Acá es dónde se va a renderizar el componente que se quiere mostrar al usuario */}
       {componentToRender}
 
