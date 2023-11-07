@@ -1,1 +1,154 @@
 
+.categories_products_page{
+
+  width: 100%;
+  height: fit-content;
+
+}
+
+
+.products_products_page{
+
+  width: 100%;
+  height: fit-content;
+  
+
+}
+
+#scroll-dialog-title{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dialog_grid_container{
+
+  height: 50vh;
+
+}
+
+
+.dialog_carousel{
+  
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.dialog_carousel_image{
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  height: 400px;  
+
+  object-fit: contain;
+  
+}
+
+
+.categoryCard {
+
+
+  width: 100%;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  align-items: center;
+  cursor: pointer;
+
+  margin: auto;
+
+}
+
+
+
+
+
+.categoryCard p{
+
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #6C98B4;
+  white-space: nowrap;
+}
+
+
+.category-card-img{
+
+  background-color: #6C98B4;
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+
+}
+
+.categoryCard:hover img{
+
+  transform: scale(1.1);
+  transition: transform 0.5s ease-in-out;
+}
+
+
+
+#categories_component_title{
+  color: #6C98B4;
+  width: 100%;
+  text-align: center;
+  
+}
+
+
+.products-category-title-w-background img{
+
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+  opacity: 0.5;
+
+  
+}
+
+.text-overlay {
+  position: absolute;
+
+  color: #000000;
+  font-size: 2rem;
+  font-weight: semi-bold;
+  margin: none;
+  height: 150px;
+
+  width: 75%; /* Adjust to your desired fading width */
+  background: linear-gradient(to left, rgba(255, 255, 255, 0), white); /* Fading effect */
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  
+}
+
+.text-overlay h2{
+
+  color: #6C98B4;
+  margin-left: 10%;
+  padding: 0;
+
+}
+
+
+
+
+
+

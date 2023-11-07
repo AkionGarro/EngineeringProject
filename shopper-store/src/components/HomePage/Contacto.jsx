@@ -21,6 +21,10 @@ const ContactForm = () => {
       + "*Mensaje: " + data.mensaje + "%0a%0a"
       + "*Enviado desde la página web de Shopper*";
     window.open(url, '_blank').focus();
+
+    //e.currentTarget.reset();
+   
+   
   };
 
   return (

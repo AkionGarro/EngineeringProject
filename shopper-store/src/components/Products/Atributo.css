@@ -1,0 +1,4 @@
+.toggle-button-scroll-container {
+  max-height: 300px; /* Set a maximum height for the container */
+  overflow-y: auto; /* Enable vertical scrolling when content exceeds the height */
+}

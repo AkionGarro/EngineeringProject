@@ -1,11 +1,7 @@
 import React from 'react'
 
 // Componentes para el Card
-import Card from "@mui/material/Card"
-import CardContent from "@mui/material/CardContent"
-import CardMedia from "@mui/material/CardMedia"
-import Typography from "@mui/material/Typography"
-import { CardActionArea } from "@mui/material"
+import {Card,CardContent,CardMedia, CardActionArea,Typography  } from "@mui/material"
 
 const ProductCard = (props) => {
 
@@ -19,23 +15,43 @@ const ProductCard = (props) => {
 
   return (
 
-    <Card key={productInfo.id} sx={{ maxWidth: 345 }} onClick={onProductClick}>
+
+
+    <Card key={productInfo.id}  onClick={onProductClick}>
 			<CardActionArea>
+
 				<CardMedia
 					component="img"
-					height="100"
+					sx={{ height: 200}}
 					image={productInfo.images[0]}
-					alt="Category Icon"
+					alt={productInfo.name}
+
+					style={{ objectFit: "contain" }}
 				/>
-				<CardContent>
-					<Typography gutterBottom variant="h5" component="div">
+
+				
+				<CardContent
+					sx={{
+						display: "flex",
+						flexDirection: "column",
+						justifyContent: "space-between",
+						alignItems: "flex-start",
+						height: 100
+					}}
+				>
+					<Typography gutterBottom variant="h6" component="div">
 						{productInfo.name}
 					</Typography>
+
 					<Typography variant="body2" color="text.secondary">
 						${productInfo.price}
 					</Typography>
+
+
+
 				</CardContent>
 			</CardActionArea>
+			
 		</Card>
   )
 
