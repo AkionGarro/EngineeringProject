@@ -210,7 +210,7 @@ export function DatabaseProvider({ children }) {
   };
 
   const getOrder = async (orderId) => {
-    console.log("ORDER ID:" + orderId.toString() + ".");
+   
     let order = null;
 
     const collections = ["pedidosTest", "pedidosPersonales", "pedidosOnline"];
@@ -221,12 +221,17 @@ export function DatabaseProvider({ children }) {
         let orderRef = doc(db, collectionName, orderId); // Utiliza doc() para referenciar un documento específico
 
         const orderDoc = await getDoc(orderRef);
-        console.log(
-          "ORDER DOC in collection " + collectionName + ": ",
-          orderDoc
-        );
+         // Obtiene la marca de tiempo de creación como un objeto Date
+        
         if (orderDoc.exists()) {
-          order = { id: orderDoc.id, ...orderDoc.data() };
+          
+          const timestamp = orderDoc._document.createTime.timestamp;          ;
+          const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+          const opcionesDeFormato = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+          const fechaFormateada = date.toLocaleDateString('es-ES', opcionesDeFormato);
+          
+      
+          order = { id: orderDoc.id, fecha: fechaFormateada, ...orderDoc.data() };
           break; // Si encontramos la orden en una colección, salimos del bucle
         }
       } catch (error) {
@@ -447,7 +452,11 @@ export function DatabaseProvider({ children }) {
         const snapshot = await getDocs(queryRef);
         console.log("SNAPSHOT: ", snapshot);
         snapshot.forEach((doc) => {
-          orders.push({ id: doc.id, ...doc.data() });
+          const timestamp = doc._document.createTime.timestamp;          ;
+          const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+          const opcionesDeFormato = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+          const fechaFormateada = date.toLocaleDateString('es-ES', opcionesDeFormato);
+          orders.push({ id: doc.id, fecha:fechaFormateada, ...doc.data() });
         });
       } else {
         const queryRef = query(
@@ -456,7 +465,11 @@ export function DatabaseProvider({ children }) {
         );
         const snapshot = await getDocs(queryRef);
         snapshot.forEach((doc) => {
-          orders.push({ id: doc.id, ...doc.data() });
+          const timestamp = doc._document.createTime.timestamp;          ;
+          const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+          const opcionesDeFormato = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+          const fechaFormateada = date.toLocaleDateString('es-ES', opcionesDeFormato);
+          orders.push({ id: doc.id, fecha:fechaFormateada, ...doc.data() });
         });
       }
     }
