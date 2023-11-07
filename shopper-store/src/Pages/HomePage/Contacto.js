@@ -18,21 +18,24 @@ const ContactForm = () => {
     e.preventDefault();
     const dataForm = new FormData(e.currentTarget);
     var phoneNumber = "+50685045830";
-    const data =
-    {
+    const data = {
       nombre: dataForm.get("nombre"),
       mensaje: dataForm.get("mensaje"),
-
-    }
-    var url = "https://wa.me/" + phoneNumber + "?text=" 
-    +"*Nombre: "+ data.nombre + "%0a" 
-    +"*Mensaje: "+ data.mensaje + "%0a%0a"
-    +"*Enviado desde la página web de Shopper*";
-    window.open(url, '_blank').focus();
+    };
+    var url =
+      "https://wa.me/" +
+      phoneNumber +
+      "?text=" +
+      "*Nombre: " +
+      data.nombre +
+      "%0a" +
+      "*Mensaje: " +
+      data.mensaje +
+      "%0a%0a" +
+      "*Enviado desde la página web de Shopper*";
+    window.open(url, "_blank").focus();
 
     e.currentTarget.reset();
-   
-   
   };
 
   return (
