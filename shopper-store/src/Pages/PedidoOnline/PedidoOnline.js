@@ -11,6 +11,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { firestore } from "../../firebase";
+import { useAuth } from "../../context/AuthContext";
 import { collection } from "firebase/firestore";
 import { addDocument } from "../../firebase";
 import { useFirebase } from "../../context/DatabaseContext";
@@ -20,50 +21,76 @@ import "./PedidoOnline.css";
 
 const PedidoOnline = () => {
   const api = useFirebase();
+
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
+  const [actualName, setActualName] = useState("");
   const [flagUpdate, setFlagUpdate] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
   const ref = collection(firestore, "pedidosOnline");
   const [linkFields, setLinkFields] = useState([{ link: "", comentario: "" }]);
   const [direction, setDirection] = useState("");
+  const auth = useAuth();
 
   const cleanData = () => {
     setLinkFields([{ link: "", comentario: "" }]);
     setDirection("");
   };
 
+  useEffect(() => {
+    console.log("Usuario con auth");
+    const datosUser = async () => {
+      console.log(auth);
+      const usuario = await api.getUserData(auth.user.email);
+      console.log(usuario);
+      if (usuario == undefined) {
+        let nameUser = auth.user.displayName;
+        setActualName(nameUser);
+        console.log("Usuario actual");
+        console.log(actualName);
+      } else {
+        console.log("Usuario con api");
+        console.log(usuario.fullName);
+        setActualName(usuario.fullName);
+      }
+    };
+    datosUser();
+
+    // Realiza algún efecto secundario aquí, como una solicitud de red.
+  }, []);
+
   const handleOpenModal = () => {
     setOpen(true);
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-
     //=========================================================
-
     e.preventDefault();
-    const dataForm = new FormData(e.currentTarget);
-    var phoneNumber = "+50685045830";
-    const dataMessage = {
-      nombre: dataForm.get("nombre"),
-      mensaje: dataForm.get("mensaje"),
-    };
-    var url =
+    // Obtén los datos de linkFields
+    const productos = linkFields.map((field) => {
+      return `Producto: ${field.link} -- *Comentario*: ${field.comentario} `;
+    });
+
+    // Construye el mensaje con los productos
+    const message = productos.join("\n");
+
+    // Número de teléfono de WhatsApp
+    const phoneNumber = "+50685045830";
+
+    // Construye la URL de WhatsApp
+    const url =
       "https://wa.me/" +
       phoneNumber +
       "?text=" +
-      "*Nombre: " +
-      data.nombre +
-      "%0a" +
-      "*Mensaje: " +
-      data.mensaje +
-      "%0a%0a" +
-      "*Enviado desde la página web de Shopper*";
-    window.open(url, "_blank").focus();
+      encodeURIComponent(
+        `*Nombre:* ${actualName}\n\n` +
+          `*Productos:*\n${message}\n\n` +
+          `_[Enviado desde la página web de VeroCam Shop]_`
+      );
 
-    e.currentTarget.reset();
+    // Abre una nueva ventana o pestaña con la URL
+    window.open(url, "_blank").focus();
 
     //=========================================================
 
