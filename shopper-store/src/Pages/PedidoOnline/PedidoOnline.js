@@ -86,7 +86,8 @@ const PedidoOnline = () => {
       phoneNumber +
       "?text=" +
       encodeURIComponent(
-        `*Nombre:* ${actualName}\n\n` +
+        `*Pedido Online*\n\n` +
+          `*Nombre:* ${actualName}\n\n` +
           `*Productos:*\n${message}\n\n` +
           `_[Enviado desde la página web de VeroCam Shop]_`
       );
