@@ -81,12 +81,16 @@ const PedidoOnline = () => {
     const phoneNumber = "+50685045830";
 
     // Construye la URL de WhatsApp
+
+    
+
     const url =
       "https://wa.me/" +
       phoneNumber +
       "?text=" +
       encodeURIComponent(
-        `*Nombre:* ${actualName}\n\n` +
+        `*Pedido Online*\n\n` +
+          `*Nombre:* ${actualName}\n\n` +
           `*Productos:*\n${message}\n\n` +
           `_[Enviado desde la página web de VeroCam Shop]_`
       );
