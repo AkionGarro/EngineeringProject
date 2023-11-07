@@ -10,14 +10,14 @@ import AdbIcon from "@mui/icons-material/Adb"
 import AppBar from "@mui/material/AppBar";
 import Container from "@mui/material/Container";
 
-import ProductsPage from "../Categories/ProductsPage.jsx"
-import Blog from "./HomePage.jsx"
+import ProductsPage from "./../Categories/ProductsPage.jsx"
+import Blog from "./HomePage.js"
 import Pedidos from "../../components/Pedidos/Pedidos.jsx"
 
 import logo from "../../imagenes/logo.png"
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useGlobalContext } from "../../GlobalContext/GlobalContext.js"
+import { useGlobalContext } from "../../GlobalContext/GlobalContext"
 
 
 // Es el Navbar

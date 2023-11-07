@@ -2,8 +2,9 @@
     display: flex;
     flex-direction: column;
     row-gap: 15px;
-    justify-content: right !important;
-    align-items: center !important;
+    align-items: start;
+    justify-content: center;
+    width: 100%;
 }
 
 .profileInfo__textfield{
@@ -17,4 +18,15 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
+}
+
+
+@media screen and (max-width: 600px) {
+    .profileInfo__textfield{
+        width:100%;
+    }
+    .profileInfo__button{
+        width: 100%;
+    }
+    
 }

@@ -3,21 +3,20 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Pedidos from "./Pedidos";
+import Beneficios from "./Beneficios";
+import InfoVero from "./AcercaDe.js";
+import Contact from "./Contacto.js";
 
-import Pedidos from "../../components/HomePage/Pedidos.jsx";
-import Beneficios from "../../components/HomePage/Beneficios.jsx";
-import InfoVero from "../../components/HomePage/AcercaDe.jsx";
-import Contact from "../../components/HomePage/Contacto.jsx";
-import Carrousel from "./Carrousel.js";
+import Carrousel from "./Carrousel";
 import Typography from "@mui/material/Typography";
-import ProductsPage from "../Categories/ProductsPage.jsx";
+import ProductsPage from "./../Categories/ProductsPage.jsx";
 
 import online from "../../imagenes/online2.jpg";
 import personal from "../../imagenes/pedidoPersonal4.jpg";
 import tienda from "../../imagenes/tienda3.jpg";
-
-import Personal_Order from "../PersonalOrdersStore/PersonalOrderStore.js";
-
+import Personal_Order from "../PersonalOrdersStore/PersonalOrderStore";
+import PedidoOnline from "../PedidoOnline/PedidoOnline.js";
 
 import "./HomePage.css";
 
@@ -27,7 +26,7 @@ const tiposPedidos = [
     description:
       "Envía los enlaces de los productos y nosotros los entregaremos directamente en tu casa.",
     image: online,
-    route: <Personal_Order />,
+    route: <PedidoOnline />,
   },
   {
     title: "Pedido Personal",
@@ -50,6 +49,7 @@ const defaultTheme = createTheme();
 const Blog = (props) => {
   const { goTo } = props;
 
+  const section0 = React.useRef(null);
   const section1 = React.useRef(null);
   const section2 = React.useRef(null);
   const section3 = React.useRef(null);
@@ -57,6 +57,9 @@ const Blog = (props) => {
   const scrollToSection = () => {
     let targetRef = null;
     switch (goTo) {
+      case 0:
+        targetRef = section0;
+        break;
       case 1:
         targetRef = section1;
         break;
@@ -80,16 +83,15 @@ const Blog = (props) => {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={defaultTheme} ref={section0}>
       <CssBaseline />
       <Container maxWidth="lg">
-        <main>
+        <main >
           <div>
             <Typography
               variant="h5"
               gutterBottom
               sx={{ mt: 3, textAlign: "center" }}
-              color="textSecondary"
             >
               En Verocam_shop conseguimos los productos que necesitas de tus
               tiendas favoritas
@@ -122,12 +124,21 @@ const Blog = (props) => {
             </Grid>
           </div>
 
-					<div ref={section2}>
-						<Typography variant="h6" gutterBottom sx={{ mt: 3, textAlign:'center', color:"#457B9D", marginTop:"5vh"}}>
-							Acerca de Vero
-						</Typography>
-						<InfoVero/>
-					</div>
+          <div ref={section2}>
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                mt: 3,
+                textAlign: "center",
+                color: "#457B9D",
+                marginTop: "100px",
+              }}
+            >
+              Acerca de Vero
+            </Typography>
+            <InfoVero />
+          </div>
 
           <div>
             <Typography

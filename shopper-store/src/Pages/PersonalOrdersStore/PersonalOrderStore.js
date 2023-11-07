@@ -11,7 +11,7 @@ import {
   Container,
   Grid,
   Autocomplete,
-  TextField, Select, MenuItem, FormControl, InputLabel
+  TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
@@ -20,23 +20,22 @@ import Swal from "sweetalert2";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useFirebase } from "../../context/DatabaseContext";
 import "./PersonalOrderStore.css";
+
 import UploadImageInput from "../../components/UploadImageInput";
 
 function Personal_Order() {
   const api = useFirebase();
-  const firebase = useFirebase();
   const [users, setUsers] = useState([]);
-  
-  const [direccionSeleccionada, setDireccionSeleccionada] = useState(null);
-  const [label, setLabel] = useState();
-  const [address, setAddress] = useState([]);
 
   const [fields, setFields] = useState([
     { description: "", image: null, url_file: null, url_fire: null },
   ]);
   const [imagenes, setImagenes] = useState([]);
+
+  const [direction, setDirection] = useState("");
   const [flagUpdate, setFlagUpdate] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedUser, setSelectedUser] = useState("");
   const referencia = collection(firestore, "pedidosPersonales");
   const [open, setOpen] = useState(false);
   const user = auth.currentUser;
@@ -120,10 +119,9 @@ function Personal_Order() {
     });
   };
 
-  const handleSelect = (event) => {
-    setLabel(event.target.value);
-    const jsonObject = JSON.parse(event.target.value);
-    setDireccionSeleccionada(jsonObject);
+  const handleDirectionOnSelect = (event) => {
+    setDirection(event.target.value);
+    console.log(event.target.value);
   };
 
   const handleSubmit = async (event) => {
@@ -141,7 +139,7 @@ function Personal_Order() {
 
     let data = {
       usuario: user.email,
-      direccion: direccionSeleccionada,
+      direccion: direction,
       productos: fields,
       estado: 0,
     };
@@ -163,8 +161,7 @@ function Personal_Order() {
     setFields([
       { description: "", image: null, url_file: null, url_fire: null },
     ]);
-    setDireccionSeleccionada("");
-    setLabel("");
+    setDirection("");
   };
 
   const handleOpenModal = () => {
@@ -173,8 +170,6 @@ function Personal_Order() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const direcciones = await firebase.getUserAdress("josuedaniel.cha@gmail.com")
-      setAddress(direcciones);
       try {
         const querySnapshot = await api.getAllUsers();
         const userData = [];
@@ -194,7 +189,6 @@ function Personal_Order() {
         });
       }
     };
-
     setFlagUpdate(false);
 
     fetchData();
@@ -261,22 +255,43 @@ function Personal_Order() {
 
         <div className="users_container">
           <div className="opciones-direccion">
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel id="direccion-label">Selecciona una dirección</InputLabel>
-              <Select
-                labelId="direccion-label"
-                id="direccion"
-                value={label}
-                onChange={handleSelect}
-                label="Selecciona una dirección"
-              >
-                {address.map((option, index) => (
-                  <MenuItem key={index} value={JSON.stringify(option)}>
-                    {`${option.country}, ${option.province}, ${option.canton}, ${option.district}, ${option.address}`}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Autocomplete
+              options={users}
+              getOptionLabel={(user) => user.email}
+              value={selectedUser}
+              onChange={(event, newValue) => {
+                setSelectedUser(newValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Buscar por correo electrónico"
+                  variant="outlined"
+                  fullWidth
+                  InputProps={{
+                    ...params.InputProps,
+                    startAdornment: (
+                      <SearchIcon position="start" fontSize="small" />
+                    ),
+                  }}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              )}
+              isOptionEqualToValue={(option, value) =>
+                option.email === value.email
+              }
+              noOptionsText="No hay resultados"
+              PopperProps={{
+                anchorOrigin: {
+                  vertical: "top",
+                  horizontal: "right",
+                },
+                transformOrigin: {
+                  vertical: "bottom",
+                  horizontal: "right",
+                },
+              }}
+            />
           </div>
         </div>
 

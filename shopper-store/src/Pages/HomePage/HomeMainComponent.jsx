@@ -1,13 +1,14 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import Footer from "../../components/HomePage/Footer.jsx"
-import Navbar from "../../components/HomePage/NavBar.jsx"
+import Header from "./Header.js"
+import Footer from "./Footer.js"
+import Navbar from "./NavBar.jsx"
 import ResponsiveAppBar from "../../components/Navigation/Navigation.jsx";
 
 
 //Imports del HomePage
-import Blog from "./HomePage.jsx"
+import Blog from "./HomePage.js"
 
 //Lo del carrito
 import Carrito from "./../../components/CarritoCompras/Carrito"
@@ -58,7 +59,7 @@ const HomeMainComponent = () => {
       {/* //Footer de la Pagina. Siempre va a estar presente. */}
       <Footer
         title="Footer"
-        description="Desarrollado por estudinates del TEC!"
+        description="Something here to give the footer a purpose!"
       />
     </>
   )
