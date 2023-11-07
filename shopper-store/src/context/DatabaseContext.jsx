@@ -145,26 +145,6 @@ export function DatabaseProvider({ children }) {
     }
   };
 
-  const getAddressUser = async (email) => {
-    let direcciones = [];
-    let ref = collection(firestore, "usersAddress");
-    ref = query(ref, where("email", "==", email));
-
-    const snapshot = await getDocs(ref);
-
-    try {
-      snapshot.forEach((doc) => {
-        direcciones.push(doc.data());
-      });
-    } catch (error) {
-      console.error("No hay direcciones", error);
-    }
-
-    console.log(direcciones);
-
-    return direcciones;
-  };
-
   const changeStateOrder = async (orderId, newState) => {
     const db = firestore;
     const collections = ["pedidosTest", "pedidosPersonales", "pedidosOnline"];
@@ -273,6 +253,27 @@ export function DatabaseProvider({ children }) {
     return userData.data();
   };
 
+  
+  const getUserAdress = async (email) => {
+    let direcciones = [];
+    let ref = collection(firestore, "usersAddress");
+    ref = query(ref, where("email", "==", email));
+
+    const snapshot = await getDocs(ref);
+  
+    try {
+      snapshot.forEach((doc) => {
+        direcciones.push(doc.data());
+      });
+    }catch (error) {
+      console.error("No hay direcciones", error);
+    }
+
+    console.log(direcciones)
+
+    return direcciones;
+  };
+
   const updateUserData = async (data) => {
     console.log(data);
     const ref = collection(firestore, "users");
@@ -293,7 +294,7 @@ export function DatabaseProvider({ children }) {
         email: data.email,
         phone: data.phone,
         identification: data.identification,
-        address: data.address,
+        direccionEnvio: data.direccionEnvio,
         userType: data.role,
       });
       console.log("Usuario actualizado con éxito.");
@@ -889,6 +890,7 @@ export function DatabaseProvider({ children }) {
         deleteOrder,
         getOrder,
         changeStateOrder,
+        getUserAdress,
         getAllUsers,
         addNewAdmin,
         changeToUser,
