@@ -20,7 +20,7 @@ const Products = props => {
 			try {
 				let querySnapshot = null
 
-				if (category === "all") {
+				if (category.name === "Todos") {
 					querySnapshot = await api.getProductsByStatus(1)
 				} else {
 					querySnapshot = await api.getActiveProductsByCategory(category.name)

@@ -16,6 +16,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />
 })
 
+
 const ProductDialog = props => {
 	const { open, setOpen, product } = props
 
@@ -47,6 +48,7 @@ const ProductDialog = props => {
 	}, [open])
 
 	const handleClose = () => {
+		setAttributeList([])
 		setOpen(false)
 	}
 

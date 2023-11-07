@@ -17,8 +17,16 @@ const emptyProduct = {
 	status: ""
 }
 
+const allCategory = {
+	id: "all01",
+	name: "Todos",
+	backgroundImage:
+		"https://firebasestorage.googleapis.com/v0/b/veroshopper-cbeb1.appspot.com/o/productCategories%2FbackgroundImages%2FtodosFondo.jpg?alt=media&token=fdf2d8f4-893f-4d77-b971-a37a72e6c974&_gl=1*1e2i2vy*_ga*MTY4ODU1Mzk3NS4xNjk4NDM1ODk0*_ga_CW55HF8NVT*MTY5OTMzMTI3MC44LjEuMTY5OTMzMjU2Ny4yNi4wLjA.",
+	icon: "https://firebasestorage.googleapis.com/v0/b/veroshopper-cbeb1.appspot.com/o/productCategories%2Ficons%2FtodosIcon.jpg?alt=media&token=1ce341e9-4fb2-46a2-9146-d23d0eb8b986&_gl=1*1qnco9c*_ga*MTY4ODU1Mzk3NS4xNjk4NDM1ODk0*_ga_CW55HF8NVT*MTY5OTMzMTI3MC44LjEuMTY5OTMzMjQ4MS40My4wLjA."
+}
+
 const ProductsPage = () => {
-	const [category, setCategory] = useState("all")
+	const [category, setCategory] = useState(allCategory)
 	const [product, setProduct] = useState(emptyProduct)
 	const [open, setOpen] = useState(false)
 
@@ -33,42 +41,34 @@ const ProductsPage = () => {
 
 	return (
 		<>
-			{/* <h2>Filtros</h2>
-      <Categories handleCategoryChange={handleCategoryChange}/>
-
-      <h2>Productos</h2>
-      <Products  category={category} handleProductClick={handleProductChange}/>
-
-      MODAL DEL PRODUCTO
-      <ProductDialog open={open} setOpen={setOpen} product={product} /> */}
-
 			<Grid container spacing={2} className="products-page">
-				<Grid xs={12} sm={3} md={3} lg={3} xl={3} className="categories_products_page">
 
-					<Grid xs={12}>
-						<TextField id="outlined-basic" label="Buscar Producto" variant="outlined" fullWidth/>
+
+			<Grid xs={12} className="products-category-title-w-background">
+
+						<div className="text-overlay">
+							<h2>{category.name}</h2>
+						</div>
+
+						<img src={category.backgroundImage} alt="" />
 					</Grid>
 
-          <Categories handleCategoryChange={handleCategoryChange}/>
 
-
+				<Grid xs={12} sm={3} md={3} lg={3} xl={3} className="categories_products_page">
+	
+					<Categories handleCategoryChange={handleCategoryChange} />
 				</Grid>
+
 
 				<Grid xs={12} sm={9} md={9} lg={9} xl={9} className="products_products_page">
+					
+					
 
-        <Grid xs={12}>
-          <h2>Productos</h2>
-
+					<Products category={category} handleProductClick={handleProductChange} />
 				</Grid>
-
-        <Products  category={category} handleProductClick={handleProductChange}/>
-
-      
-        </Grid>
 			</Grid>
 
-    <ProductDialog open={open} setOpen={setOpen} product={product} /> 
-
+			<ProductDialog open={open} setOpen={setOpen} product={product} />
 		</>
 	)
 }

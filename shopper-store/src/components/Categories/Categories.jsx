@@ -27,6 +27,20 @@ const Categories = props => {
 		const fetchData = async () => {
 			try {
 				const querySnapshot = await api.getCategoriesByStatus(1)
+				console.log("Categorias")
+				console.log(querySnapshot)
+
+				const allCategory = {
+					id: 'all01',
+					name: "Todos",
+					backgroundImage: 'https://firebasestorage.googleapis.com/v0/b/veroshopper-cbeb1.appspot.com/o/productCategories%2FbackgroundImages%2FtodosFondo.jpg?alt=media&token=fdf2d8f4-893f-4d77-b971-a37a72e6c974&_gl=1*1e2i2vy*_ga*MTY4ODU1Mzk3NS4xNjk4NDM1ODk0*_ga_CW55HF8NVT*MTY5OTMzMTI3MC44LjEuMTY5OTMzMjU2Ny4yNi4wLjA.',
+					icon: 'https://firebasestorage.googleapis.com/v0/b/veroshopper-cbeb1.appspot.com/o/productCategories%2Ficons%2FtodosIcon.jpg?alt=media&token=1ce341e9-4fb2-46a2-9146-d23d0eb8b986&_gl=1*1qnco9c*_ga*MTY4ODU1Mzk3NS4xNjk4NDM1ODk0*_ga_CW55HF8NVT*MTY5OTMzMTI3MC44LjEuMTY5OTMzMjQ4MS40My4wLjA.'
+				}
+
+				//Insert at the begining 
+				querySnapshot.unshift(allCategory)
+
+
 				setCategories(querySnapshot)
 				setLoading(false)
 			} catch (error) {

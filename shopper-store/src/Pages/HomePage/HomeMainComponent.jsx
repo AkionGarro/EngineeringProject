@@ -44,7 +44,7 @@ const HomeMainComponent = () => {
   return (
     <>
       {/* //NavBar de la Pagina. Siempre va a estar presente. */}
-      <ResponsiveAppBar/>
+      <ResponsiveAppBar />
       <Navbar/>
 
       {/* Carrito de la Pagina */}

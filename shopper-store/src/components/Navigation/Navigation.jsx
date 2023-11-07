@@ -146,6 +146,7 @@ function ResponsiveAppBar() {
             >
               <MenuIcon />
             </IconButton>
+
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -181,6 +182,7 @@ function ResponsiveAppBar() {
                   </Link>
                 </MenuItem>
               ))}
+              
             </Menu>
           </Box>
 
