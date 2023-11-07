@@ -36,8 +36,11 @@ export default function Login() {
   const handleGoogle = async (e) => {
     e.preventDefault();
     try {
-      await auth.loginWithGoogle();
-      if (auth.user) {
+      const response = await auth.loginWithGoogle();
+      if (await response) {
+        console.log("----------------");
+        console.log(response);
+        console.log("----------------");
         goToHomePageAdmin();
       }
     } catch (e) {
@@ -56,7 +59,7 @@ export default function Login() {
 
     try {
       await auth.login(data.email, data.password);
-      if (auth.user) {
+      if (await auth.user) {
         setEmail("");
         setPassword("");
         goToHomePageAdmin();
@@ -96,7 +99,7 @@ export default function Login() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                InputLabelProps={{ shrink: true }}
+                  InputLabelProps={{ shrink: true }}
                   required
                   fullWidth
                   id="email"
@@ -110,7 +113,7 @@ export default function Login() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                InputLabelProps={{ shrink: true }}
+                  InputLabelProps={{ shrink: true }}
                   margin="dense"
                   variant="outlined"
                   fullWidth
@@ -137,7 +140,6 @@ export default function Login() {
 
             <Grid container>
               <Grid item className="register__info">
-                
                 <Link href="/Register" variant="body2">
                   {"¿No tienes cuenta? ¡Regístrate!"}
                 </Link>
@@ -159,7 +161,7 @@ export default function Login() {
                       />
                     </div>
                     <p className="btn-text">
-                      <b>Sign in with google</b>
+                      <b>Inicio con google</b>
                     </p>
                   </div>
                 </div>

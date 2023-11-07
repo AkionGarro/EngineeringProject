@@ -16,15 +16,18 @@ import LogoVeroShop from "../Logo/Logo";
 import "./Navigation.css";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
-import logo from "../../imagenes/logoBlanco.png"
+import logo from "../../imagenes/logoBlanco.png";
+import { useAuth } from "../../context/AuthContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const pages = [
-  { name: "Inicio", route: "/" },
-  { name: "Iniciar Secion", route: "/Login" }
-];
+const pages = [{ name: "Inicio", route: "/" }];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [userAuthenticated, setUserAuthenticated] = React.useState(false);
+  const auth = useAuth();
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -32,6 +35,56 @@ function ResponsiveAppBar() {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  useEffect(() => {
+    if (auth.user) {
+      setUserAuthenticated(true);
+    } else {
+      setUserAuthenticated(false);
+    }
+  }, [auth.user]);
+
+  const checkAuth = () => {
+    if (userAuthenticated) {
+      console.log("User is authenticated");
+      console.log(auth.user);
+    } else {
+      console.log("User isn't authenticated");
+    }
+  };
+
+  const handleLogout = () => {
+    console.log("User is logging out");
+    auth.logout();
+  };
+
+  const handleLogin = () => {
+    navigate("/Login");
+  };
+
+  const renderLogin = () => {
+    return (
+      <Button
+        key="login"
+        onClick={handleLogin}
+        sx={{ my: 2, color: "white", display: "block" }}
+      >
+        Iniciar Sesión
+      </Button>
+    );
+  };
+
+  const renderLogout = () => {
+    return (
+      <Button
+        key="logout"
+        onClick={handleLogout}
+        sx={{ my: 2, color: "white", display: "block" }}
+      >
+        Cerrar Sesión
+      </Button>
+    );
   };
 
   return (
@@ -56,26 +109,31 @@ function ResponsiveAppBar() {
               alignItems: "center",
               justifyContent: "center",
             }}
-          > <div
-            style={{
-              width: "40px", // Tamaño del círculo
-              height: "40px", // Tamaño del círculo
-              borderRadius: "50%", // Forma circular
-              backgroundColor: "lightgray", // Color del círculo
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginRight: "10px" // Espacio entre el círculo y el texto
-            }}>
+          >
+            {" "}
+            <div
+              style={{
+                width: "40px", // Tamaño del círculo
+                height: "40px", // Tamaño del círculo
+                borderRadius: "50%", // Forma circular
+                backgroundColor: "lightgray", // Color del círculo
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginRight: "10px", // Espacio entre el círculo y el texto
+              }}
+            >
               <img
                 src={logo} // Reemplaza con la URL o la ruta de tu imagen
                 style={{
                   width: "100%", // Tamaño de la imagen dentro del círculo
                   height: "auto", // Altura automática para mantener la proporción
-                  borderRadius: "50%" // Hace que la imagen sea circular
+                  borderRadius: "50%", // Hace que la imagen sea circular
                 }}
               />
-            </div>VeroCamp Shop</Typography>
+            </div>
+            VeroCamp Shop
+          </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -115,7 +173,8 @@ function ResponsiveAppBar() {
                   >
                     <Button
                       key={page.name}
-                      sx={{ my: 2, color: "#457B9D", height:'20px'}}
+                      sx={{ my: 2, color: "#457B9D", height: "20px" }}
+                      onClick={page.clicked}
                     >
                       {page.name}
                     </Button>
@@ -143,7 +202,11 @@ function ResponsiveAppBar() {
           >
             VeroCampShop
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }} className="container-nav">
+
+          <Box
+            sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
+            className="container-nav"
+          >
             {pages.map((page) => (
               <Link
                 to={`${page.route.toLowerCase()}`}
@@ -152,13 +215,14 @@ function ResponsiveAppBar() {
               >
                 <Button
                   key={page.name}
-                  onClick={handleCloseNavMenu}
+                  onClick={page.clicked}
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
                   {page.name}
                 </Button>
               </Link>
             ))}
+            {userAuthenticated ? renderLogout() : renderLogin()}
           </Box>
         </Toolbar>
       </Container>

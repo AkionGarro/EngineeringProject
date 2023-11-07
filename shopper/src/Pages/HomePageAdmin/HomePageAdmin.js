@@ -217,7 +217,6 @@ export default function HomePageAdmin(props) {
   const handleLogout = async () => {
     try {
       await auth.logout();
-      console.log("logout");
       goToLogin();
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -253,12 +252,8 @@ export default function HomePageAdmin(props) {
             sx={{ display: { sm: "block", xs: "none" } }}
           />
         </Box>
-        <Box sx={{ flex: 1, display: "flex", flexDirection: "column"}}>
-          <AppBar
-            position="sticky"
-            elevation={0}
-            className="appbar"
-          >
+        <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          <AppBar position="sticky" elevation={0} className="appbar">
             <Toolbar>
               <Grid container spacing={1} alignItems="center">
                 <Grid sx={{ display: { sm: "none", xs: "block" } }} item>
@@ -306,12 +301,12 @@ export default function HomePageAdmin(props) {
               paddingRight: "0px",
               paddingBottom: "0px",
               paddingTop: "0px",
-              backgroundColor:"#FFFF" 
+              backgroundColor: "#FFFF",
             }}
           >
             {componentToRender}
           </Box>
-          
+
           <Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>
             <Copyright />
           </Box>

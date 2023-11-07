@@ -28,7 +28,7 @@
 }
 
 .google-btn {
-    width: 184px;
+    width: 185px;
     height: 42px;
     background-color: #4285f4;
     border-radius: 2px;
@@ -43,7 +43,7 @@
       background-color: #fff;
     }
     .google-icon {
-      position: absolute;
+      position: relative;
       margin-top: 11px;
       margin-left: 11px;
       width: 18px;
@@ -51,7 +51,7 @@
     }
     .btn-text {
       float: right;
-      margin: 11px 11px 0 0;
+      margin: 11px 10px 0 0;
       color: #fff;
       font-size: 14px;
       letter-spacing: 0.2px;
@@ -65,5 +65,17 @@
       background: #1669F2;
     }
   }
+
+@media screen and (min-width: 768px) {
+
+  .google-btn {
+    .btn-text {
+      margin: 11px 18px;
+
+    }
+  }
+  
+}
+
 
   

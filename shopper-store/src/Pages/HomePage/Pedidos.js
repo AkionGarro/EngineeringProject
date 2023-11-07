@@ -22,16 +22,16 @@ function Pedidos(props) {
       <CardActionArea component="a" href={pedido.direccion} onClick={handleNavoptions}>
         <Card sx={{ display: 'flex' , height:200}}>
           <CardContent sx={{ flex: 1 }}>
-            <Typography component="h2" variant="h5">
+            <Typography component="h2" variant="h5"  sx={{textAlign:'left', marginBottom:'1rem'}}>
               {pedido.title}
             </Typography>
-            <Typography variant="subtitle1" paragraph>
+            <Typography variant="subtitle1" paragraph sx={{textAlign:'left',fontSize:'1rem'}}>
               {pedido.description}
             </Typography>
           </CardContent>
           <CardMedia
             component="img"
-            sx={{ width: 200,backgroundColor:'#b8d4e5',padding:'20px',display: { xs: 'none', sm: 'block' } }}
+            sx={{ width: 220,height:300, display: { xs: 'none', sm: 'block' }, marginLeft: 2}}
             image={pedido.image}
           />
         </Card>
