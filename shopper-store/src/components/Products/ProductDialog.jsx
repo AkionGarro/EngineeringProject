@@ -45,6 +45,7 @@ const ProductDialog = props => {
 
 			//Obtiene atributos del producto
 			var atributos = []
+
 			Object.keys(product.personalizedFields).map(key => {
 				let valueList = product.personalizedFields[key].split(",")
 
@@ -68,6 +69,12 @@ const ProductDialog = props => {
 	const updateCarritoCompras = product => {
 		var carritoComprasJSON = localStorage.getItem("carritoCompras")
 		var carritoCompras = JSON.parse(carritoComprasJSON)
+		product.comentario = commentValue
+		product.valorAtributos = attributeList
+
+		console.log("Producto a añadir al carrito")
+		console.log(product)
+
 		carritoCompras.push(product)
 		var carritoComprasActualizadoJSON = JSON.stringify(carritoCompras)
 		localStorage.setItem("carritoCompras", carritoComprasActualizadoJSON)
@@ -135,7 +142,9 @@ const ProductDialog = props => {
 										</Grid>
 									))}
 
+									<Grid xs={12}>Agregagr comentario al pedido (Opcional)</Grid>
 									<Grid xs={12}>
+									
 										<TextField
 											label="Comentario (250 caracteres)"
 											multiline
