@@ -69,6 +69,30 @@ function ResponsiveAppBar() {
     navigate("/Login");
   };
 
+  const renderPedidos = () => {
+    return (
+      <Button
+        key="login"
+        onClick={() => setComponentToRender(<Pedidos />)}
+        sx={{ my: 2, color: "white", display: "block" }}
+      >
+        Pedidos
+      </Button>
+    );
+  };
+
+  const renderInicio = () => {
+    return (
+      <Button
+        key="login"
+        onClick={() => setComponentToRender(<Blog goTo={0}/>)}
+        sx={{ my: 2, color: "white", display: "block" }}
+      >
+        Inicio
+      </Button>
+    );
+  };
+
   const renderLogin = () => {
     return (
       <Box
