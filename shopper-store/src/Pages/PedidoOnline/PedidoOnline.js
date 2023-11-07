@@ -27,13 +27,10 @@ const PedidoOnline = () => {
   const [direccionSeleccionada, setDireccionSeleccionada] = useState(null);
   const [label, setLabel] = useState();
   const [address, setAddress] = useState([]);
-  const [flagUpdate, setFlagUpdate] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedUser, setSelectedUser] = useState("");
   const ref = collection(firestore, "pedidosOnline");
   const [linkFields, setLinkFields] = useState([{ link: "", comentario: "" }]);
   const auth = useAuth();
-  const user = auth.currentUser;
+  const email = auth.user.email;
 
   const cleanData = () => {
     setLinkFields([{ link: "", comentario: "" }]);
@@ -45,6 +42,7 @@ const PedidoOnline = () => {
     setLabel(event.target.value);
     const jsonObject = JSON.parse(event.target.value);
     setDireccionSeleccionada(jsonObject);
+    setLabel("");
   };
 
   useEffect(() => {
@@ -53,7 +51,7 @@ const PedidoOnline = () => {
       const direcciones = await api.getAddressUser("josuedaniel.cha@gmail.com");
       setAddress(direcciones);
       //===================================================================================
-      const usuario = await api.getUserData(auth.user.email);
+      const usuario = await api.getUserData(email);
       console.log(usuario);
       if (usuario == undefined) {
         let nameUser = auth.user.displayName;
@@ -67,21 +65,9 @@ const PedidoOnline = () => {
     // Realiza algún efecto secundario aquí, como una solicitud de red.
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     //=========================================================
     e.preventDefault();
-
-    try {
-      addDocument(ref, data);
-      Swal.fire({
-        icon: "success",
-        title: "¡Pedido Completado!",
-        text: "Tu pedido se ha guardado de forma correcta.",
-      });
-      cleanData();
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
 
     // Obtén los datos de linkFields
     const productos = linkFields.map((field) => {
@@ -111,11 +97,23 @@ const PedidoOnline = () => {
     //=========================================================
 
     let data = {
-      usuario: selectedUser.email,
+      usuario: email,
       direccion: direccionSeleccionada,
       productos: linkFields,
       estado: 0,
     };
+
+    try {
+      await addDocument(ref, data);
+      Swal.fire({
+        icon: "success",
+        title: "¡Pedido Completado!",
+        text: "Tu pedido se ha guardado de forma correcta.",
+      });
+      cleanData();
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   };
 
   const deleteAll = () => {
