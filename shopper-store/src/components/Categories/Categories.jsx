@@ -67,8 +67,6 @@ const Categories = props => {
             <CategoryCard categoryInfo={element} onCategoryClick={onCategoryClick} />
         </Grid>
       
-
-
       )
 		})
 

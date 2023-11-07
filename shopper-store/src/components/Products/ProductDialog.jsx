@@ -1,4 +1,5 @@
-import * as React from "react"
+
+import React, { useState, useEffect, forwardRef, useRef } from "react"
 import Button from "@mui/material/Button"
 import Dialog from "@mui/material/Dialog"
 import DialogActions from "@mui/material/DialogActions"
@@ -11,20 +12,31 @@ import Carousel from "react-material-ui-carousel"
 import Grid from "@mui/material/Unstable_Grid2" // Grid version 2
 import CloseIcon from "@mui/icons-material/Close"
 import Atributo from "./Atributo"
+import TextField from '@mui/material/TextField';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />
 })
-
 
 const ProductDialog = props => {
 	const { open, setOpen, product } = props
 
-	const [attributeList, setAttributeList] = React.useState([])
+	const [attributeList, setAttributeList] = useState([])
 
-	const descriptionElementRef = React.useRef(null)
+	const descriptionElementRef = useRef(null)
 
-	React.useEffect(() => {
+	const [commentValue, setCommentValue] = useState('');
+
+  const handleCommentValueChange = (e) => {
+    const value = e.target.value;
+    
+    // Check if the input value exceeds the character limit
+    if (commentValue.length <= 250) {
+      setCommentValue(value);
+    }
+  };
+
+	useEffect(() => {
 		if (open) {
 			const { current: descriptionElement } = descriptionElementRef
 			if (descriptionElement !== null) {
@@ -48,6 +60,7 @@ const ProductDialog = props => {
 	}, [open])
 
 	const handleClose = () => {
+		setCommentValue('')
 		setAttributeList([])
 		setOpen(false)
 	}
@@ -102,7 +115,6 @@ const ProductDialog = props => {
 
 			<DialogContent id="scroll-dialog-description" ref={descriptionElementRef} tabIndex={-1} dividers={true}>
 				<form id="product_information_dialog_form" onSubmit={handleAddItem}>
-
 					<Grid container spacing={2} className="dialog_grid_container">
 						<Grid xs={12} md={5} className="izq">
 							<Carousel className="dialog_carousel">
@@ -122,8 +134,20 @@ const ProductDialog = props => {
 											<Atributo info={attr} />
 										</Grid>
 									))}
+
+									<Grid xs={12}>
+										<TextField
+											label="Comentario (250 caracteres)"
+											multiline
+											rows={4}
+											value={commentValue}
+											onChange={handleCommentValueChange}
+											inputProps={{ maxLength: 250 }}
+											variant="outlined"
+											fullWidth
+										/>
+									</Grid>
 								</Grid>
-								
 							</>
 						</Grid>
 					</Grid>
