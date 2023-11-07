@@ -6,7 +6,7 @@ const GlobalContext = createContext();
 
 export function GlobalProvider({ children }) {
 
-  const [componentToRender, setComponentToRender] = useState(<Blog goTo={1} />)
+  const [componentToRender, setComponentToRender] = useState(<Blog />)
   
 
   return (

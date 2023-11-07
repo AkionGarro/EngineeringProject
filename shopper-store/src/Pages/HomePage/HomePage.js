@@ -49,6 +49,7 @@ const defaultTheme = createTheme();
 const Blog = (props) => {
   const { goTo } = props;
 
+  const section0 = React.useRef(null);
   const section1 = React.useRef(null);
   const section2 = React.useRef(null);
   const section3 = React.useRef(null);
@@ -56,6 +57,9 @@ const Blog = (props) => {
   const scrollToSection = () => {
     let targetRef = null;
     switch (goTo) {
+      case 0:
+        targetRef = section0;
+        break;
       case 1:
         targetRef = section1;
         break;
@@ -79,10 +83,10 @@ const Blog = (props) => {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={defaultTheme} ref={section0}>
       <CssBaseline />
       <Container maxWidth="lg">
-        <main>
+        <main >
           <div>
             <Typography
               variant="h5"
