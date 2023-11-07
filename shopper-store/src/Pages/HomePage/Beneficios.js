@@ -1,7 +1,11 @@
 import React from 'react';
 import { Grid, Card, CardContent, CardMedia, Typography, Button } from '@mui/material';
+import Ahorro from "../../imagenes/ahorro.png";
 import Ahorro2 from "../../imagenes/ahorro2.jpg";
+import Personal from "../../imagenes/personal.png"
 import Personal2 from "../../imagenes/personal2.jpg"
+import Personal3 from "../../imagenes/personal3.jpg" 
+import Internacional from "../../imagenes/internacional.png"
 import Internacional2 from "../../imagenes/international2.jpg"
 
 
@@ -55,7 +59,7 @@ function CardGrid() {
                                     image={card.image}
                                 />
                                 <CardContent style={{ textAlign: "center" }}>
-                                    <Typography variant="h6" component="div" sx={{color:'#457B9D;'}}>
+                                    <Typography variant="h6" component="div">
                                         {card.title}
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary" style={{ textAlign: "center",marginTop:'1rem' }}>

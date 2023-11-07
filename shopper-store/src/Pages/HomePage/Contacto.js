@@ -1,18 +1,24 @@
 import React from "react";
-import {Grid,Typography,TextField,Button,Paper,Link,IconButton,Divider} from "@mui/material";
+import {
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  Paper,
+  Link,
+  IconButton,
+  Divider,
+} from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import InstagramIcon from '@mui/icons-material/Instagram';
+import TwitterIcon from "@mui/icons-material/Twitter";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import "./Contacto.css";
-
-
 const ContactForm = () => {
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dataForm = new FormData(e.currentTarget);
     var phoneNumber = "+50685045830";
-    const data =
-    {
+    const data = {
       nombre: dataForm.get("nombre"),
       mensaje: dataForm.get("mensaje"),
 
@@ -30,6 +36,7 @@ const ContactForm = () => {
 
   return (
     <Grid container spacing={3}>
+      {/* Columna Izquierda */}
       <Grid item xs={12} sm={6}>
         <Paper
           style={{ padding: "20px", boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)" }}
@@ -72,6 +79,7 @@ const ContactForm = () => {
         </Paper>
       </Grid>
 
+      {/* Columna Derecha */}
       <Grid item xs={12} sm={6}>
         <Paper
           id="contactInfo"
@@ -99,16 +107,21 @@ const ContactForm = () => {
               Puedes encontrarnos en nuestras redes sociales y cuentas
               oficiales.
             </Typography>
-            <Divider/>
+            <Divider style={{ marginBottom: "20px" }} />
             <div className="social">
-              <Link href="https://instagram.com/verocam_shop?igshid=MXRtcTY1d244czkwdA==" target="_blank">
-                <IconButton style={{ color: "white" }}>
-                  <InstagramIcon />
-                </IconButton>
-              </Link>
-              <Link href="https://www.facebook.com/profile.php?id=100069117420733&mibextid=LQQJ4d" target="_blank">
+              <Link href="https://www.facebook.com/" target="_blank">
                 <IconButton style={{ color: "white" }}>
                   <FacebookIcon />
+                </IconButton>
+              </Link>
+              <Link href="https://twitter.com/" target="_blank">
+                <IconButton style={{ color: "white" }}>
+                  <TwitterIcon />
+                </IconButton>
+              </Link>
+              <Link href="https://www.linkedin.com/" target="_blank">
+                <IconButton style={{ color: "white" }}>
+                  <LinkedInIcon />
                 </IconButton>
               </Link>
             </div>
