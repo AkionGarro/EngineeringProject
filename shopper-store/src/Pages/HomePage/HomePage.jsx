@@ -3,19 +3,20 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Pedidos from "./Pedidos";
-import Beneficios from "./Beneficios";
-import InfoVero from "./AcercaDe.js";
-import Contact from "./Contacto.js";
 
-import Carrousel from "./Carrousel";
+import Pedidos from "../../components/HomePage/Pedidos.jsx";
+import Beneficios from "../../components/HomePage/Beneficios.jsx";
+import InfoVero from "../../components/HomePage/AcercaDe.jsx";
+import Contact from "../../components/HomePage/Contacto.jsx";
+import Carrousel from "./Carrousel.js";
 import Typography from "@mui/material/Typography";
-import ProductsPage from "./../Categories/ProductsPage.jsx";
+import ProductsPage from "../Categories/ProductsPage.jsx";
 
 import online from "../../imagenes/online2.jpg";
 import personal from "../../imagenes/pedidoPersonal4.jpg";
 import tienda from "../../imagenes/tienda3.jpg";
-import Personal_Order from "../PersonalOrdersStore/PersonalOrderStore";
+
+import Personal_Order from "../PersonalOrdersStore/PersonalOrderStore.js";
 
 
 import "./HomePage.css";
@@ -88,6 +89,7 @@ const Blog = (props) => {
               variant="h5"
               gutterBottom
               sx={{ mt: 3, textAlign: "center" }}
+              color="textSecondary"
             >
               En Verocam_shop conseguimos los productos que necesitas de tus
               tiendas favoritas
@@ -121,7 +123,7 @@ const Blog = (props) => {
           </div>
 
 					<div ref={section2}>
-						<Typography variant="h6" gutterBottom sx={{ mt: 3, textAlign:'center', color:"#457B9D", marginTop:"8vh"}}>
+						<Typography variant="h6" gutterBottom sx={{ mt: 3, textAlign:'center', color:"#457B9D", marginTop:"5vh"}}>
 							Acerca de Vero
 						</Typography>
 						<InfoVero/>
