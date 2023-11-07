@@ -35,7 +35,7 @@ const section = [
 ]
 
 function ResponsiveAppBar(props) {
-  const {onClickCarrito} =  props
+	const { onClickCarrito } = props
 	const [anchorElNav, setAnchorElNav] = useState(null)
 	const [userAuthenticated, setUserAuthenticated] = useState(false)
 	const auth = useAuth()
@@ -164,11 +164,11 @@ function ResponsiveAppBar(props) {
         >
           Mi Cuenta
         </Button> */}
-        <Button variant="contained" color="primary" onClick={onClickCarrito}>
-						<div className="inside-button-products">
-							<ShoppingCartIcon />
-						</div>
-					</Button>
+				<Button variant="contained" disableElevation style={{backgroundColor:'#457B9D'}} onClick={onClickCarrito}>
+					<div className="inside-button-products">
+						<ShoppingCartIcon />
+					</div>
+				</Button>
 
 				{pages2.map(page => (
 					<Link to={`${page.route.toLowerCase()}`} key={page.route} style={{ textDecoration: "none" }}>
