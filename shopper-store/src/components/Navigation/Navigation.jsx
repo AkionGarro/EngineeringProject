@@ -20,12 +20,16 @@ import logo from "../../imagenes/logoBlanco.png";
 import { useAuth } from "../../context/AuthContext";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../../GlobalContext/GlobalContext";
+import Pedidos from "../Pedidos/Pedidos";
+import Blog from "../../Pages/HomePage/HomePage";
 
-const pages = [{ name: "Inicio", route: "/" }];
+const pages = [/*{ name: "Inicio", route: "/" }*/];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [userAuthenticated, setUserAuthenticated] = React.useState(false);
+  const {componentToRender, setComponentToRender} = useGlobalContext();
   const auth = useAuth();
   const navigate = useNavigate();
 
@@ -61,6 +65,30 @@ function ResponsiveAppBar() {
 
   const handleLogin = () => {
     navigate("/Login");
+  };
+
+  const renderPedidos = () => {
+    return (
+      <Button
+        key="login"
+        onClick={() => setComponentToRender(<Pedidos />)}
+        sx={{ my: 2, color: "white", display: "block" }}
+      >
+        Pedidos
+      </Button>
+    );
+  };
+
+  const renderInicio = () => {
+    return (
+      <Button
+        key="login"
+        onClick={() => setComponentToRender(<Blog goTo={0}/>)}
+        sx={{ my: 2, color: "white", display: "block" }}
+      >
+        Inicio
+      </Button>
+    );
   };
 
   const renderLogin = () => {
@@ -181,6 +209,7 @@ function ResponsiveAppBar() {
                   </Link>
                 </MenuItem>
               ))}
+             
             </Menu>
           </Box>
 
@@ -222,6 +251,8 @@ function ResponsiveAppBar() {
                 </Button>
               </Link>
             ))}
+            {renderInicio()}
+            {userAuthenticated ? renderPedidos() : null}
             {userAuthenticated ? renderLogout() : renderLogin()}
           </Box>
         </Toolbar>
