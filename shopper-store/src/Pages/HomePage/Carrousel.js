@@ -11,6 +11,7 @@ import imagen3 from '../../imagenes/carousel3.jpeg';
 import imagen4 from '../../imagenes/carousel4.jpeg';
 import imagen5 from '../../imagenes/carousel5.jpeg';
 import imagen6 from '../../imagenes/carousel6.jpeg';
+import './Carousel.css'
 
 const AutoPlayCarousel = autoPlay(Carousel);
 
@@ -38,9 +39,9 @@ const images = [
 
 function SwipeableTextMobileStepper() {
   return (
-    <Carousel interval={7000} >
+    <Carousel interval={7000} className='carousel'>
       {images.map((item, index) => (
-        <img src={item.imgPath} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '30px' }} />
+        <img className='image_carousel' src={item.imgPath} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '30px' }} />
       ))}
     </Carousel>
   );

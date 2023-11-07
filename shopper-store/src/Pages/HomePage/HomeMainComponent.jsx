@@ -58,7 +58,7 @@ const HomeMainComponent = () => {
       {/* //Footer de la Pagina. Siempre va a estar presente. */}
       <Footer
         title="Footer"
-        description="Something here to give the footer a purpose!"
+        description="Desarrollado por estudinates del TEC!"
       />
     </>
   )
