@@ -16,6 +16,7 @@ import online from "../../imagenes/online2.jpg";
 import personal from "../../imagenes/pedidoPersonal4.jpg";
 import tienda from "../../imagenes/tienda3.jpg";
 import Personal_Order from "../PersonalOrdersStore/PersonalOrderStore";
+import PedidoOnline from "../PedidoOnline/PedidoOnline.js";
 
 import "./HomePage.css";
 
@@ -25,7 +26,7 @@ const tiposPedidos = [
     description:
       "Envía los enlaces de los productos y nosotros los entregaremos directamente en tu casa.",
     image: online,
-    route: <Personal_Order />,
+    route: <PedidoOnline />,
   },
   {
     title: "Pedido Personal",
