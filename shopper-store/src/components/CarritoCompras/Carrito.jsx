@@ -6,6 +6,10 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Swal from "sweetalert2";
 import Loader from "./Loader";
+import { useAuth } from "../../context/AuthContext";
+import { firestore } from "../../firebase";
+import { addDocument } from "../../firebase";
+import { collection } from "firebase/firestore";
 import "./Carrito.css";
 
 const Carrito = () => {
@@ -13,7 +17,10 @@ const Carrito = () => {
   const [montoTotal, setMontoTotal] = useState(0);
   const [cantidadArt, setCantidadArt] = useState(0);
   const [cantidadFlag, setCantidadFlag] = useState(true);
+  const ref = collection(firestore, "pedidosTienda");
   const [loading, setLoading] = useState(true);
+  const auth = useAuth();
+  const email = auth.user.email;
 
   const agregarAlCarrito = (product, id) => {
     const nuevoCarrito = [...carrito];
@@ -127,6 +134,26 @@ const Carrito = () => {
     });
   };
 
+  const buyItems = async () => {
+    let data = {
+      usuario: email,
+      direccion: "",
+      productos: carrito,
+      estado: 1,
+    };
+
+    try {
+      await addDocument(ref, data);
+      Swal.fire({
+        icon: "success",
+        title: "¡Pedido Completado!",
+        text: "Tu pedido se ha guardado de forma correcta.",
+      });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       var carritoComprasJSON = localStorage.getItem("carritoCompras");
@@ -188,6 +215,7 @@ const Carrito = () => {
                 variant="contained"
                 color="success"
                 className="buttons-carrito"
+                onClick={buyItems}
               >
                 Comprar
               </Button>

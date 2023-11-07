@@ -82,8 +82,6 @@ const PedidoOnline = () => {
 
     // Construye la URL de WhatsApp
 
-    
-
     const url =
       "https://wa.me/" +
       phoneNumber +
