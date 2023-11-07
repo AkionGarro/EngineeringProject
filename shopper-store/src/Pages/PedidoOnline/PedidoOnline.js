@@ -50,8 +50,8 @@ const PedidoOnline = () => {
   useEffect(() => {
     const datosUser = async () => {
       //Direcciones
-      //const direcciones = await api.getUserAdress("josuedaniel.cha@gmail.com");
-      //setAddress(direcciones);
+      const direcciones = await api.getAddressUser("josuedaniel.cha@gmail.com");
+      setAddress(direcciones);
       //===================================================================================
       const usuario = await api.getUserData(auth.user.email);
       console.log(usuario);
@@ -70,6 +70,19 @@ const PedidoOnline = () => {
   const handleSubmit = (e) => {
     //=========================================================
     e.preventDefault();
+
+    try {
+      addDocument(ref, data);
+      Swal.fire({
+        icon: "success",
+        title: "¡Pedido Completado!",
+        text: "Tu pedido se ha guardado de forma correcta.",
+      });
+      cleanData();
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+
     // Obtén los datos de linkFields
     const productos = linkFields.map((field) => {
       return `Producto: ${field.link} -- *Comentario*: ${field.comentario} `;
@@ -103,18 +116,6 @@ const PedidoOnline = () => {
       productos: linkFields,
       estado: 0,
     };
-
-    try {
-      addDocument(ref, data);
-      Swal.fire({
-        icon: "success",
-        title: "¡Pedido Completado!",
-        text: "Tu pedido se ha guardado de forma correcta.",
-      });
-      cleanData();
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
   };
 
   const deleteAll = () => {
