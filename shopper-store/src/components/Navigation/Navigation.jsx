@@ -14,14 +14,14 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
 import logo from "../../imagenes/logoBlanco.png";
 import { useAuth } from "../../context/AuthContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../GlobalContext/GlobalContext.js"
 import Cuenta from "../../Pages/Account/Account"
 
 
 const pages = [
-  { name: "Inicio", route: "/" }
+  { name: "Inicio", route: "/" },
 ];
 
 const pages2 = [
@@ -32,14 +32,19 @@ const pages2 = [
 const section = { name: "Mi Cuenta", route: <Cuenta /> };
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [userAuthenticated, setUserAuthenticated] = React.useState(false);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
   const auth = useAuth();
   const navigate = useNavigate();
 
   const { setComponentToRender } = useGlobalContext()
 
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null)
+  };
+
   const handleNavoptions = (route) => {
+    setAnchorElNav(null)
     setComponentToRender(route)
   }
 
@@ -47,9 +52,6 @@ function ResponsiveAppBar() {
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
 
   useEffect(() => {
     if (auth.user) {
@@ -99,6 +101,56 @@ function ResponsiveAppBar() {
     );
   };
 
+  const renderLoginCelular = () => {
+    return (
+      <Menu
+        id="menu-appbar"
+        anchorEl={anchorElNav}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        open={Boolean(anchorElNav)}
+        onClose={handleCloseNavMenu}
+        sx={{
+          display: { xs: "block", md: "none" },
+        }}
+      >
+        {pages.map((page) => (
+          <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+            <Link
+              to={`${page.route.toLowerCase()}`}
+              key={page.route}
+              style={{ textDecoration: "none" }}
+            >
+              <Button
+                key={page.name}
+                onClick={page.clicked}
+                sx={{ my: 2, color: "black", display: "block" }}
+              >
+                {page.name}
+              </Button>
+            </Link>
+          </MenuItem>
+        ))}
+        <MenuItem onClick={handleCloseNavMenu}>
+          <Button
+            key="login"
+            onClick={handleLogin}
+            sx={{ my: 2, color: "black", display: "block" }}
+          >
+            Iniciar Sesión
+          </Button>
+        </MenuItem>
+      </Menu>
+    );
+  };
+
   const renderLogout = () => {
     return (
       <Box
@@ -109,7 +161,7 @@ function ResponsiveAppBar() {
           key={section.name}
           color="inherit"
           onClick={() => handleNavoptions(section.route)}
-          >
+        >
           Mi Cuenta
         </Button>
         {pages2.map((page) => (
@@ -138,6 +190,65 @@ function ResponsiveAppBar() {
     );
   };
 
+  const renderLogoutCelular = () => {
+    return (
+      <Menu
+        id="menu-appbar"
+        anchorEl={anchorElNav}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        open={Boolean(anchorElNav)}
+        onClose={handleCloseNavMenu}
+        sx={{
+          display: { xs: "block", md: "none" },
+        }}
+      >
+        <MenuItem onClick={handleCloseNavMenu}>
+          <Button
+            key={section.name}
+            color="inherit"
+            onClick={() => handleNavoptions(section.route)}
+          >
+            Mi Cuenta
+          </Button>
+        </MenuItem>
+        {pages2.map((page) => (
+          <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+            <Link
+              to={`${page.route.toLowerCase()}`}
+              key={page.route}
+              style={{ textDecoration: "none" }}
+            >
+              <Button
+                key={page.name}
+                onClick={page.clicked}
+                sx={{ my: 1, color: "black", display: "block" }}
+              >
+                {page.name}
+              </Button>
+            </Link>
+          </MenuItem>
+        ))}
+        <MenuItem onClick={handleCloseNavMenu}>
+          <Button
+            key="logout"
+            onClick={handleLogout}
+            sx={{ my: 1, color: "black", display: "block" }}
+          >
+            Cerrar Sesión
+          </Button>
+        </MenuItem>
+      </Menu>
+    );
+  };
+
   return (
     <AppBar position="static">
       <Container
@@ -161,7 +272,6 @@ function ResponsiveAppBar() {
               justifyContent: "center",
             }}
           >
-            {" "}
             <div
               style={{
                 width: "40px", // Tamaño del círculo
@@ -196,43 +306,8 @@ function ResponsiveAppBar() {
               color="inherit"
             >
               <MenuIcon />
+              {userAuthenticated ? renderLogoutCelular() : renderLoginCelular()}
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Link
-                    to={`${page.route.toLowerCase()}`}
-                    key={page.route}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Button
-                      key={page.name}
-                      sx={{ my: 2, color: "#457B9D", height: "20px" }}
-                      onClick={page.clicked}
-                    >
-                      {page.name}
-                    </Button>
-                  </Link>
-                </MenuItem>
-              ))}
-            </Menu>
           </Box>
 
           <Typography
