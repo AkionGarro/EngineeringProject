@@ -126,6 +126,21 @@ export function DatabaseProvider({ children }) {
     }
   };
 
+  const userIsRegistered = async (email) => {
+    const ref = collection(firestore, "users");
+    const q = query(ref, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.docs.length === 0) {
+      console.log("Usuario no encontrado.");
+      return false;
+    }else{
+      console.log("Usuario encontrado.");
+      return true;
+    }
+   
+  };
+
   const addAddressToUser = async (data) => {
     const ref = collection(firestore, "users");
     const addressCollection = collection(firestore, "usersAddress");
@@ -851,6 +866,7 @@ export function DatabaseProvider({ children }) {
         getUserData,
         updateUserData,
         addAddressToUser,
+        userIsRegistered,
         //Categorias de productos para la Vista de Administrador
         getCategoryReference,
         getAllCategories,

@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, Grid, Typography, Paper, IconButton } from "@mui/material";
-import { Edit as EditIcon, CheckCircleOutline as CheckCircleOutlineIcon } from "@mui/icons-material"; // Import icons
+import {
+  TextField,
+  Button,
+  Grid,
+  Typography,
+  Paper,
+  IconButton,
+} from "@mui/material";
+import {
+  Edit as EditIcon,
+  CheckCircleOutline as CheckCircleOutlineIcon,
+} from "@mui/icons-material"; // Import icons
 import "./Account.css";
 import { useFirebase } from "../../context/DatabaseContext";
-
+import Swal from "sweetalert2";
 function Account() {
   const firebase = useFirebase();
   const [updateInfo, setUpdateInfo] = useState(false);
@@ -14,7 +24,6 @@ function Account() {
   const [address, setAddress] = useState({});
   const [role, setRole] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -40,12 +49,32 @@ function Account() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
       const email = localStorage.getItem("currentUser");
       const data = await firebase.getUserData(email);
+
+      if (
+        data.identification == "empty" ||
+        data.identification == null ||
+        data.identification == undefined ||
+        data.phone == "empty" ||
+        data.phone == null ||
+        data.phone == undefined ||
+        data.address == "empty" ||
+        data.address == null ||
+        data.address == undefined
+      ) {
+        Swal.fire({
+          title: "Por favor completa tu perfil",
+          text: "Para poder realizar compras debes completar tu perfil",
+          icon: "warning",
+          confirmButtonText: "Ok",
+        });
+      }
+
       setFullName(data.fullName);
       setEmail(data.email);
       setPhone(data.phone);
@@ -63,8 +92,7 @@ function Account() {
         <Grid container spacing={2} mt={2} ml={2}>
           <Grid item xs={12} sm={5}>
             <TextField
-            InputLabelProps={{ shrink: true }}
-
+              InputLabelProps={{ shrink: true }}
               id="fullName"
               label="Full Name"
               name="fullName"
@@ -77,7 +105,7 @@ function Account() {
           </Grid>
           <Grid item xs={12} sm={5}>
             <TextField
-            InputLabelProps={{ shrink: true }}
+              InputLabelProps={{ shrink: true }}
               id="email"
               label="Email"
               name="email"
@@ -90,7 +118,7 @@ function Account() {
           </Grid>
           <Grid item xs={12} sm={5}>
             <TextField
-            InputLabelProps={{ shrink: true }}
+              InputLabelProps={{ shrink: true }}
               id="identification"
               label="Identification"
               name="identification"
@@ -103,7 +131,7 @@ function Account() {
           </Grid>
           <Grid item xs={12} sm={5}>
             <TextField
-            InputLabelProps={{ shrink: true }}
+              InputLabelProps={{ shrink: true }}
               id="phone"
               label="Phone Number"
               name="phone"
@@ -116,7 +144,7 @@ function Account() {
           </Grid>
           <Grid item xs={12} sm={5}>
             <TextField
-            InputLabelProps={{ shrink: true }}
+              InputLabelProps={{ shrink: true }}
               id="address"
               label="Address"
               name="address"
@@ -129,7 +157,7 @@ function Account() {
           </Grid>
           <Grid item xs={12} sm={5}>
             <TextField
-            InputLabelProps={{ shrink: true }}
+              InputLabelProps={{ shrink: true }}
               id="role"
               label="Role"
               name="role"
@@ -141,19 +169,16 @@ function Account() {
             />
           </Grid>
           <Grid item xs={12}>
-         
-              <IconButton onClick={handleEditClick}>
-                <EditIcon />
-              </IconButton>
-           
-              <IconButton type="submit">
-                <CheckCircleOutlineIcon />
-              </IconButton>
-          
+            <IconButton onClick={handleEditClick}>
+              <EditIcon />
+            </IconButton>
+
+            <IconButton type="submit">
+              <CheckCircleOutlineIcon />
+            </IconButton>
           </Grid>
         </Grid>
       </Paper>
-
     </form>
   );
 }
