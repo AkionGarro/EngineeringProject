@@ -6,9 +6,10 @@ import {
   Container,
   Grid,
   TextField,
-  Autocomplete,
   Select,
   MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import { firestore } from "../../firebase";
 import { useAuth } from "../../context/AuthContext";
@@ -22,36 +23,42 @@ import "./PedidoOnline.css";
 const PedidoOnline = () => {
   const api = useFirebase();
 
-  const [users, setUsers] = useState([]);
-  const [open, setOpen] = useState(false);
   const [actualName, setActualName] = useState("");
+  const [direccionSeleccionada, setDireccionSeleccionada] = useState(null);
+  const [label, setLabel] = useState();
+  const [address, setAddress] = useState([]);
   const [flagUpdate, setFlagUpdate] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
   const ref = collection(firestore, "pedidosOnline");
   const [linkFields, setLinkFields] = useState([{ link: "", comentario: "" }]);
-  const [direction, setDirection] = useState("");
   const auth = useAuth();
+  const user = auth.currentUser;
 
   const cleanData = () => {
     setLinkFields([{ link: "", comentario: "" }]);
-    setDirection("");
+    setDireccionSeleccionada("");
+    setLabel("");
+  };
+
+  const handleSelect = (event) => {
+    setLabel(event.target.value);
+    const jsonObject = JSON.parse(event.target.value);
+    setDireccionSeleccionada(jsonObject);
   };
 
   useEffect(() => {
-    console.log("Usuario con auth");
     const datosUser = async () => {
-      console.log(auth);
+      //Direcciones
+      //const direcciones = await api.getUserAdress("josuedaniel.cha@gmail.com");
+      //setAddress(direcciones);
+      //===================================================================================
       const usuario = await api.getUserData(auth.user.email);
       console.log(usuario);
       if (usuario == undefined) {
         let nameUser = auth.user.displayName;
         setActualName(nameUser);
-        console.log("Usuario actual");
-        console.log(actualName);
       } else {
-        console.log("Usuario con api");
-        console.log(usuario.fullName);
         setActualName(usuario.fullName);
       }
     };
@@ -59,10 +66,6 @@ const PedidoOnline = () => {
 
     // Realiza algún efecto secundario aquí, como una solicitud de red.
   }, []);
-
-  const handleOpenModal = () => {
-    setOpen(true);
-  };
 
   const handleSubmit = (e) => {
     //=========================================================
@@ -96,7 +99,7 @@ const PedidoOnline = () => {
 
     let data = {
       usuario: selectedUser.email,
-      direccion: direction,
+      direccion: direccionSeleccionada,
       productos: linkFields,
       estado: 0,
     };
@@ -224,7 +227,24 @@ const PedidoOnline = () => {
 
       <div className="users_container">
         <div className="opciones-direccion">
-          <p>direciones del usuario</p>
+          <FormControl variant="outlined" fullWidth>
+            <InputLabel id="direccion-label">
+              Selecciona una dirección
+            </InputLabel>
+            <Select
+              labelId="direccion-label"
+              id="direccion"
+              value={label}
+              onChange={handleSelect}
+              label="Selecciona una dirección"
+            >
+              {address.map((option, index) => (
+                <MenuItem key={index} value={JSON.stringify(option)}>
+                  {`${option.country}, ${option.province}, ${option.canton}, ${option.district}, ${option.address}`}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
       </div>
 
