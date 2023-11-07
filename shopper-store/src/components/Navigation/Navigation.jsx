@@ -7,35 +7,51 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-import LogoVeroShop from "../Logo/Logo";
 import "./Navigation.css";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
 import logo from "../../imagenes/logoBlanco.png";
 import { useAuth } from "../../context/AuthContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../../GlobalContext/GlobalContext.js"
+import Cuenta from "../../Pages/Account/Account"
 
-const pages = [{ name: "Inicio", route: "/" }];
+
+const pages = [
+  { name: "Inicio", route: "/" },
+];
+
+const pages2 = [
+  { name: "Carrito", route: "/" },
+  { name: "Inicio", route: "/" }
+];
+
+const section = { name: "Mi Cuenta", route: <Cuenta /> };
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [userAuthenticated, setUserAuthenticated] = React.useState(false);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
   const auth = useAuth();
   const navigate = useNavigate();
+
+  const { setComponentToRender } = useGlobalContext()
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null)
+  };
+
+  const handleNavoptions = (route) => {
+    setAnchorElNav(null)
+    setComponentToRender(route)
+  }
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
 
   useEffect(() => {
     if (auth.user) {
@@ -45,17 +61,7 @@ function ResponsiveAppBar() {
     }
   }, [auth.user]);
 
-  const checkAuth = () => {
-    if (userAuthenticated) {
-      console.log("User is authenticated");
-      console.log(auth.user);
-    } else {
-      console.log("User isn't authenticated");
-    }
-  };
-
   const handleLogout = () => {
-    console.log("User is logging out");
     auth.logout();
   };
 
@@ -65,25 +71,181 @@ function ResponsiveAppBar() {
 
   const renderLogin = () => {
     return (
-      <Button
-        key="login"
-        onClick={handleLogin}
-        sx={{ my: 2, color: "white", display: "block" }}
+      <Box
+        sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
+        className="container-nav"
       >
-        Iniciar Sesión
-      </Button>
+        {pages.map((page) => (
+          <Link
+            to={`${page.route.toLowerCase()}`}
+            key={page.route}
+            style={{ textDecoration: "none" }}
+          >
+            <Button
+              key={page.name}
+              onClick={page.clicked}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              {page.name}
+            </Button>
+          </Link>
+        ))}
+        <Button
+          key="login"
+          onClick={handleLogin}
+          sx={{ my: 2, color: "white", display: "block" }}
+        >
+          Iniciar Sesión
+        </Button>
+      </Box>
+    );
+  };
+
+  const renderLoginCelular = () => {
+    return (
+      <Menu
+        id="menu-appbar"
+        anchorEl={anchorElNav}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        open={Boolean(anchorElNav)}
+        onClose={handleCloseNavMenu}
+        sx={{
+          display: { xs: "block", md: "none" },
+        }}
+      >
+        {pages.map((page) => (
+          <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+            <Link
+              to={`${page.route.toLowerCase()}`}
+              key={page.route}
+              style={{ textDecoration: "none" }}
+            >
+              <Button
+                key={page.name}
+                onClick={page.clicked}
+                sx={{ my: 2, color: "black", display: "block" }}
+              >
+                {page.name}
+              </Button>
+            </Link>
+          </MenuItem>
+        ))}
+        <MenuItem onClick={handleCloseNavMenu}>
+          <Button
+            key="login"
+            onClick={handleLogin}
+            sx={{ my: 2, color: "black", display: "block" }}
+          >
+            Iniciar Sesión
+          </Button>
+        </MenuItem>
+      </Menu>
     );
   };
 
   const renderLogout = () => {
     return (
-      <Button
-        key="logout"
-        onClick={handleLogout}
-        sx={{ my: 2, color: "white", display: "block" }}
+      <Box
+        sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
+        className="container-nav"
       >
-        Cerrar Sesión
-      </Button>
+        <Button
+          key={section.name}
+          color="inherit"
+          onClick={() => handleNavoptions(section.route)}
+        >
+          Mi Cuenta
+        </Button>
+        {pages2.map((page) => (
+          <Link
+            to={`${page.route.toLowerCase()}`}
+            key={page.route}
+            style={{ textDecoration: "none" }}
+          >
+            <Button
+              key={page.name}
+              onClick={page.clicked}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              {page.name}
+            </Button>
+          </Link>
+        ))}
+        <Button
+          key="logout"
+          onClick={handleLogout}
+          sx={{ my: 2, color: "white", display: "block" }}
+        >
+          Cerrar Sesión
+        </Button>
+      </Box>
+    );
+  };
+
+  const renderLogoutCelular = () => {
+    return (
+      <Menu
+        id="menu-appbar"
+        anchorEl={anchorElNav}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        open={Boolean(anchorElNav)}
+        onClose={handleCloseNavMenu}
+        sx={{
+          display: { xs: "block", md: "none" },
+        }}
+      >
+        <MenuItem onClick={handleCloseNavMenu}>
+          <Button
+            key={section.name}
+            color="inherit"
+            onClick={() => handleNavoptions(section.route)}
+          >
+            Mi Cuenta
+          </Button>
+        </MenuItem>
+        {pages2.map((page) => (
+          <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+            <Link
+              to={`${page.route.toLowerCase()}`}
+              key={page.route}
+              style={{ textDecoration: "none" }}
+            >
+              <Button
+                key={page.name}
+                onClick={page.clicked}
+                sx={{ my: 1, color: "black", display: "block" }}
+              >
+                {page.name}
+              </Button>
+            </Link>
+          </MenuItem>
+        ))}
+        <MenuItem onClick={handleCloseNavMenu}>
+          <Button
+            key="logout"
+            onClick={handleLogout}
+            sx={{ my: 1, color: "black", display: "block" }}
+          >
+            Cerrar Sesión
+          </Button>
+        </MenuItem>
+      </Menu>
     );
   };
 
@@ -110,7 +272,6 @@ function ResponsiveAppBar() {
               justifyContent: "center",
             }}
           >
-            {" "}
             <div
               style={{
                 width: "40px", // Tamaño del círculo
@@ -145,45 +306,8 @@ function ResponsiveAppBar() {
               color="inherit"
             >
               <MenuIcon />
+              {userAuthenticated ? renderLogoutCelular() : renderLoginCelular()}
             </IconButton>
-
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Link
-                    to={`${page.route.toLowerCase()}`}
-                    key={page.route}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Button
-                      key={page.name}
-                      sx={{ my: 2, color: "#457B9D", height: "20px" }}
-                      onClick={page.clicked}
-                    >
-                      {page.name}
-                    </Button>
-                  </Link>
-                </MenuItem>
-              ))}
-              
-            </Menu>
           </Box>
 
           <Typography
@@ -204,28 +328,7 @@ function ResponsiveAppBar() {
           >
             VeroCampShop
           </Typography>
-
-          <Box
-            sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
-            className="container-nav"
-          >
-            {pages.map((page) => (
-              <Link
-                to={`${page.route.toLowerCase()}`}
-                key={page.route}
-                style={{ textDecoration: "none" }}
-              >
-                <Button
-                  key={page.name}
-                  onClick={page.clicked}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
-                  {page.name}
-                </Button>
-              </Link>
-            ))}
-            {userAuthenticated ? renderLogout() : renderLogin()}
-          </Box>
+          {userAuthenticated ? renderLogout() : renderLogin()}
         </Toolbar>
       </Container>
     </AppBar>
