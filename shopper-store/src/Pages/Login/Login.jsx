@@ -18,12 +18,14 @@ import Swal from "sweetalert2";
 import LogoVeroShop from "../../components/Logo/Logo";
 import ResponsiveAppBar from "../../components/Navigation/Navigation";
 import "./Login.css";
+import { useFirebase } from "../../context/DatabaseContext";
 
 const defaultTheme = createTheme();
 
 export default function Login() {
   const navigate = useNavigate();
   const auth = useAuth();
+  const firebase = useFirebase();
 
   const goToHomePageAdmin = () => {
     navigate("/");
@@ -44,7 +46,9 @@ export default function Login() {
       const response = await auth.loginWithGoogle();
       if (await response) {
         console.log("----------------");
-        console.log(response);
+        console.log(response.user.email);
+        firebase.userIsRegistered(response.user.email);
+        console.log(response.user.displayName);
         console.log("----------------");
         goToHomePageAdmin();
       }

@@ -18,6 +18,7 @@ import "./Login.css";
 import Swal from "sweetalert2";
 import LogoVeroShop from "../../components/Logo/Logo";
 import Register from "../Register/Register";
+import { useFirebase } from "../../context/DatabaseContext";
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
@@ -25,6 +26,7 @@ const defaultTheme = createTheme();
 export default function Login() {
   const navigate = useNavigate();
   const auth = useAuth();
+  const firebase = useFirebase();
 
   const goToHomePageAdmin = () => {
     navigate("/HomePageAdmin");
@@ -39,9 +41,19 @@ export default function Login() {
       const response = await auth.loginWithGoogle();
       if (await response) {
         console.log("----------------");
-        console.log(response);
-        console.log("----------------");
-        goToHomePageAdmin();
+        const userData = {
+          email: response.user.email,
+          displayName: response.user.displayName,
+        };
+
+        await firebase.userIsRegistered(userData).then((res) => {
+          if (res) {
+            goToHomePageAdmin();
+          } else {
+            console.log("Usuario encontrado");
+            goToHomePageAdmin();
+          }
+        });
       }
     } catch (e) {
       console.error("Error adding document: ", e);

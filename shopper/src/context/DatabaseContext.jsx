@@ -130,6 +130,21 @@ export function DatabaseProvider({ children }) {
     }
   };
 
+  const userIsRegistered = async (data) => {
+    const ref = collection(firestore, "users");
+    const q = query(ref, where("email", "==", data.email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.docs.length === 0) {
+      console.log("Usuario no encontrado.");
+      registerDataUser(data.displayName, data.email, "empty", "empty");
+      return true;
+    } else {
+      console.log("Usuario encontrado.");
+      return false;
+    }
+  };
+
   const addAddressToUser = async (data) => {
     const ref = collection(firestore, "users");
     const addressCollection = collection(firestore, "usersAddress");
@@ -770,6 +785,7 @@ export function DatabaseProvider({ children }) {
         getUserData,
         updateUserData,
         addAddressToUser,
+        userIsRegistered,
         //Categorias de productos para la Vista de Administrador
         getCategoryReference,
         getAllCategories,
