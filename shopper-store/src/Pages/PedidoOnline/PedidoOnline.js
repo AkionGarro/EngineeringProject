@@ -22,7 +22,6 @@ import "./PedidoOnline.css";
 
 const PedidoOnline = () => {
   const api = useFirebase();
-
   const [actualName, setActualName] = useState("");
   const [direccionSeleccionada, setDireccionSeleccionada] = useState(null);
   const [label, setLabel] = useState();
@@ -47,8 +46,13 @@ const PedidoOnline = () => {
 
   useEffect(() => {
     const datosUser = async () => {
+      const email = auth.user.email;
+      console.log(email);
+      console.log("Email Usuario");
       //Direcciones
-      const direcciones = await api.getUserAdress("josuedaniel.cha@gmail.com");
+      const direcciones = await api.getUserAdress(email);
+      console.log(direcciones);
+      console.log("Direcciones");
       setAddress(direcciones);
       //===================================================================================
       const usuario = await api.getUserData(email);
@@ -61,27 +65,18 @@ const PedidoOnline = () => {
       }
     };
     datosUser();
-
-    // Realiza algún efecto secundario aquí, como una solicitud de red.
   }, []);
 
   const handleSubmit = async (e) => {
     //=========================================================
     e.preventDefault();
-
-    // Obtén los datos de linkFields
     const productos = linkFields.map((field) => {
       return `Producto: ${field.link} -- *Comentario*: ${field.comentario} `;
     });
-
-    // Construye el mensaje con los productos
     const message = productos.join("\n");
-
-    // Número de teléfono de WhatsApp
     const phoneNumber = "+50685045830";
 
     // Construye la URL de WhatsApp
-
     const url =
       "https://wa.me/" +
       phoneNumber +
@@ -136,10 +131,10 @@ const PedidoOnline = () => {
   const removeField = (index) => {
     Swal.fire({
       title: "¿Estás seguro?",
-      text: "¡Todos tus pedidos se borrarán de la lista! ",
+      text: "¡Este pedido se borrará de la lista! ",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "¡Sí, quiero eliminarlos!",
+      confirmButtonText: "¡Sí, quiero eliminarlo!",
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -213,7 +208,7 @@ const PedidoOnline = () => {
           onClick={addFields}
           className="add-button"
         >
-          + Agregar otro producto
+          + Agregar producto
         </Button>
 
         <Button

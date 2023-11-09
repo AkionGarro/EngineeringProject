@@ -1,16 +1,23 @@
 #root > header {
-background-color: #457B9D;
-
+  background-color: #457b9d;
 }
-#root > header > div{
-    min-width: 100vw;
+#root > header > div {
+  min-width: 100vw;
 }
 
+.container-nav {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 3rem;
+  justify-content: right;
+}
 
-.container-nav{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 3rem;
-    justify-content: right;
+.menu-mobile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-left: 0;
 }

@@ -4,6 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useFirebase } from "../../context/DatabaseContext";
 import Swal from "sweetalert2";
 import Loader from "./Loader";
 import { useAuth } from "../../context/AuthContext";
@@ -19,6 +20,7 @@ const Carrito = () => {
   const [cantidadFlag, setCantidadFlag] = useState(true);
   const ref = collection(firestore, "pedidosTienda");
   const [loading, setLoading] = useState(true);
+  const firebase = useFirebase();
   const auth = useAuth();
   const email = auth.user.email;
 
@@ -94,10 +96,8 @@ const Carrito = () => {
       }
     }
     localStorage.setItem("carritoCompras", JSON.stringify(carrito));
-    console.log("carrito con cant");
     var carritoComprasJSON = localStorage.getItem("carritoCompras");
     var carritoCompras = JSON.parse(carritoComprasJSON);
-    console.log(carritoCompras);
   };
 
   const calcularMonto = () => {
@@ -135,9 +135,19 @@ const Carrito = () => {
   };
 
   const buyItems = async () => {
+    console.log("email");
+    console.log(email);
+    const userInfo = await firebase.getUserData(email);
+    console.log(userInfo);
+
+    console.log("User info");
+
     let data = {
       usuario: email,
-      direccion: "",
+      direccion:
+        userInfo && userInfo.direccionEnvio !== null
+          ? userInfo.direccionEnvio
+          : "Direccion no especificada",
       productos: carrito,
       estado: 1,
     };
@@ -160,8 +170,6 @@ const Carrito = () => {
 
       if (carritoComprasJSON !== null) {
         var carritoCompras = JSON.parse(carritoComprasJSON);
-        console.log("Objetos carrito Compras");
-        console.log(carritoCompras);
 
         setCarrito(carritoCompras);
 
