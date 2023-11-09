@@ -83,6 +83,7 @@ const Carrito = (render) => {
   };
 
   const setCantidad = () => {
+    console.log("Prueba GITHUB");
     let flag = false;
     for (let i = 0; i < carrito.length; i++) {
       let product = carrito[i];
