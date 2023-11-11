@@ -243,8 +243,8 @@ function ResponsiveAppBar(props) {
                   >
                     Carrito
                   </Button></MenuItem>
-                <MenuItem onClick={() => handleMenuItemClick()}>
-                  {section.map((section) => (
+                {section.map((section) => (
+                  <MenuItem onClick={() => handleMenuItemClick()}>
                     <Button
                       key={section.name}
                       onClick={() => handleNavoptions(section.route)}
@@ -252,8 +252,8 @@ function ResponsiveAppBar(props) {
                     >
                       {section.name}
                     </Button>
-                  ))}
-                </MenuItem>
+                  </MenuItem>
+                ))}
                 <MenuItem onClick={() => handleMenuItemClick()}>
                   {pages2.map((page) => (
                     <Link
@@ -276,8 +276,8 @@ function ResponsiveAppBar(props) {
                     Cerrar Sesión
                   </Button>
                 </MenuItem>
-              </Menu> :
-
+              </Menu>
+              :
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
