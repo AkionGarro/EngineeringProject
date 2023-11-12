@@ -153,8 +153,8 @@ const Carrito = (props) => {
       for (let producto of carrito) {
         if (producto.cantidad == null) {
           await Swal.fire({
-            title: "Producto con cantidad vacía",
-            text: "Hay un problema en la cantidad de uno de tus productos dentro del carrito de compras",
+            title: "Tenemos un problema",
+            text: "Hay un problema con la cantidad de uno de tus productos dentro del carrito de compras",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Revisar manualmente mis productos",
