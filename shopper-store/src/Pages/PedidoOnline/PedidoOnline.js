@@ -48,10 +48,10 @@ const PedidoOnline = () => {
     const datosUser = async () => {
       const email = auth.user.email;
       //Direcciones
-      const direcciones = await api.getUserAdress("josuedaniel.cha@gmail.com");
+      const direcciones = await api.getUserAdress(email);
       setAddress(direcciones);
       //===================================================================================
-      const usuario = await api.getUserData("josuedaniel.cha@gmail.com");
+      const usuario = await api.getUserData(email);
       setDireccionSeleccionada(usuario.direccionEnvio);
       if (usuario == undefined) {
         let nameUser = auth.user.displayName;
