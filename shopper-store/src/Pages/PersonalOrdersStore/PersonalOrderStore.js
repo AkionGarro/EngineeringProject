@@ -4,18 +4,16 @@ import { useEffect } from "react";
 import { firestore } from "../../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { storage } from "../../firebase";
-import SearchIcon from "@mui/icons-material/Search";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   Button,
   Container,
   Grid,
-  Autocomplete,
   TextField, Select, MenuItem, FormControl, InputLabel
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
-import { auth } from "../../firebase";
+import { useAuth } from "../../context/AuthContext";
 import Swal from "sweetalert2";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useFirebase } from "../../context/DatabaseContext";
@@ -23,11 +21,9 @@ import "./PersonalOrderStore.css";
 import UploadImageInput from "../../components/UploadImageInput";
 
 function Personal_Order() {
-  const api = useFirebase();
   const firebase = useFirebase();
-  const [users, setUsers] = useState([]);
-  
-  const [direccionSeleccionada, setDireccionSeleccionada] = useState(null);
+
+  const [direccionSeleccionada, setDireccionSeleccionada] = useState({});
   const [label, setLabel] = useState();
   const [address, setAddress] = useState([]);
 
@@ -39,7 +35,8 @@ function Personal_Order() {
   const [searchQuery, setSearchQuery] = useState("");
   const referencia = collection(firestore, "pedidosPersonales");
   const [open, setOpen] = useState(false);
-  const user = auth.currentUser;
+  const auth = useAuth();
+  const email = auth.user.email;
 
   const VisuallyHiddenInput = styled("input")`
     clip: rect(0 0 0 0);
@@ -97,8 +94,6 @@ function Personal_Order() {
         const updatedImagenes = [...imagenes];
         updatedImagenes.splice(index, 1);
         setImagenes(updatedImagenes);
-        console.log(fields);
-        console.log(imagenes);
       }
     });
   };
@@ -124,9 +119,11 @@ function Personal_Order() {
     setLabel(event.target.value);
     const jsonObject = JSON.parse(event.target.value);
     setDireccionSeleccionada(jsonObject);
+    setLabel(null);
   };
 
   const handleSubmit = async (event) => {
+
     event.preventDefault();
 
     for (let i = 0; i < imagenes.length; i++) {
@@ -140,14 +137,14 @@ function Personal_Order() {
     }
 
     let data = {
-      usuario: user.email,
+      usuario: email,
       direccion: direccionSeleccionada,
       productos: fields,
       estado: 0,
     };
 
     try {
-      const docRef = await addDoc(referencia, data);
+      await addDoc(referencia, data);
       Swal.fire({
         icon: "success",
         title: "¡Pedido Completado!",
@@ -157,6 +154,30 @@ function Personal_Order() {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
+
+    //=========================================================
+
+    const productos = fields.map((field) => {
+      return `Descripcion: ${field.description} -- *Imagen referencia*: ${field.url_fire} `;
+    });
+    const message = productos.join("\n");
+    const phoneNumber = "+50685045830";
+
+    // Construye la URL de WhatsApp
+    const url =
+      "https://wa.me/" +
+      phoneNumber +
+      "?text=" +
+      encodeURIComponent(
+        `*Pedido Online*\n\n` +
+        `*Nombre:* ${auth.user.displayName}\n\n` +
+        `*Productos:*\n${message}\n\n` +
+        `_[Enviado desde la página web de VeroCam Shop]_`
+      );
+
+    // Abre una nueva ventana o pestaña con la URL
+    window.open(url, "_blank").focus();
+    //=========================================================
   };
 
   const cleanData = () => {
@@ -164,35 +185,16 @@ function Personal_Order() {
       { description: "", image: null, url_file: null, url_fire: null },
     ]);
     setDireccionSeleccionada("");
-    setLabel("");
-  };
-
-  const handleOpenModal = () => {
-    setOpen(true);
+    setLabel(null);
+    setFlagUpdate(true);
   };
 
   useEffect(() => {
     const fetchData = async () => {
+      const data = await firebase.getUserData("josuedaniel.cha@gmail.com");
+      setDireccionSeleccionada(data.direccionEnvio);
       const direcciones = await firebase.getUserAdress("josuedaniel.cha@gmail.com")
       setAddress(direcciones);
-      try {
-        const querySnapshot = await api.getAllUsers();
-        const userData = [];
-        for (const doc in querySnapshot) {
-          userData.push(querySnapshot[doc]);
-        }
-        const filteredUsers = userData.filter((user) =>
-          user.email.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        setUsers(filteredUsers);
-        console.log(userData);
-      } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Error al obtener usuarios",
-          text: error,
-        });
-      }
     };
 
     setFlagUpdate(false);
@@ -240,6 +242,7 @@ function Personal_Order() {
             </Grid>
           </Grid>
         ))}
+
         <div className="opciones-botones">
           <Button
             variant="contained"
@@ -261,6 +264,17 @@ function Personal_Order() {
 
         <div className="users_container">
           <div className="opciones-direccion">
+            <TextField
+              InputLabelProps={{ shrink: true }}
+              id="direccionEnvio"
+              label="Direccion de envio"
+              name="direccionEnvio"
+              variant="outlined"
+              value={direccionSeleccionada.country + ' , ' + direccionSeleccionada.province + ' , ' + direccionSeleccionada.canton + ' , ' + direccionSeleccionada.district + ' , ' + direccionSeleccionada.address}
+              disabled={true}
+              fullWidth
+              className="direccionEnvio"
+            />
             <FormControl variant="outlined" fullWidth>
               <InputLabel id="direccion-label">Selecciona una dirección</InputLabel>
               <Select
@@ -277,8 +291,10 @@ function Personal_Order() {
                 ))}
               </Select>
             </FormControl>
+            <InputLabel htmlFor="direccionEnvio" className="labelDireccion">*Selecciona una dirección de envío</InputLabel>
           </div>
         </div>
+
 
         <div className="botones-opciones">
           <Button
