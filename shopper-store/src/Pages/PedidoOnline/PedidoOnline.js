@@ -23,7 +23,7 @@ import "./PedidoOnline.css";
 const PedidoOnline = () => {
   const api = useFirebase();
   const [actualName, setActualName] = useState("");
-  const [direccionSeleccionada, setDireccionSeleccionada] = useState(null);
+  const [direccionSeleccionada, setDireccionSeleccionada] = useState({});
   const [label, setLabel] = useState();
   const [address, setAddress] = useState([]);
   const ref = collection(firestore, "pedidosOnline");
@@ -48,10 +48,11 @@ const PedidoOnline = () => {
     const datosUser = async () => {
       const email = auth.user.email;
       //Direcciones
-      const direcciones = await api.getUserAdress(email);
+      const direcciones = await api.getUserAdress("josuedaniel.cha@gmail.com");
       setAddress(direcciones);
       //===================================================================================
-      const usuario = await api.getUserData(email);
+      const usuario = await api.getUserData("josuedaniel.cha@gmail.com");
+      setDireccionSeleccionada(usuario.direccionEnvio);
       if (usuario == undefined) {
         let nameUser = auth.user.displayName;
         setActualName(nameUser);
@@ -61,6 +62,9 @@ const PedidoOnline = () => {
     };
     datosUser();
   }, []);
+
+  console.log("Direcion selecionada");
+  console.log(direccionSeleccionada);
 
   const handleSubmit = async (e) => {
     //=========================================================
@@ -218,6 +222,27 @@ const PedidoOnline = () => {
 
       <div className="users_container">
         <div className="opciones-direccion">
+          <TextField
+            InputLabelProps={{ shrink: true }}
+            id="direccionEnvio"
+            label="Direccion de envio"
+            name="direccionEnvio"
+            variant="outlined"
+            value={
+              direccionSeleccionada.country +
+              " , " +
+              direccionSeleccionada.province +
+              " , " +
+              direccionSeleccionada.canton +
+              " , " +
+              direccionSeleccionada.district +
+              " , " +
+              direccionSeleccionada.address
+            }
+            disabled={true}
+            fullWidth
+            className="direccionEnvio"
+          />
           <FormControl variant="outlined" fullWidth>
             <InputLabel id="direccion-label">
               Selecciona una dirección
@@ -236,6 +261,9 @@ const PedidoOnline = () => {
               ))}
             </Select>
           </FormControl>
+          <InputLabel htmlFor="direccionEnvio" className="labelDireccion">
+            *Selecciona una dirección de envío
+          </InputLabel>
         </div>
       </div>
 
