@@ -30,9 +30,6 @@ function Account() {
     setOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const handleSelect = (event) => {
     setLabel(event.target.value);
@@ -69,15 +66,17 @@ function Account() {
   useEffect(() => {
     if (auth.user) {
       setUser(auth.user.email);
+      console.log(auth)
     }
     const fetchUserData = async () => {
-      const data = await firebase.getUserData("josuedaniel.cha@gmail.com");
+      const data = await firebase.getUserData(auth.user.email);
+      console.log(data)
       setFullName(data.fullName);
       setEmail(data.email);
       setPhone(data.phone);
       setIdentification(data.identification);
       setAddressEnvio(data.direccionEnvio);
-      const direcciones = await firebase.getUserAdress("josuedaniel.cha@gmail.com")
+      const direcciones = await firebase.getUserAdress(auth.user.email);
       setAddress(direcciones);
       setRole(data.userType);
       setUpdateInfo(false);

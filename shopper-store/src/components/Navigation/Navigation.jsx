@@ -29,7 +29,7 @@ const pages2 = [{ name: "Inicio", route: "/" }];
 
 const section = [
   { name: "Mi Cuenta", route: <Cuenta /> },
-  { name: "Pedidos", route: <Pedidos /> },
+  { name: "Historial de pedidos", route: <Pedidos /> },
 ];
 
 function ResponsiveAppBar(props) {
@@ -168,7 +168,7 @@ function ResponsiveAppBar(props) {
           maxWidth: "xl",
         }}
       >
-        <Toolbar disableGutters>
+        <Toolbar>
           <Typography
             variant="h5"
             noWrap

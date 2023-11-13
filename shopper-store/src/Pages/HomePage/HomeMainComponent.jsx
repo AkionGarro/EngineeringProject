@@ -43,6 +43,7 @@ const HomeMainComponent = () => {
   return (
     <>
       {/* //NavBar de la Pagina. Siempre va a estar presente. */}
+      
       <ResponsiveAppBar onClickCarrito={toggleCarrito}/>
       <Navbar/>
 
