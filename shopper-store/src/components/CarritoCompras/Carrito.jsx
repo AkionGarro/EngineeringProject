@@ -13,12 +13,12 @@ import { addDocument } from "../../firebase";
 import { collection } from "firebase/firestore";
 import "./Carrito.css";
 
-const Carrito = () => {
+const Carrito = (render) => {
   const [carrito, setCarrito] = useState([]);
   const [montoTotal, setMontoTotal] = useState(0);
   const [cantidadArt, setCantidadArt] = useState(0);
   const [cantidadFlag, setCantidadFlag] = useState(true);
-  const ref = collection(firestore, "pedidosTienda");
+  const ref = collection(firestore, "pedidosTest");
   const [loading, setLoading] = useState(true);
   const firebase = useFirebase();
   const auth = useAuth();
@@ -96,8 +96,6 @@ const Carrito = () => {
       }
     }
     localStorage.setItem("carritoCompras", JSON.stringify(carrito));
-    var carritoComprasJSON = localStorage.getItem("carritoCompras");
-    var carritoCompras = JSON.parse(carritoComprasJSON);
   };
 
   const calcularMonto = () => {

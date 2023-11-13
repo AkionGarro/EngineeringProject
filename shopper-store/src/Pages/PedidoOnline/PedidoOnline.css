@@ -33,8 +33,11 @@
 }
 
 .iconoEliminar:hover {
-  background-color: lightgray;
+  background-color: rgb(211, 12, 12) !important;
   cursor: pointer;
+  box-shadow: 0px 0px 10px 3px rgba(172, 14, 14, 0.763);
+  border-radius: 50%;
+  color: white
 }
 
 .container .opciones-direccion {

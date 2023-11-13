@@ -47,16 +47,11 @@ const PedidoOnline = () => {
   useEffect(() => {
     const datosUser = async () => {
       const email = auth.user.email;
-      console.log(email);
-      console.log("Email Usuario");
       //Direcciones
       const direcciones = await api.getUserAdress(email);
-      console.log(direcciones);
-      console.log("Direcciones");
       setAddress(direcciones);
       //===================================================================================
       const usuario = await api.getUserData(email);
-      console.log(usuario);
       if (usuario == undefined) {
         let nameUser = auth.user.displayName;
         setActualName(nameUser);
