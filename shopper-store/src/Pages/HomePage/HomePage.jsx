@@ -87,7 +87,7 @@ const Blog = (props) => {
     <ThemeProvider theme={defaultTheme} ref={section0}>
       <CssBaseline />
       <Container maxWidth="lg">
-        <main >
+        <main>
           <div>
             <Typography
               variant="h5"
@@ -126,12 +126,21 @@ const Blog = (props) => {
             </Grid>
           </div>
 
-					<div ref={section2}>
-						<Typography variant="h6" gutterBottom sx={{ mt: 3, textAlign:'center', color:"#457B9D", marginTop:"5vh"}}>
-							Acerca de Vero
-						</Typography>
-						<InfoVero/>
-					</div>
+          <div ref={section2}>
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                mt: 3,
+                textAlign: "center",
+                color: "#457B9D",
+                marginTop: "5vh",
+              }}
+            >
+              Acerca de Vero
+            </Typography>
+            <InfoVero />
+          </div>
 
           <div>
             <Typography
