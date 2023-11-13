@@ -43,7 +43,6 @@ const ProductsPage = () => {
 		<>
 			<Grid container spacing={2} className="products-page">
 
-
 			<Grid xs={12} className="products-category-title-w-background">
 
 						<div className="text-overlay">

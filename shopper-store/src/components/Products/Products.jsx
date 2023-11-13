@@ -41,7 +41,7 @@ const Products = props => {
 
 		products.forEach(element => {
 			mappedProducts.push(
-				<Grid xs={12} sm={6} md={4} lg={3}>
+				<Grid key={`product-card-${element.id}`} xs={12} sm={6} md={4} lg={3}>
 					<ProductCard productInfo={element} onClickHandler={handleProductClick} />
 				</Grid>
 			)
