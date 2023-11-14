@@ -135,21 +135,12 @@ function ResponsiveAppBar(props) {
             {section.name}
           </Button>
         ))}
-        {pages2.map((page) => (
-          <Link
-            to={`${page.route.toLowerCase()}`}
-            key={page.route}
-            style={{ textDecoration: "none" }}
-          >
-            <Button
-              key={page.name}
-              onClick={page.clicked}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
-              {page.name}
-            </Button>
-          </Link>
-        ))}
+        <Button
+          onClick={handleInicio}
+          sx={{ my: 2, color: "white", display: "block" }}
+        >
+          Inicio
+        </Button>
         <Button
           key="logout"
           onClick={handleLogout}
@@ -256,7 +247,7 @@ function ResponsiveAppBar(props) {
                 <MenuItem onClick={() => handleMenuItemClick()}>
                   <Button
                     onClick={handleInicio}
-                    sx={{ my: 2, color: "white", display: "block" }}
+                    sx={{ my: 2, color: "inherit", display: "block" }}
                   >
                     Inicio
                   </Button>
@@ -290,21 +281,12 @@ function ResponsiveAppBar(props) {
                 }}
               >
                 <MenuItem onClick={() => handleMenuItemClick()}>
-                  {pages.map((page) => (
-                    <Link
-                      to={`${page.route.toLowerCase()}`}
-                      key={page.route}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <Button
-                        key={page.name}
-                        onClick={page.clicked}
-                        sx={{ my: 2, color: "black", display: "block" }}
-                      >
-                        {page.name}
-                      </Button>
-                    </Link>
-                  ))}
+                  <Button
+                    onClick={handleInicio}
+                    sx={{ my: 2, color: "inherit", display: "block" }}
+                  >
+                    Inicio
+                  </Button>
                 </MenuItem>
                 <MenuItem onClick={() => handleMenuItemClick()}>
                   <Button
