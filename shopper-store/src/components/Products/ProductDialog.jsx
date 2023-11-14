@@ -113,7 +113,16 @@ const ProductDialog = props => {
 		console.log("valorAtributos", attributeList)
 		console.log("comentario", commentValue)
 		
-		product.producto = product
+		
+		
+		
+		product.producto = {
+			name: product.name,
+			categoryName: product.categoryName,
+			price: product.price,
+			images: product.images,
+			personalizedFields: product.personalizedFields,
+		  };
 		product.comentario = commentValue
 		product.valorAtributos = attributeList
 		
