@@ -19,7 +19,7 @@ const UploadProductImagesInput = props => {
 	return (
 		<Grid container direction="column" justifyContent="center" alignItems="center">
 			<Button component="label" variant="contained" startIcon={<CloudUploadIcon />} fullWidth sx={{ mt: 2 }}>
-				Add Image
+				Añadir Imágen
 				<VisuallyHiddenInput type="file" multiple accept="image/*" onChange={props.handleAddImage} />
 			</Button>
 

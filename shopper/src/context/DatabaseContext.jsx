@@ -43,7 +43,7 @@ export function DatabaseProvider({ children }) {
       phone: phoneF,
       userType: "user",
       identification: identificationF,
-      direccionEnvio: direccion
+      direccionEnvio: direccion,
     };
 
     try {
@@ -60,14 +60,60 @@ export function DatabaseProvider({ children }) {
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.docs.length === 0) {
-      console.log("Usuario no encontrado.");
-      registerDataUser(data.displayName, data.email, "empty", "empty");
-      return true;
-    } else {
-      console.log("Usuario encontrado.");
+      console.log("Usuario se tuvo que registrar.");
+      const direccion = {
+        address: "empty",
+        canton: "empty",
+        country: "empty",
+        district: "empty",
+        email: data.email,
+        province: "empty",
+      };
+
+      registerDataUser(
+        data.displayName,
+        data.email,
+        "empty",
+        "empty",
+        direccion
+      );
+      addAddressToUser(direccion);
       return false;
+    } else {
+      return true;
     }
   };
+
+  const checkCompleteUserInfo = async (email) => {
+    const ref = collection(firestore, "users");
+    const q = query(ref, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.docs.length === 0) {
+      console.log("Usuario no encontrado.");
+    } else {
+      const userDoc = querySnapshot.docs[0];
+      const userData = userDoc.data();
+      console.log("----------------");
+      console.log(userData);
+      console.log("----------------");
+      if (
+        userData.phone == "empty" ||
+        userData.identification == "empty" ||
+        userData.direccionEnvio.country == "empty" ||
+        userData.direccionEnvio.province == "empty" ||
+        userData.direccionEnvio.canton == "empty" ||
+        userData.direccionEnvio.district == "empty" ||
+        userData.direccionEnvio.address == "empty"
+    
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  };
+
 
   const addAddressToUser = async (data) => {
     const ref = collection(firestore, "users");
@@ -761,6 +807,7 @@ export function DatabaseProvider({ children }) {
         updateUserData,
         addAddressToUser,
         userIsRegistered,
+        checkCompleteUserInfo,
         //Categorias de productos para la Vista de Administrador
         getCategoryReference,
         getAllCategories,
