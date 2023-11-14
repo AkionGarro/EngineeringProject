@@ -99,8 +99,6 @@ function Personal_Order() {
         const updatedImagenes = [...imagenes];
         updatedImagenes.splice(index, 1);
         setImagenes(updatedImagenes);
-        console.log(fields);
-        console.log(imagenes);
       }
     });
   };
@@ -122,29 +120,55 @@ function Personal_Order() {
     });
   };
 
-  const handleDirectionOnSelect = (event) => {
-    setDirection(event.target.value);
-    console.log(event.target.value);
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    for (let i = 0; i < imagenes.length; i++) {
-      const foto = imagenes[i];
-      const refArchivo = ref(storage, `pedidosPersonales/${foto.name}`);
-      await uploadBytes(refArchivo, foto);
-      const file = await getDownloadURL(refArchivo);
-      const updatedFields = [...fields];
-      updatedFields[i]["url_fire"] = file;
-      setFields(updatedFields);
+    if(imagenes.length !== 0){
+      for (let i = 0; i < imagenes.length; i++) {
+        const foto = imagenes[i];
+        if (foto === undefined) {
+          Swal.fire({
+            icon: "error",
+            title: "Información incompleta",
+            text: "Revise que haya cargado una imagen de cada producto.",
+          });
+          return; // Se encontró un elemento vacío
+        } else {
+          const refArchivo = ref(storage, `pedidosPersonales/${foto.name}`);
+          await uploadBytes(refArchivo, foto);
+          const file = await getDownloadURL(refArchivo);
+          const updatedFields = [...fields];
+          updatedFields[i]["url_fire"] = file;
+          setFields(updatedFields);
+        }
+      }
+    }else{
+      Swal.fire({
+        icon: "error",
+        title: "Información incompleta",
+        text: "Revise que haya cargado una imagen de cada producto.",
+      });
+      return;
     }
 
-    const dataUser = await firebase.getUserData(user.email);
+    for (var i = 0; i < fields.length; i++) {
+      var objeto = fields[i];
+      if (objeto.description === '') {
+        Swal.fire({
+          icon: "error",
+          title: "Información incompleta",
+          text: "Revise que haya escrito una descripción para cada producto.",
+        });
+        return;
+      }
+    }
+
+    const dataUser = await api.getUserData(selectedUser.email);
     const direccion = dataUser.direccionEnvio;
 
     let data = {
-      usuario: user.email,
+      usuario: selectedUser.email,
       direccion: direccion,
       productos: fields,
       estado: 0,
@@ -186,7 +210,6 @@ function Personal_Order() {
           user.email.toLowerCase().includes(searchQuery.toLowerCase())
         );
         setUsers(filteredUsers);
-        console.log(userData);
       } catch (error) {
         Swal.fire({
           icon: "error",
