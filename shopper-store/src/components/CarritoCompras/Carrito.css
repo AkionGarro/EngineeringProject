@@ -1,32 +1,23 @@
-.carrito {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 350px;
-  height: 100%;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 1rem;
-  z-index: 999;
+.swal2-container {
+  z-index: 10000 !important;
 }
 
+.button-cerrar-carrito {
+  display: flex !important;
+  justify-content: flex-end !important;
+}
 .carrito-resumen {
-  background-color: #fff;
-  width: fit-content;
-  border-top: 2px solid #ccc;
-  border-bottom: 2px solid #ccc;
-  padding: 10px;
-  text-align: center;
+  background-color: #fff !important;
+  width: 100% !important;
+  border-top: 2px solid #ccc !important;
+  border-bottom: 2px solid #ccc !important;
+  padding: 10px !important;
+  text-align: center !important;
 }
 
 .parrafo-resumen {
-  font-size: 16px;
+  font-size: 18px !important;
+  margin-bottom: 1rem !important;
 }
 
 .buttons-carrito {
@@ -42,7 +33,7 @@
 }
 
 .image-product {
-  max-width: 100%;
+  max-width: 200px !important;
   height: auto;
 }
 
@@ -121,10 +112,10 @@
 
 @media only screen and (max-width: 600px) {
   .carrito {
-    top: 4rem; /* Agregado el margen superior de 2 rem */
+    top: 4rem;
     right: 1.5rem;
-    width: auto; /* Cambiado el ancho a automático */
-    left: 1.5rem; /* Asegura que el carrito esté centrado en la pantalla */
+    width: auto;
+    left: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;

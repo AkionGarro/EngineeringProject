@@ -71,8 +71,8 @@ function ResponsiveAppBar(props) {
     localStorage.removeItem("carritoCompras");
     localStorage.removeItem("CarritoCompras");
     localStorage.removeItem("currentUser");
-    setComponentToRender(<Blog />);
     auth.logout();
+    setComponentToRender(<Blog />);
   };
 
   const handleLogin = () => {
@@ -210,7 +210,7 @@ function ResponsiveAppBar(props) {
             >
               <MenuIcon />
             </IconButton>
-            {userAuthenticated ?
+            {userAuthenticated ? (
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
@@ -229,12 +229,10 @@ function ResponsiveAppBar(props) {
                 }}
               >
                 <MenuItem onClick={() => handleMenuItemClick()}>
-                  <Button
-                    color='inherit'
-                    onClick={onClickCarrito}
-                  >
+                  <Button color="inherit" onClick={onClickCarrito}>
                     Carrito
-                  </Button></MenuItem>
+                  </Button>
+                </MenuItem>
                 {section.map((section) => (
                   <MenuItem onClick={() => handleMenuItemClick()}>
                     <Button
@@ -255,12 +253,16 @@ function ResponsiveAppBar(props) {
                   </Button>
                 </MenuItem>
                 <MenuItem onClick={() => handleMenuItemClick()}>
-                  <Button key="logout" onClick={handleLogout} sx={{ color: "black" }}>
+                  <Button
+                    key="logout"
+                    onClick={handleLogout}
+                    sx={{ color: "black" }}
+                  >
                     Cerrar Sesión
                   </Button>
                 </MenuItem>
               </Menu>
-              :
+            ) : (
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
@@ -295,8 +297,8 @@ function ResponsiveAppBar(props) {
                     Iniciar Sesión
                   </Button>
                 </MenuItem>
-              </Menu>}
-
+              </Menu>
+            )}
           </Box>
 
           <Typography
