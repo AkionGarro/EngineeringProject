@@ -13,7 +13,10 @@ const AddAddressrModal = (props) => {
     const auth = useAuth();
     const firebase = useFirebase();
 
-    const handleClose = () => props.setOpen(false);
+    const handleClose = () =>{ 
+        props.setOpen(false)
+        props.setFlagUpdate(true)
+    };
 
     const [email, setEmail] = useState("");
 
@@ -31,7 +34,7 @@ const AddAddressrModal = (props) => {
         const dataForm = new FormData(event.currentTarget);
 
         const dataAddress = {
-            email: email,
+            email: auth.user.email,
             country: dataForm.get("country"),
             province: dataForm.get("province"),
             canton: dataForm.get("canton"),
