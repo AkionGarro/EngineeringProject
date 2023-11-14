@@ -318,6 +318,7 @@ const PedidoNormal = () => {
       <div className="boton-enviar">
         <Button
           variant="contained"
+          type="submit"
           color="success"
           onClick={handleSubmit}
           className="send-button"
