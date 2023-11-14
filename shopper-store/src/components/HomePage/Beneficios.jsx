@@ -34,7 +34,7 @@ function CardGrid() {
     }
     return (
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <div style={{ marginTop: "40px" }}>
+            <div style={{ marginTop: "20px" }}>
                 <Grid container spacing={2}>
                     {cardsData.map((card, index) => (
                         <Grid item key={index} xs={12} sm={12} md={4}>
