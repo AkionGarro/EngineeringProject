@@ -67,8 +67,12 @@ const PedidoOnline = () => {
     //=========================================================
     e.preventDefault();
 
-    for (let pedido in linkFields) {
-      if (pedido.description == "" || pedido.url == "") {
+    for (let pedido of linkFields) {
+      console.log("Pedido");
+      console.log(pedido);
+      console.log("=====================================");
+      if (pedido.comentario === "" || pedido.url === "") {
+        console.log("Entro porque hay campos vacios");
         Swal.fire({
           icon: "error",
           title: "Información incompleta",
