@@ -196,7 +196,7 @@ function ResponsiveAppBar(props) {
                 }}
               />
             </div>
-            VeroCamp Shop
+            VeroCam Shop
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -317,7 +317,7 @@ function ResponsiveAppBar(props) {
               textDecoration: "none",
             }}
           >
-            VeroCampShop
+            VeroCam Shop
           </Typography>
           {userAuthenticated ? renderLogout() : renderLogin()}
         </Toolbar>

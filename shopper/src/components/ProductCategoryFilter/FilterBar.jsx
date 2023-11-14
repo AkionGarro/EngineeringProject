@@ -11,14 +11,17 @@ import Paper from '@mui/material/Paper';
 //   {key: 2, label: "En proceso"},
 // ]
 
+import "./FilterBar.css"
+
 const FilterBar = props => {
 	//props.handleFilterChange(filter) Para cambiar el filtro en el padre
 
 
 	return (
-		<>
-			<p>Filters</p>
+		<div id="fiter_bar_component">
+			<p>Filtros</p>
 			<Paper
+				id="filter_bar_paper"
 				sx={{
 					display: "flex",
 					justifyContent: "flex-start",
@@ -32,16 +35,16 @@ const FilterBar = props => {
 					console.log("El data es ", data);
 
 					if (data.label === props.filter) {
-						return <Chip variant="filled" key={data.key} label={data.label} value={data.label} onClick={props.handleFilterChange} sx={{ ml: 2 }}/>
+						return <Chip id="chip_filled" variant="filled" key={data.key} label={data.label} value={data.label} onClick={props.handleFilterChange} sx={{ ml: 2 }}/>
 						
 					}else{
-						return <Chip variant="outlined" key={data.key} label={data.label} value={data.label} onClick={props.handleFilterChange} sx={{ ml: 2 }}/>
+						return <Chip id="chip_outlined" variant="outlined" key={data.key} label={data.label} value={data.label} onClick={props.handleFilterChange} sx={{ ml: 2 }}/>
 					}
 
 					
 				})}
 			</Paper>
-		</>
+		</div>
 	)
 }
 

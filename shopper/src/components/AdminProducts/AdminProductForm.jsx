@@ -95,14 +95,14 @@ const AdminProductForm = props => {
 	}, [openCategoryBox])
 
 	useEffect(() => {
-		console.log("Producto:", props.product)
+		// console.log("Producto:", props.product)
 
 		const fetchProductCategory = async categoryRef => {
 			try {
 				const productCategorySnap = await api.getCategoryByID(categoryRef)
 				setProductCategory(productCategorySnap)
 			} catch (error) {
-				console.log("Error la categoria del producto", error)
+				// console.log("Error la categoria del producto", error)
 			}
 		}
 
@@ -205,7 +205,7 @@ const AdminProductForm = props => {
 			}
 		})
 
-		console.log(productCategory)
+		// console.log(productCategory)
 	}
 
 	//Envia los datos del formulario
@@ -214,14 +214,14 @@ const AdminProductForm = props => {
 
 		const result = await Swal.fire({
 			target: document.getElementById("form-modal"),
-			title: "Are you sure?",
-			text: "You won't be able to revert this!",
+			title: "¿Está seguro que quiere guardar los cambios?",
+			text: "Una vez guardados, no podrá deshacer los cambios",
 			icon: "warning",
 			showCancelButton: true,
 			cancelButtonColor: "#d33",
 			confirmButtonColor: "#3085d6",
-			cancelButtonText: "Cancel",
-			confirmButtonText: "Yes, save it!"
+			cancelButtonText: "cancelar",
+			confirmButtonText: "Guardar Cambios"
 		})
 
 		if (result.isConfirmed) {
@@ -229,7 +229,7 @@ const AdminProductForm = props => {
 			//Upload Images to Firebae Storage
 
 			
-			console.log("Product Category: ", productCategory)
+			// console.log("Product Category: ", productCategory)
 
 			//Filter images with a file
 			const imagesWithFile = imagesFormData.filter(image => image.file !== null).map(image => image.file)
@@ -259,7 +259,7 @@ const AdminProductForm = props => {
 				categoryName: productCategory.name
 			}
 
-			console.log("Submitting this product: ", newProduct)
+			// console.log("Submitting this product: ", newProduct)
 
 			if (newProduct.id) {
 				//Edita el producto
@@ -283,14 +283,14 @@ const AdminProductForm = props => {
 	const handleClose = () => {
 		Swal.fire({
 			target: document.getElementById("form-modal"),
-			title: "You have unsaved changes!",
-			text: "Are you sure you want to leave without saving?",
+			title: "¡Tiene cambios sin guardar!",
+			text: "¿Está seguro que quiere salir sin antes guardar?",
 			icon: "warning",
 			showCancelButton: true,
 			cancelButtonColor: "#3085d6",
 			confirmButtonColor: "#d33",
-			cancelButtonText: "Stay on this Page",
-			confirmButtonText: "Discard Changes"
+			cancelButtonText: "Quedarme",
+			confirmButtonText: "Salir sin guardar"
 		}).then(result => {
 			if (result.isConfirmed) {
 				props.closeForm()
@@ -299,7 +299,7 @@ const AdminProductForm = props => {
 	}
 
 	const handleCategoryChange = category => {
-		console.log("Category ID: ", category)
+		// console.log("Category ID: ", category)
 
 		//Hacer un json con los atributos de name de personalized fields de la categroy
 		const personalizedFields = {}
@@ -333,7 +333,7 @@ const AdminProductForm = props => {
 						<Grid id="FormContainer" container spacing={2}>
 							<Grid id="Title-Exit" container xs={12}>
 								<Grid id="Title" xs={10}>
-									<h3>Category Form</h3>
+									<h3>Nuevo Producto</h3>
 								</Grid>
 
 								<Grid id="Exit_Button" xs={2} display="flex" justifyContent="end" alignItems="center">
@@ -345,13 +345,13 @@ const AdminProductForm = props => {
 
 							<Grid container id="InputContainer" xs={12} sm={6}>
 								<Grid xs={12}>
-									<p>General Information</p>
+									<p>Información General</p>
 
 									<TextField
 										required
 										key="nameInput"
 										InputLabelProps={{ shrink: true }}
-										label="Name"
+										label="Nombre"
 										name="name"
 										value={formData.name}
 										onChange={e => handleNameChange(e)}
@@ -367,7 +367,7 @@ const AdminProductForm = props => {
 											name="Price"
 											onChange={e => handlePriceChange(e)}
 											startAdornment={<InputAdornment position="start">$</InputAdornment>}
-											label="price"
+											label="Precio"
 											inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
 											value={formData.price}
 										/>
@@ -378,10 +378,10 @@ const AdminProductForm = props => {
 										<Select
 											id="statusSelect"
 											value={formData.status}
-											label="status"
+											label="Estado"
 											onChange={e => handleStatusChange(e)}>
-											<MenuItem value={1}>Active</MenuItem>
-											<MenuItem value={0}>Inactive</MenuItem>
+											<MenuItem value={1}>Activo</MenuItem>
+											<MenuItem value={0}>Inactivo</MenuItem>
 										</Select>
 									</FormControl>
 
@@ -410,7 +410,7 @@ const AdminProductForm = props => {
 												margin="normal"
 												InputLabelProps={{ shrink: true }}
 												required
-												label="Category"
+												label="Categoría"
 												InputProps={{
 													...params.InputProps,
 													endAdornment: (
@@ -430,8 +430,8 @@ const AdminProductForm = props => {
 									{!productCategory ? (
 										<Alert severity="error">
 											{" "}
-											We can't show you the product attributes until you select a category.
-											<br /> Please choose a category first.{" "}
+											No podemos mostrarle los atributos del producto hasta que seleccione una categoría.
+											<br /> Por favor elija una categoría.{" "}
 										</Alert>
 									) : (
 										productCategory.personalizedFields.map((field, index) => (
@@ -452,7 +452,7 @@ const AdminProductForm = props => {
 							</Grid>
 
 							<Grid id="ImagesContainer" xs={12} sm={6}>
-								<p>Product Images</p>
+								<p>Imágenes del Producto</p>
 
 								<UploadProductImagesInput
 									images={imagesFormData}
@@ -464,12 +464,12 @@ const AdminProductForm = props => {
 							<Grid container id="Action Buttons" xs={12}>
 								<Grid xs={6}>
 									<Button onClick={handleClose} variant="contained" color="error" fullWidth>
-										Discard Changes
+										Borrar Cambios
 									</Button>
 								</Grid>
 								<Grid xs={6}>
 									<Button type="submit" variant="contained" color="success" fullWidth>
-										Save Changes
+										Guardar Cambios
 									</Button>
 								</Grid>
 							</Grid>

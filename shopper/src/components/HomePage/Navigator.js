@@ -11,6 +11,8 @@ import HomeIcon from "@mui/icons-material/Home";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SellIcon from "@mui/icons-material/Sell";
+import LaptopIcon from "@mui/icons-material/Laptop";
+import StoreIcon from "@mui/icons-material/Store";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -28,48 +30,54 @@ import PedidoNormal from "../../Pages/PedidoNormal/PedidoNormal";
 
 const categories = [
   {
-    id: "Opciones:",
+    id: "Tablas",
     children: [
       {
         id: "Pedidos",
         icon: <SellIcon />,
         route: <Orders />,
-        tittle: "Gestionar Pedidos",
+        tittle: "Pedidos",
       },
       {
         id: "Productos",
         icon: <InventoryIcon />,
         route: <Products />,
-        tittle: "Gestionar productos",
+        tittle: "Productos",
       },
       {
         id: "Categorías",
         icon: <CategoryIcon />,
         route: <Categories />,
-        tittle: "Gestionar Categorías",
+        tittle: "Categorías",
       },
+      
+    ],
+  },
+  {
+    id: "Pedidos",
+    children: [
       {
         id: "Pedido Personal",
-        icon: <ShoppingCartIcon />,
+        icon: <StoreIcon />,
         route: <PedidoPersonal />,
-        tittle: "Gestionar Pedido Personal",
+        tittle: "Pedido Personal",
       },
       {
-        id: "Pedido en línea",
-        icon: <ShoppingCartIcon />,
+        id: "Pedido en Línea",
+        icon: <LaptopIcon />,
         route: <PedidoOnline />,
-        tittle: "Gestionar Pedido en Línea ",
+        tittle: "Pedido en Línea ",
       },
       {
-        id: "Pedido común",
+        id: "Pedido Tienda",
         icon: <ShoppingCartIcon />,
         route: <PedidoNormal />,
-        tittle: "Gestionar Pedido Común",
+        tittle: "Pedido Común",
       },
     ],
   },
   {
-    id: "Users",
+    id: "Usuarios",
     children: [
       {
         id: "Mi cuenta",
@@ -81,7 +89,7 @@ const categories = [
         id: "Gestión de administradores",
         icon: <PersonAddIcon />,
         route: <NewAdmin />,
-        tittle: "Gestión de administradores",
+        tittle: "Administradores",
       },
     ],
   },
@@ -120,7 +128,7 @@ export default function Navigator(props) {
         <ListItem
           sx={{ ...item, ...itemCategory, fontSize: 22, color: "#fff" }}
         >
-          VeroCamShop
+          VeroCam Shop
         </ListItem>
         {categories.map(({ id, children }) => (
           <Box key={id} sx={{ bgcolor: "#101F33" }}>
