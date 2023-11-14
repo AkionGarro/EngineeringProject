@@ -285,6 +285,7 @@ export function DatabaseProvider({ children }) {
           order = {
             id: orderDoc.id,
             fecha: fechaFormateada,
+            tabla: collectionName,
             ...orderDoc.data(),
           };
           break; // Si encontramos la orden en una colección, salimos del bucle
@@ -551,7 +552,7 @@ export function DatabaseProvider({ children }) {
           if(direccion !== undefined){
             direccionString = direccion.address + ", " + direccion.district + ", " + direccion.canton + ", " + direccion.province + ", " + direccion.country;
           }
-          orders.push({ id: doc.id, fecha: fechaFormateada, direccionString:direccionString , ...doc.data() });
+          orders.push({ id: doc.id, fecha: fechaFormateada,tabla: collectionName, direccionString:direccionString , ...doc.data() });
         });
       } else {
         const queryRef = query(
@@ -579,7 +580,7 @@ export function DatabaseProvider({ children }) {
           if(direccion !== undefined){
             direccionString = direccion.address + ", " + direccion.district + ", " + direccion.canton + ", " + direccion.province + ", " + direccion.country;
           }
-          orders.push({ id: doc.id, fecha: fechaFormateada, direccionString: direccionString, ...doc.data() });
+          orders.push({ id: doc.id, fecha: fechaFormateada,tabla: collectionName, direccionString: direccionString, ...doc.data() });
         });
       }
     }

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import './VerPedido.css';
+import './VerPedidoOnline.css';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useFirebase } from "../../context/DatabaseContext.jsx";
+import { Link as RouterLink } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -14,7 +15,7 @@ import DialogContent from "@mui/material/DialogContent"
 
 const defaultTheme = createTheme();
 
-function VerPedido(props) {
+function VerPedidoOnline(props) {
     //recibe la funcion getPedido de props
     const { idPedido } = props;
     const { estado } = props;
@@ -54,24 +55,16 @@ function VerPedido(props) {
     };
 
     const columns = [
-        { field: "nombre", headerName: "Nombre", width: 300 },
-        { field: "cantidad", headerName: "Cantidad", width: 100 },
-        { field: "comentario", headerName: "Comentario", width: 300 },
+        
+        { field: "comentario", headerName: "Comentario", width: 600 },
         {
-            headerName: "Ver producto",
-            width: 300,
+            field: "url",
+            headerName: "Link del producto",
+            width: 600,
             renderCell: (params) => (
-                <div>
-                    <Stack direction="row" spacing={2}>
-
-                        <Button
-                            variant="outlined"
-                            id={params.row.id}
-                            onClick={() => openProductModal(params.row.producto)}
-                            startIcon={<VisibilityIcon />}
-                        ></Button>
-                    </Stack>
-                </div>
+                <RouterLink to={params.row.url} target="_blank">
+                    {params.row.url}
+                </RouterLink>
             ),
         },
     ];
@@ -197,4 +190,4 @@ function VerPedido(props) {
     );
 }
 
-export default VerPedido;
+export default VerPedidoOnline;

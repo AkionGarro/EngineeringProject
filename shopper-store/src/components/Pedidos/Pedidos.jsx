@@ -13,6 +13,8 @@ import Box from '@mui/material/Box';
 //useAuth para ver el usuario logueado
 import { useAuth } from "../../context/AuthContext.jsx";
 import VerPedido from "../VerPedido/VerPedido.jsx";
+import VerPedidoOnline from "../VerPedidoOnline/VerPedidoOnline.jsx";
+import VerPedidoPersonal from "../VerPedidoPersonal/VerPedidoPersonal.jsx";
 const defaultTheme = createTheme();
 
 function Pedidos() {
@@ -58,13 +60,17 @@ function Pedidos() {
   const getPedido = () => {
     return order;
   };
-  const verPedido = (id, estado) => {
-    console.log("ID handleEditClick objeto:", id);
-    console.log("ID handleEditClick:" + toString(id));
+  const verPedido = (id, estado, tabla) => {
     setOrderId(id);
     setPedidoSeleccionado(firebase.getOrder(id));
     // Abre el modal de edición cuando se hace clic en el icono de editar
-    setComponentToRender(<VerPedido idPedido={id} estado={estado} />);
+    if(tabla === "pedidosOnline"){
+      setComponentToRender(<VerPedidoOnline idPedido={id} estado={estado} />);
+    }else if(tabla === "pedidosTest"){
+      setComponentToRender(<VerPedido idPedido={id} estado={estado} />);
+    }else if(tabla === "pedidosPersonales"){
+      setComponentToRender(<VerPedidoPersonal idPedido={id} estado={estado} />);
+    }
   };
 
   const onChangeInput = async (idOrder) => {
@@ -217,7 +223,6 @@ function Pedidos() {
   }, []);
 
   const handleChangePage = (event, newPage) => {
-    console.log("DATA: ", orders);
     setPage(newPage);
   };
 
@@ -270,7 +275,7 @@ function Pedidos() {
             <Button
               variant="outlined"
               id={params.row.id}
-              onClick={() => verPedido(params.row.id, params.row.estado)}
+              onClick={() => verPedido(params.row.id, params.row.estado, params.row.tabla)}
               startIcon={<VisibilityIcon />}
             ></Button>
           </Stack>
