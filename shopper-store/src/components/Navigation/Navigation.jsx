@@ -32,8 +32,6 @@ const section = [
   { name: "Historial de pedidos", route: <Pedidos /> },
 ];
 
-const pageBlog = <Blog />;
-
 function ResponsiveAppBar(props) {
   const { onClickCarrito } = props;
   const [anchorEl, setAnchorEl] = useState(null);
@@ -73,9 +71,8 @@ function ResponsiveAppBar(props) {
     localStorage.removeItem("carritoCompras");
     localStorage.removeItem("CarritoCompras");
     localStorage.removeItem("currentUser");
-    setComponentToRender(<Blog />);
     auth.logout();
-    setComponentToRender(pageBlog);
+    setComponentToRender(<Blog />);
   };
 
   const handleLogin = () => {

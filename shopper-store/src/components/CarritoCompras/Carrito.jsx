@@ -30,11 +30,12 @@ const Carrito = (props) => {
   const [cantidadFlag, setCantidadFlag] = useState(true);
   const { onClose } = props;
   const [isOpen, setOpen] = useState(true); // Agrega el estado isOpen
-  const ref = collection(firestore, "pedidosTienda");
+  const ref = collection(firestore, "pedidosTest");
   const [loading, setLoading] = useState(true);
   const firebase = useFirebase();
-  const auth = useAuth();
-  const email = auth.user.email;
+
+  const email = localStorage.getItem("currentUser");
+  console.log("Email");
 
   const agregarAlCarrito = (product, id) => {
     const nuevoCarrito = [...carrito];
@@ -171,6 +172,9 @@ const Carrito = (props) => {
       if (noErrors) {
         // Obtener información del usuario
         const userInfo = await firebase.getUserData(email);
+        console.log("Info usuario Carrito");
+        console.log(userInfo);
+        console.log("===================================================");
 
         // Construir el objeto de datos
         let data = {

@@ -27,12 +27,12 @@ const PedidoOnline = () => {
   const [label, setLabel] = useState();
   const [address, setAddress] = useState([]);
   const ref = collection(firestore, "pedidosOnline");
-  const [linkFields, setLinkFields] = useState([{ link: "", comentario: "" }]);
+  const [linkFields, setLinkFields] = useState([{ url: "", comentario: "" }]);
   const auth = useAuth();
   const email = auth.user.email;
 
   const cleanData = () => {
-    setLinkFields([{ link: "", comentario: "" }]);
+    setLinkFields([{ url: "", comentario: "" }]);
     setDireccionSeleccionada("");
     setLabel("");
   };
@@ -63,14 +63,23 @@ const PedidoOnline = () => {
     datosUser();
   }, []);
 
-  console.log("Direcion selecionada");
-  console.log(direccionSeleccionada);
-
   const handleSubmit = async (e) => {
     //=========================================================
     e.preventDefault();
+
+    for (let pedido in linkFields) {
+      if (pedido.description == "" || pedido.url == "") {
+        Swal.fire({
+          icon: "error",
+          title: "Información incompleta",
+          text: "Porfavor, revisar que todos los campos en sus pedidos estén completos.",
+        });
+        return;
+      }
+    }
+
     const productos = linkFields.map((field) => {
-      return `Producto: ${field.link} -- *Comentario*: ${field.comentario} `;
+      return `Producto: ${field.url} -- *Comentario*: ${field.comentario} `;
     });
     const message = productos.join("\n");
     const phoneNumber = "+50685045830";
@@ -122,7 +131,7 @@ const PedidoOnline = () => {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        setLinkFields([{ link: "", comentario: "" }]);
+        setLinkFields([{ url: "", comentario: "" }]);
       }
     });
   };
@@ -145,12 +154,12 @@ const PedidoOnline = () => {
   };
 
   const addFields = () => {
-    setLinkFields([...linkFields, { link: "", comentario: "" }]);
+    setLinkFields([...linkFields, { url: "", comentario: "" }]);
   };
 
   const handleLinkChange = (event, index) => {
     const updatedFields = [...linkFields];
-    updatedFields[index].link = event.target.value;
+    updatedFields[index].url = event.target.value;
     setLinkFields(updatedFields);
   };
 
@@ -173,7 +182,7 @@ const PedidoOnline = () => {
               fullWidth
               label="Link"
               variant="outlined"
-              value={field.link}
+              value={field.url}
               onChange={(e) => handleLinkChange(e, index)}
               className="link"
               autoComplete="off"
