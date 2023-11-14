@@ -11,18 +11,31 @@ import { useAuth } from "../../context/AuthContext";
 import { firestore } from "../../firebase";
 import { addDocument } from "../../firebase";
 import { collection } from "firebase/firestore";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
+
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+
 import "./Carrito.css";
 
-const Carrito = (render) => {
+const Carrito = (props) => {
   const [carrito, setCarrito] = useState([]);
   const [montoTotal, setMontoTotal] = useState(0);
   const [cantidadArt, setCantidadArt] = useState(0);
   const [cantidadFlag, setCantidadFlag] = useState(true);
+  const { onClose } = props;
+  const [isOpen, setOpen] = useState(true); // Agrega el estado isOpen
   const ref = collection(firestore, "pedidosTest");
   const [loading, setLoading] = useState(true);
   const firebase = useFirebase();
-  const auth = useAuth();
-  const email = auth.user.email;
+
+  const email = localStorage.getItem("currentUser");
+  console.log("Email");
 
   const agregarAlCarrito = (product, id) => {
     const nuevoCarrito = [...carrito];
@@ -128,37 +141,74 @@ const Carrito = (render) => {
       if (result.isConfirmed) {
         setCarrito([]);
         localStorage.setItem("carritoCompras", JSON.stringify([]));
+        handleClose();
       }
     });
   };
 
   const buyItems = async () => {
-    console.log("email");
-    console.log(email);
-    const userInfo = await firebase.getUserData(email);
-    console.log(userInfo);
-
-    console.log("User info");
-
-    let data = {
-      usuario: email,
-      direccion:
-        userInfo && userInfo.direccionEnvio !== null
-          ? userInfo.direccionEnvio
-          : "Direccion no especificada",
-      productos: carrito,
-      estado: 1,
-    };
+    let noErrors = true;
 
     try {
-      await addDocument(ref, data);
-      Swal.fire({
-        icon: "success",
-        title: "¡Pedido Completado!",
-        text: "Tu pedido se ha guardado de forma correcta.",
-      });
-    } catch (e) {
-      console.error("Error adding document: ", e);
+      // Verificar la cantidad de productos en el carrito
+      for (let producto of carrito) {
+        if (producto.cantidad == null) {
+          await Swal.fire({
+            title: "Tenemos un problema",
+            text: "Hay un problema con la cantidad de uno de tus productos dentro del carrito de compras",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Revisar manualmente mis productos",
+          });
+
+          noErrors = false;
+          // Lanza una excepción si hay un problema con la cantidad
+          throw new Error(
+            "Problema con la cantidad de productos en el carrito"
+          );
+        }
+      }
+
+      if (noErrors) {
+        // Obtener información del usuario
+        const userInfo = await firebase.getUserData(email);
+        console.log("Info usuario Carrito");
+        console.log(userInfo);
+        console.log("===================================================");
+
+        // Construir el objeto de datos
+        let data = {
+          usuario: email,
+          direccion:
+            userInfo && userInfo.direccionEnvio !== null
+              ? userInfo.direccionEnvio
+              : "Direccion no especificada",
+          productos: carrito,
+          estado: 1,
+        };
+
+        // Realizar la operación addDocument solo si no se lanzó una excepción
+        await addDocument(ref, data);
+
+        // Mostrar mensaje de éxito
+        await Swal.fire({
+          icon: "success",
+          title: "¡Pedido Completado!",
+          text: "Tu pedido se ha guardado de forma correcta.",
+        });
+
+        // Limpiar el carrito y cerrar el diálogo
+        setCarrito([]);
+        localStorage.setItem("carritoCompras", JSON.stringify([]));
+        handleClose();
+      }
+    } catch (error) {
+      // Manejar la excepción, si se lanzó
+      console.error("Error:", error.message);
+    } finally {
+      if (!noErrors) {
+        console.error("Error: no se ha realizado la compra");
+      }
     }
   };
 
@@ -189,82 +239,100 @@ const Carrito = (render) => {
     calcularArticulos();
   }, [carrito]);
 
+  const handleClose = () => {
+    setOpen(false); // Usa setOpen para actualizar el estado
+    onClose(); // Llama a la función handleClose proporcionada por props
+  };
+
   return (
-    <div className="carrito">
-      {loading === true ? (
-        <Loader />
-      ) : carrito.length === 0 ? (
-        <div>
-          <h2>Carrito de Compras Vacío</h2>
-        </div>
-      ) : (
-        <>
-          <h2>Carrito de Compras</h2>
-          <div className="carrito-resumen">
-            <h3>Detalle de Compra</h3>
-            <p className="parrafo-resumen">
-              Total de artículos: <strong>{cantidadArt}</strong>
-            </p>
-            <p className="parrafo-resumen">
-              Total a Pagar: <strong>${montoTotal} </strong>
-            </p>
-            <div className="opciones-button-carrito">
-              <Button
-                variant="contained"
-                color="error"
-                onClick={deleteAll}
-                className="buttons-carrito"
-              >
-                Vaciar carrito
-              </Button>
-              <Button
-                variant="contained"
-                color="success"
-                className="buttons-carrito"
-                onClick={buyItems}
-              >
-                Comprar
-              </Button>
+    <Dialog
+      className="container"
+      open={isOpen}
+      onClose={handleClose}
+      fullWidth={true}
+      maxWidth="md"
+    >
+      <DialogTitle id="scroll-dialog-title" className="button-cerrar-carrito">
+        <IconButton onClick={handleClose}>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent>
+        {loading === true ? (
+          <Loader />
+        ) : carrito.length === 0 ? (
+          <div>
+            <h2>Carrito de Compras Vacío</h2>
+          </div>
+        ) : (
+          <>
+            <h1>Carrito de Compras</h1>
+            <div className="carrito-resumen">
+              <h2>Detalle de Compra</h2>
+              <p className="parrafo-resumen">
+                Total de artículos: <strong>{cantidadArt}</strong>
+              </p>
+              <p className="parrafo-resumen">
+                Total a Pagar: <strong>${montoTotal} </strong>
+              </p>
+              <div className="opciones-button-carrito">
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={deleteAll}
+                  className="buttons-carrito"
+                >
+                  Vaciar carrito
+                </Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  className="buttons-carrito"
+                  onClick={buyItems}
+                >
+                  Comprar
+                </Button>
+              </div>
             </div>
-          </div>
-          <div className="carrito-items">
-            {carrito.map((product, index) => (
-              <Card className="card" key={index}>
-                <CardContent className="card-Content">
-                  <h3>Nombre: {product.name}</h3>
-                  <h3>Color: {product.personalizedFields.Color}</h3>
-                  <p>Precio: ${product.price}</p>
-                  <img
-                    className="image-product"
-                    src={product.images[0]}
-                    alt={`producto ${product.name}`}
-                  />
-                  <div className="card-buttons">
-                    <Button
-                      id="circle_btn"
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => eliminarDelCarrito(index, product.id)}
-                    >
-                      <RemoveIcon />
-                    </Button>
-                    <h3>{product.cantidad}</h3>
-                    <Button
-                      id="circle_btn"
-                      variant="contained"
-                      color="primary"
-                      onClick={() => agregarAlCarrito(product, product.id)}
-                    >
-                      <AddIcon />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
+            <div className="carrito-items">
+              {carrito.map((product, index) => (
+                <Card className="card" key={index}>
+                  <CardContent className="card-Content">
+                    <h3>Nombre: {product.name}</h3>
+                    <h3>Color: {product.personalizedFields.Color}</h3>
+                    <p>Precio: ${product.price}</p>
+                    <img
+                      className="image-product"
+                      src={product.images[0]}
+                      alt={`producto ${product.name}`}
+                    />
+                    <div className="card-buttons">
+                      <Button
+                        id="circle_btn"
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => eliminarDelCarrito(index, product.id)}
+                      >
+                        <RemoveIcon />
+                      </Button>
+                      <h3>{product.cantidad}</h3>
+                      <Button
+                        id="circle_btn"
+                        variant="contained"
+                        color="primary"
+                        onClick={() => agregarAlCarrito(product, product.id)}
+                      >
+                        <AddIcon />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 };
 

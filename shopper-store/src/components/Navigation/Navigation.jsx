@@ -71,8 +71,8 @@ function ResponsiveAppBar(props) {
     localStorage.removeItem("carritoCompras");
     localStorage.removeItem("CarritoCompras");
     localStorage.removeItem("currentUser");
-    setComponentToRender(<Blog />);
     auth.logout();
+    setComponentToRender(<Blog />);
   };
 
   const handleLogin = () => {
@@ -135,21 +135,12 @@ function ResponsiveAppBar(props) {
             {section.name}
           </Button>
         ))}
-        {pages2.map((page) => (
-          <Link
-            to={`${page.route.toLowerCase()}`}
-            key={page.route}
-            style={{ textDecoration: "none" }}
-          >
-            <Button
-              key={page.name}
-              onClick={page.clicked}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
-              {page.name}
-            </Button>
-          </Link>
-        ))}
+        <Button
+          onClick={handleInicio}
+          sx={{ my: 2, color: "white", display: "block" }}
+        >
+          Inicio
+        </Button>
         <Button
           key="logout"
           onClick={handleLogout}
@@ -219,7 +210,7 @@ function ResponsiveAppBar(props) {
             >
               <MenuIcon />
             </IconButton>
-            {userAuthenticated ?
+            {userAuthenticated ? (
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
@@ -238,12 +229,10 @@ function ResponsiveAppBar(props) {
                 }}
               >
                 <MenuItem onClick={() => handleMenuItemClick()}>
-                  <Button
-                    color='inherit'
-                    onClick={onClickCarrito}
-                  >
+                  <Button color="inherit" onClick={onClickCarrito}>
                     Carrito
-                  </Button></MenuItem>
+                  </Button>
+                </MenuItem>
                 {section.map((section) => (
                   <MenuItem onClick={() => handleMenuItemClick()}>
                     <Button
@@ -258,18 +247,22 @@ function ResponsiveAppBar(props) {
                 <MenuItem onClick={() => handleMenuItemClick()}>
                   <Button
                     onClick={handleInicio}
-                    sx={{ my: 2, color: "white", display: "block" }}
+                    sx={{ my: 2, color: "inherit", display: "block" }}
                   >
                     Inicio
                   </Button>
                 </MenuItem>
                 <MenuItem onClick={() => handleMenuItemClick()}>
-                  <Button key="logout" onClick={handleLogout} sx={{ color: "black" }}>
+                  <Button
+                    key="logout"
+                    onClick={handleLogout}
+                    sx={{ color: "black" }}
+                  >
                     Cerrar Sesión
                   </Button>
                 </MenuItem>
               </Menu>
-              :
+            ) : (
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
@@ -288,21 +281,12 @@ function ResponsiveAppBar(props) {
                 }}
               >
                 <MenuItem onClick={() => handleMenuItemClick()}>
-                  {pages.map((page) => (
-                    <Link
-                      to={`${page.route.toLowerCase()}`}
-                      key={page.route}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <Button
-                        key={page.name}
-                        onClick={page.clicked}
-                        sx={{ my: 2, color: "black", display: "block" }}
-                      >
-                        {page.name}
-                      </Button>
-                    </Link>
-                  ))}
+                  <Button
+                    onClick={handleInicio}
+                    sx={{ my: 2, color: "inherit", display: "block" }}
+                  >
+                    Inicio
+                  </Button>
                 </MenuItem>
                 <MenuItem onClick={() => handleMenuItemClick()}>
                   <Button
@@ -313,8 +297,8 @@ function ResponsiveAppBar(props) {
                     Iniciar Sesión
                   </Button>
                 </MenuItem>
-              </Menu>}
-
+              </Menu>
+            )}
           </Box>
 
           <Typography
