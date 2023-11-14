@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import Swal from "sweetalert2";
 
 const orders = [
   {
@@ -121,11 +122,11 @@ export function DatabaseProvider({ children }) {
       phone: phoneF,
       userType: "user",
       identification: identificationF,
-      direccionEnvio: direccion
+      direccionEnvio: direccion,
     };
 
     try {
-      console.log(data)
+      console.log(data);
       const docRef = await addDoc(ref, data);
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
@@ -140,7 +141,23 @@ export function DatabaseProvider({ children }) {
 
     if (querySnapshot.docs.length === 0) {
       console.log("Usuario se tuvo que registrar.");
-      registerDataUser(data.displayName, data.email, "empty", "empty");
+      const direccion = {
+        address: "empty",
+        canton: "empty",
+        country: "empty",
+        district: "empty",
+        email: data.email,
+        province: "empty",
+      };
+
+      registerDataUser(
+        data.displayName,
+        data.email,
+        "empty",
+        "empty",
+        direccion
+      );
+      addAddressToUser(direccion);
       return false;
     } else {
       return true;
@@ -161,18 +178,14 @@ export function DatabaseProvider({ children }) {
       console.log(userData);
       console.log("----------------");
       if (
-        userData.dirreccionEnvio === "empty" ||
-        userData.phone === "empty" ||
-        userData.identification === "empty" ||
-        userData.dirreccionEnvio === "" ||
-        userData.phone === "" ||
-        userData.identification === "" ||
-        userData.dirreccionEnvio === null ||
-        userData.phone === null ||
-        userData.identification === null ||
-        userData.dirreccionEnvio === undefined ||
-        userData.phone === undefined ||
-        userData.identification === undefined
+        userData.phone == "empty" ||
+        userData.identification == "empty" ||
+        userData.direccionEnvio.country == "empty" ||
+        userData.direccionEnvio.province == "empty" ||
+        userData.direccionEnvio.canton == "empty" ||
+        userData.direccionEnvio.district == "empty" ||
+        userData.direccionEnvio.address == "empty"
+    
       ) {
         return false;
       } else {
@@ -361,7 +374,7 @@ export function DatabaseProvider({ children }) {
         phone: data.phone,
         identification: data.identification,
         direccionEnvio: data.direccionEnvio,
-        userType: data.role,
+        userType: "user",
       });
       console.log("Usuario actualizado con éxito.");
     } catch (error) {
