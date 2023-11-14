@@ -30,6 +30,7 @@ function Account() {
 
   const handleSelect = (event) => {
     setLabel(event.target.value);
+    console.log("Hola"+event)
     const jsonObject = JSON.parse(event.target.value);
     setDireccionSeleccionada(jsonObject);
   };

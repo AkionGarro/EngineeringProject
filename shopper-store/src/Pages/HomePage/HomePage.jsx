@@ -88,7 +88,7 @@ const Blog = (props) => {
       <CssBaseline />
       <Container maxWidth="lg">
         <main>
-          <div>
+          <div> 
             <Typography
               variant="h5"
               gutterBottom
