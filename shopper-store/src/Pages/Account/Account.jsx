@@ -144,19 +144,6 @@ function Account() {
             <Grid item xs={11} sm={5}>
               <TextField
                 InputLabelProps={{ shrink: true }}
-                id="role"
-                label="Role"
-                name="role"
-                variant="outlined"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                disabled={!isEditing}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={11} sm={5}>
-              <TextField
-                InputLabelProps={{ shrink: true }}
                 id="direccionEnvio"
                 label="Direccion de envio"
                 name="direccionEnvio"
