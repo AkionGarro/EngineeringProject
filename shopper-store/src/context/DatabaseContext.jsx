@@ -496,6 +496,8 @@ export function DatabaseProvider({ children }) {
       return null;
     }
     const userDoc = querySnapshot.docs[0];
+
+    
     return userDoc.id;
   };
 
@@ -511,6 +513,9 @@ export function DatabaseProvider({ children }) {
     console.log("Filtro 1: ", filtroParametro);
     console.log("Filtro 2: ", collections);
     console.log("Filtro 3: ", email);
+
+    
+  
 
     const userDoc = await getUserIdFBDoc(email);
     console.log("USER CODUMENT: ", userDoc);
@@ -541,7 +546,12 @@ export function DatabaseProvider({ children }) {
             "es-ES",
             opcionesDeFormato
           );
-          orders.push({ id: doc.id, fecha: fechaFormateada, ...doc.data() });
+          const direccion = doc.data().direccion;
+          let direccionString = "No disponible";
+          if(direccion !== undefined){
+            direccionString = direccion.address + ", " + direccion.district + ", " + direccion.canton + ", " + direccion.province + ", " + direccion.country;
+          }
+          orders.push({ id: doc.id, fecha: fechaFormateada, direccionString:direccionString , ...doc.data() });
         });
       } else {
         const queryRef = query(
@@ -564,7 +574,12 @@ export function DatabaseProvider({ children }) {
             "es-ES",
             opcionesDeFormato
           );
-          orders.push({ id: doc.id, fecha: fechaFormateada, ...doc.data() });
+          const direccion = doc.data().direccion;
+          let direccionString = "No disponible";
+          if(direccion !== undefined){
+            direccionString = direccion.address + ", " + direccion.district + ", " + direccion.canton + ", " + direccion.province + ", " + direccion.country;
+          }
+          orders.push({ id: doc.id, fecha: fechaFormateada, direccionString: direccionString, ...doc.data() });
         });
       }
     }
@@ -590,6 +605,27 @@ export function DatabaseProvider({ children }) {
           order.estado = "Enviado";
           break;
         case "6":
+          order.estado = "Recibido";
+          break;
+        case 0:
+          order.estado = "Pendiente de confirmación";
+          break;
+        case 1:
+          order.estado = "En proceso";
+          break;
+        case 2:
+          order.estado = "Pendiente de pago";
+          break;
+        case 3:
+          order.estado = "Cancelado";
+          break;
+        case 4:
+          order.estado = "Pagado";
+          break;
+        case 5:
+          order.estado = "Enviado";
+          break;
+        case 6:
           order.estado = "Recibido";
           break;
         default:

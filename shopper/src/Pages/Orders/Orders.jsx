@@ -210,6 +210,7 @@ function Orders() {
 
     let data;
     const setData = async () => {
+      console.log("FILTRO: ", filtro, "FILTRO2: ", filtroSeleccionado2Fire);
       data = await firebase.getAllOrdersWithID(filtro, filtroSeleccionado2Fire);
       setOrders(data);
     };
@@ -262,6 +263,7 @@ function Orders() {
   };
 
   const deleteOrder = async (id) => {
+    console.log("ID ORDER BORRAR: ", id);
     let result = await Swal.fire({
       title: "¿Estás seguro?",
       text: "Esta acción eliminará la orden. ¿Estás seguro de que quieres continuar?",
@@ -292,10 +294,10 @@ function Orders() {
 
   const columns = [
     { field: "id", headerName: "ID", width: 95 },
-    { field: "cliente", headerName: "Cliente", width: 140 },
-    { field: "telefono", headerName: "Telefono", width: 140 },
-    { field: "direccion", headerName: "Dirección", width: 200, },
-    { field: "estado", headerName: "Estado", width: 140 },
+    { field: "fullName", headerName: "Cliente", width: 170 },
+    { field: "phone", headerName: "Telefono", width: 140 },
+    { field: "direccionString", headerName: "Dirección", width: 400, },
+    
     {
       headerName: "Acciones",
       width: 300,
