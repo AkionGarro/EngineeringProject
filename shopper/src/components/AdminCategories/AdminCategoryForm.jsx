@@ -232,7 +232,7 @@ const AdminCategoryForm = props => {
 			showCancelButton: true,
 			cancelButtonColor: "#3085d6",
 			confirmButtonColor: "#d33",
-			cancelButtonText: "Quedarme en la página",
+			cancelButtonText: "Quedarme",
 			confirmButtonText: "Salir sin guardar"
 		}).then(result => {
 			if (result.isConfirmed) {
@@ -314,14 +314,14 @@ const AdminCategoryForm = props => {
 
 									<UploadImageInput
 										imageUrl={formData.icon}
-										buttonTitle={"Upload Icon"}
-										label={"Icon"}
+										buttonTitle={"Subir Imágen"}
+										label={"Icono"}
 										onChange={handleIconChange}
 									/>
 									<UploadImageInput
 										imageUrl={formData.backgroundImage}
-										buttonTitle={"Upload Background"}
-										label={"Background Image"}
+										buttonTitle={"Subir Imágen"}
+										label={"Fondo"}
 										onChange={handleBackgroundImageChange}
 									/>
 								</Grid>
