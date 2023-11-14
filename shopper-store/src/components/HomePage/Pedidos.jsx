@@ -19,7 +19,6 @@ function Pedidos(props) {
   const { setComponentToRender } = useGlobalContext();
 
   const handleNavoptions = async () => {
-    setComponentToRender(pedido.route);
     const userAuth = localStorage.getItem("currentUser");
     if (userAuth == null || userAuth == undefined) {
       Swal.fire({
@@ -39,16 +38,21 @@ function Pedidos(props) {
         }
       });
     } else {
-      const flagUserInfo = await firebase.checkCompleteUserInfo(userAuth);
-      if (await flagUserInfo) {
-        console.log("User is logged in");
-        setComponentToRender(pedido.route);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Perfil incompleto",
-          text: "Falta información en tu perfil, por favor completa tu información",
+      try {
+        await firebase.checkCompleteUserInfo(userAuth).then((result) => {
+          if (result == true) {
+            console.log("User is logged in");
+            setComponentToRender(pedido.route);
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Perfil incompleto",
+              text: "Falta información en tu perfil, por favor completa tu información",
+            });
+          }
         });
+      } catch (err) {
+        console.log(err);
       }
     }
   };
