@@ -40,13 +40,12 @@ const Register = () => {
   const [address, setAddress] = useState("");
 
   const goToLogin = () => {
-    navigate("/Login");
+    navigate("/");
   };
 
   const handleAddress = async (data) => {
     try {
       await firebase.addAddressToUser(data);
-
       setCountry("");
       setProvince("");
       setCanton("");
@@ -78,16 +77,18 @@ const Register = () => {
       address: dataForm.get("address"),
     };
 
+    const direccion = {"address":dataAddress.address,"canton":dataAddress.canton,"country":dataAddress.country,"district":dataAddress.district,"email":dataAddress.email,"province":dataAddress.province};
+
     try {
       await auth.register(data.email, data.password);
 
       try {
-        await firebase
-          .registerDataUser(
+        await firebase.registerDataUser(
             data.fullname,
             data.email,
             data.phone,
-            data.identification
+            data.identification,
+            direccion
           )
           .finally(() => {
             try {

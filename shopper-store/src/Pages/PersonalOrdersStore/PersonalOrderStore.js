@@ -126,14 +126,49 @@ function Personal_Order() {
 
     event.preventDefault();
 
-    for (let i = 0; i < imagenes.length; i++) {
-      const foto = imagenes[i];
-      const refArchivo = ref(storage, `pedidosPersonales/${foto.name}`);
-      await uploadBytes(refArchivo, foto);
-      const file = await getDownloadURL(refArchivo);
-      const updatedFields = [...fields];
-      updatedFields[i]["url_fire"] = file;
-      setFields(updatedFields);
+    console.log(imagenes.length)
+
+    if(imagenes.length !== 0){
+      for (let i = 0; i < imagenes.length; i++) {
+        const foto = imagenes[i];
+        if (foto === undefined) {
+          Swal.fire({
+            icon: "error",
+            title: "Información incompleta",
+            text: "Revise que haya cargado una imagen de cada producto.",
+          });
+          return; // Se encontró un elemento vacío
+        } else {
+          const refArchivo = ref(storage, `pedidosPersonales/${foto.name}`);
+          await uploadBytes(refArchivo, foto);
+          const file = await getDownloadURL(refArchivo);
+          const updatedFields = [...fields];
+          updatedFields[i]["url_fire"] = file;
+          setFields(updatedFields);
+        }
+      }
+    }else{
+      Swal.fire({
+        icon: "error",
+        title: "Información incompleta",
+        text: "Revise que haya cargado una imagen de cada producto.",
+      });
+      return;
+    }
+    
+
+    console.log(fields)
+
+    for (var i = 0; i < fields.length; i++) {
+      var objeto = fields[i];
+      if (objeto.description === '') {
+        Swal.fire({
+          icon: "error",
+          title: "Información incompleta",
+          text: "Revise que haya escrito una descripción para cada producto.",
+        });
+        return;
+      }
     }
 
     let data = {

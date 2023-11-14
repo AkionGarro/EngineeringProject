@@ -111,7 +111,8 @@ export function DatabaseProvider({ children }) {
     fullnameF,
     emailF,
     phoneF,
-    identificationF
+    identificationF,
+    direccion
   ) => {
     const ref = collection(firestore, "users");
     let data = {
@@ -120,9 +121,11 @@ export function DatabaseProvider({ children }) {
       phone: phoneF,
       userType: "user",
       identification: identificationF,
+      direccionEnvio: direccion
     };
 
     try {
+      console.log(data)
       const docRef = await addDoc(ref, data);
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
