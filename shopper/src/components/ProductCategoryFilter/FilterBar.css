@@ -1,0 +1,17 @@
+#fiter_bar_component #filter_bar_paper{
+
+  background-color: #E8E9F3;
+
+  
+}
+
+#chip_filled {
+  color: #E8E9F3;
+  background-color: #457B9D;
+}
+
+#chip_outlined {
+  background-color: white;
+  color: #272635;
+  border: 1px solid #272635;
+}
