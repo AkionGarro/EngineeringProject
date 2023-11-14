@@ -4,7 +4,6 @@ import { Edit as EditIcon, CheckCircleOutline as CheckCircleOutlineIcon } from "
 import "./Account.css";
 import { useFirebase } from "../../context/DatabaseContext";
 import { useAuth } from "../../context/AuthContext";
-import SearchIcon from "@mui/icons-material/Search";
 import AddAddress from "./AddAddress.jsx"
 
 function Account() {
@@ -16,7 +15,6 @@ function Account() {
   const [identification, setIdentification] = useState(0);
   const [address, setAddress] = useState([]);
   const [addressEnvio, setAddressEnvio] = useState({});
-  const [role, setRole] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useState(false);
   const auth = useAuth();
@@ -29,7 +27,6 @@ function Account() {
   const handleOpen = () => {
     setOpen(true);
   };
-
 
   const handleSelect = (event) => {
     setLabel(event.target.value);
@@ -51,7 +48,6 @@ function Account() {
       phone: dataForm.get("phone"),
       identification: dataForm.get("identification"),
       direccionEnvio: direccionSeleccionada,
-      role: dataForm.get("role"),
     };
 
     try {
@@ -66,7 +62,6 @@ function Account() {
   useEffect(() => {
     if (auth.user) {
       setUser(auth.user.email);
-      console.log(auth)
     }
     const fetchUserData = async () => {
       const data = await firebase.getUserData(auth.user.email);
@@ -77,10 +72,10 @@ function Account() {
       setAddressEnvio(data.direccionEnvio);
       const direcciones = await firebase.getUserAdress(auth.user.email);
       setAddress(direcciones);
-      setRole(data.userType);
       setUpdateInfo(false);
     };
     fetchUserData();
+    setFlagUpdate(false);
   }, [flagUpdate,updateInfo]);
 
   return (

@@ -31,15 +31,17 @@ import FilterBar from "../ProductCategoryFilter/FilterBar"
 import { useFirebase } from "../../context/DatabaseContext"
 import AdminProductForm from "./AdminProductForm"
 
+import "./AdminProductsTableComponent.css"
+
 const Filters = [
-	{ key: 0, label: "All" },
-	{ key: 1, label: "Active" },
-	{ key: 2, label: "Inactive" }
+	{ key: 0, label: "Todos" },
+	{ key: 1, label: "Activos" },
+	{ key: 2, label: "Inactivos" }
 ]
 
 const AdminProductsTableComponent = memo(props => {
 
-	const [filter, setFilter] = useState("Active")
+	const [filter, setFilter] = useState("Activos")
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [products, setProducts] = useState([])
@@ -54,9 +56,9 @@ const AdminProductsTableComponent = memo(props => {
 		const fetchData = async () => {
 			try {
 				let querySnapshot = null
-				if(filter === "Active"){
+				if(filter === "Activos"){
 					querySnapshot = await api.getProductsByStatus(1)
-				}else if(filter === "Inactive"){
+				}else if(filter === "Inactivos"){
 					querySnapshot = await api.getProductsByStatus(0)
 				}else{
 					querySnapshot = await api.getAllProducts()
@@ -65,7 +67,7 @@ const AdminProductsTableComponent = memo(props => {
 				setProducts(querySnapshot)
 				setLoading(false)
 			} catch (error) {
-				console.log("Error al Obtener Datos de productos de Firebase", error)
+				// console.log("Error al Obtener Datos de productos de Firebase", error)
 			}
 		}
 		fetchData()
@@ -75,7 +77,7 @@ const AdminProductsTableComponent = memo(props => {
 
 
 	const handleDelete = item => {
-		console.log("Desactivar producto:", item)
+		// console.log("Desactivar producto:", item)
 
 		api.deactivateProduct(item.id).then(() => {
 			setLoading(true)
@@ -112,7 +114,7 @@ const AdminProductsTableComponent = memo(props => {
 	const handleFilterChange = event => {
 		setFilter(event.target.innerText)
 		setLoading(true)
-		console.log("Filter: ", event.target.innerText);
+		// console.log("Filter: ", event.target.innerText);
 	}
 
 
@@ -120,7 +122,7 @@ const AdminProductsTableComponent = memo(props => {
 	const endIndex = startIndex + rowsPerPage
 
 	return (
-		<>
+		<div id="admin_products_table_c">
 			{loading ? (
 				<Box sx={{ display: "flex" }}>
 					<CircularProgress />
@@ -128,20 +130,20 @@ const AdminProductsTableComponent = memo(props => {
 			) : (
 				<>
 
-					<FilterBar FilterList={Filters} filter={filter} handleFilterChange={handleFilterChange} />
+					<FilterBar  FilterList={Filters} filter={filter} handleFilterChange={handleFilterChange} />
 
 					<Button variant="contained" onClick={() => handleOpenForm()} startIcon={<AddIcon />} sx={{mt:2, mb:2}}>
-						Add Product
+						Añadir Nuevo Producto
 					</Button>
 
 					<TableContainer component={Paper}>
 						<Table>
 							<TableHead>
 								<TableRow>
-									<TableCell>Name</TableCell>
-									<TableCell className="hide-on-mobile " >Category</TableCell>
-									<TableCell className="hide-on-mobile " >Price</TableCell>
-									<TableCell className="hide-on-mobile ">State</TableCell>
+									<TableCell>Nombre</TableCell>
+									<TableCell className="hide-on-mobile " >Categoría</TableCell>
+									<TableCell className="hide-on-mobile " >Precio</TableCell>
+									<TableCell className="hide-on-mobile ">Estado</TableCell>
 									{/* <TableCell>Attributes</TableCell> */}
 									<TableCell>Actions</TableCell>
 								</TableRow>
@@ -158,7 +160,7 @@ const AdminProductsTableComponent = memo(props => {
 												<Chip
 													id="status-chip"
 													icon={<SentimentSatisfiedAltIcon />}
-													label="  Active"
+													label="  Activo"
 													color="success"
 													size="small"
 												/>
@@ -168,7 +170,7 @@ const AdminProductsTableComponent = memo(props => {
 												<Chip
 													id="status-chip"
 													icon={<SentimentVeryDissatisfiedIcon />}
-													label="Inactive"
+													label="Inactivo"
 													color="error"
 													size="small"
 												/>
@@ -204,7 +206,7 @@ const AdminProductsTableComponent = memo(props => {
 					<AdminProductForm setLoading={setLoading} open={open} closeForm={handleCloseform} product={editProduct} />
 				</>
 			)}
-		</>
+		</div>
 	)
 })
 

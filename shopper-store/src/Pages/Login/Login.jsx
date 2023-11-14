@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState ,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 /* Material imports */
@@ -82,13 +82,16 @@ export default function Login() {
       return;
     } else {
       try {
-        await auth.login(data.email, data.password);
-        if (auth.user) {
-          console.log(auth.user);
-          setEmail("");
-          setPassword("");
-          goToHomePageAdmin();
-        }
+        await auth.login(data.email, data.password).then((res) => {
+          if (res.user) {
+            console.log(res);
+            setEmail("");
+            setPassword("");
+            goToHomePageAdmin();
+          } else {
+            console.log("Usuario no encontrado");
+          }
+        });
       } catch (e) {
         Swal.fire({
           icon: "error",

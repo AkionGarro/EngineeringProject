@@ -59,6 +59,7 @@ export function AuthProvider({ children }) {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
+      return response;
     } catch (error) {
       console.log(error);
     }

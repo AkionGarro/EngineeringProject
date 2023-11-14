@@ -321,11 +321,10 @@ function Orders() {
     },
   ];
   const commonStyles = {
-    bgcolor: 'background.paper',
+    bgcolor: '#E8E9F3',
     mb: 1,
-    borderColor: 'text.primary',
+    borderRadius: 1,
     width: '100%',
-
   };
 
   return (

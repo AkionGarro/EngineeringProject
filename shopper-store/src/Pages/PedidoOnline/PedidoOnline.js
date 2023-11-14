@@ -23,16 +23,16 @@ import "./PedidoOnline.css";
 const PedidoOnline = () => {
   const api = useFirebase();
   const [actualName, setActualName] = useState("");
-  const [direccionSeleccionada, setDireccionSeleccionada] = useState(null);
+  const [direccionSeleccionada, setDireccionSeleccionada] = useState({});
   const [label, setLabel] = useState();
   const [address, setAddress] = useState([]);
   const ref = collection(firestore, "pedidosOnline");
-  const [linkFields, setLinkFields] = useState([{ link: "", comentario: "" }]);
+  const [linkFields, setLinkFields] = useState([{ url: "", comentario: "" }]);
   const auth = useAuth();
-  const email = auth.user.email;
+  const email = localStorage.getItem("currentUser");
 
   const cleanData = () => {
-    setLinkFields([{ link: "", comentario: "" }]);
+    setLinkFields([{ url: "", comentario: "" }]);
     setDireccionSeleccionada("");
     setLabel("");
   };
@@ -46,12 +46,13 @@ const PedidoOnline = () => {
 
   useEffect(() => {
     const datosUser = async () => {
-      const email = auth.user.email;
+      const email = localStorage.getItem("currentUser");
       //Direcciones
       const direcciones = await api.getUserAdress(email);
       setAddress(direcciones);
       //===================================================================================
       const usuario = await api.getUserData(email);
+      setDireccionSeleccionada(usuario.direccionEnvio);
       if (usuario == undefined) {
         let nameUser = auth.user.displayName;
         setActualName(nameUser);
@@ -65,8 +66,20 @@ const PedidoOnline = () => {
   const handleSubmit = async (e) => {
     //=========================================================
     e.preventDefault();
+
+    for (let pedido in linkFields) {
+      if (pedido.description == "" || pedido.url == "") {
+        Swal.fire({
+          icon: "error",
+          title: "Información incompleta",
+          text: "Porfavor, revisar que todos los campos en sus pedidos estén completos.",
+        });
+        return;
+      }
+    }
+
     const productos = linkFields.map((field) => {
-      return `Producto: ${field.link} -- *Comentario*: ${field.comentario} `;
+      return `Producto: ${field.url} -- *Comentario*: ${field.comentario} `;
     });
     const message = productos.join("\n");
     const phoneNumber = "+50685045830";
@@ -118,7 +131,7 @@ const PedidoOnline = () => {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        setLinkFields([{ link: "", comentario: "" }]);
+        setLinkFields([{ url: "", comentario: "" }]);
       }
     });
   };
@@ -141,12 +154,12 @@ const PedidoOnline = () => {
   };
 
   const addFields = () => {
-    setLinkFields([...linkFields, { link: "", comentario: "" }]);
+    setLinkFields([...linkFields, { url: "", comentario: "" }]);
   };
 
   const handleLinkChange = (event, index) => {
     const updatedFields = [...linkFields];
-    updatedFields[index].link = event.target.value;
+    updatedFields[index].url = event.target.value;
     setLinkFields(updatedFields);
   };
 
@@ -169,7 +182,7 @@ const PedidoOnline = () => {
               fullWidth
               label="Link"
               variant="outlined"
-              value={field.link}
+              value={field.url}
               onChange={(e) => handleLinkChange(e, index)}
               className="link"
               autoComplete="off"
@@ -218,6 +231,27 @@ const PedidoOnline = () => {
 
       <div className="users_container">
         <div className="opciones-direccion">
+          <TextField
+            InputLabelProps={{ shrink: true }}
+            id="direccionEnvio"
+            label="Direccion de envio"
+            name="direccionEnvio"
+            variant="outlined"
+            value={
+              direccionSeleccionada.country +
+              " , " +
+              direccionSeleccionada.province +
+              " , " +
+              direccionSeleccionada.canton +
+              " , " +
+              direccionSeleccionada.district +
+              " , " +
+              direccionSeleccionada.address
+            }
+            disabled={true}
+            fullWidth
+            className="direccionEnvio"
+          />
           <FormControl variant="outlined" fullWidth>
             <InputLabel id="direccion-label">
               Selecciona una dirección
@@ -236,6 +270,9 @@ const PedidoOnline = () => {
               ))}
             </Select>
           </FormControl>
+          <InputLabel htmlFor="direccionEnvio" className="labelDireccion">
+            *Selecciona una dirección de envío
+          </InputLabel>
         </div>
       </div>
 
