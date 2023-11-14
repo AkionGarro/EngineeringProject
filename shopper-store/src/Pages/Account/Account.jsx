@@ -30,7 +30,6 @@ function Account() {
     setOpen(true);
   };
 
-
   const handleSelect = (event) => {
     setLabel(event.target.value);
     const jsonObject = JSON.parse(event.target.value);
@@ -81,6 +80,7 @@ function Account() {
       setUpdateInfo(false);
     };
     fetchUserData();
+    setFlagUpdate(false);
   }, [flagUpdate,updateInfo]);
 
   return (
