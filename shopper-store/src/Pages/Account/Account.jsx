@@ -70,7 +70,6 @@ function Account() {
     }
     const fetchUserData = async () => {
       const data = await firebase.getUserData(auth.user.email);
-      console.log(data)
       setFullName(data.fullName);
       setEmail(data.email);
       setPhone(data.phone);
