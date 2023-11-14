@@ -78,7 +78,7 @@ const Register = () => {
     };
 
     const direccion = {"address":dataAddress.address,"canton":dataAddress.canton,"country":dataAddress.country,"district":dataAddress.district,"email":dataAddress.email,"province":dataAddress.province};
-
+    console.log(direccion)
     try {
       await auth.register(data.email, data.password);
 
