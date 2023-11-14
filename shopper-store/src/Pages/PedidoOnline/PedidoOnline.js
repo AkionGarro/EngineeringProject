@@ -22,7 +22,6 @@ import "./PedidoOnline.css";
 import { useGlobalContext } from "../../GlobalContext/GlobalContext";
 import Blog from "../HomePage/HomePage.jsx";
 
-
 const PedidoOnline = () => {
   const api = useFirebase();
   const [actualName, setActualName] = useState("");
@@ -127,7 +126,7 @@ const PedidoOnline = () => {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
-    setComponentToRender(<Blog/>);
+    setComponentToRender(<Blog />);
   };
 
   const deleteAll = () => {
