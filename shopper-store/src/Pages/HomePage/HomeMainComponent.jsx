@@ -58,8 +58,9 @@ const HomeMainComponent = () => {
 
       {/* //Footer de la Pagina. Siempre va a estar presente. */}
       <Footer
-        title="Footer"
-        description="Desarrollado por estudinates del TEC!"
+        title="VeroCam Shop - Personal Shopper"
+        description="Made with "
+        description2=" by ABDFJ"
       />
     </>
   )
