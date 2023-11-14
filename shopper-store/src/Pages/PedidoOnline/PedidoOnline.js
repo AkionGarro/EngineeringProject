@@ -19,6 +19,8 @@ import { useFirebase } from "../../context/DatabaseContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 import "./PedidoOnline.css";
+import { useGlobalContext } from "../../GlobalContext/GlobalContext";
+import Blog from "../HomePage/HomePage.jsx";
 
 const PedidoOnline = () => {
   const api = useFirebase();
@@ -30,6 +32,7 @@ const PedidoOnline = () => {
   const [linkFields, setLinkFields] = useState([{ url: "", comentario: "" }]);
   const auth = useAuth();
   const email = localStorage.getItem("currentUser");
+  const { setComponentToRender } = useGlobalContext();
 
   const cleanData = () => {
     setLinkFields([{ url: "", comentario: "" }]);
@@ -67,8 +70,12 @@ const PedidoOnline = () => {
     //=========================================================
     e.preventDefault();
 
-    for (let pedido in linkFields) {
-      if (pedido.description == "" || pedido.url == "") {
+    for (let pedido of linkFields) {
+      console.log("Pedido");
+      console.log(pedido);
+      console.log("=====================================");
+      if (pedido.comentario === "" || pedido.url === "") {
+        console.log("Entro porque hay campos vacios");
         Swal.fire({
           icon: "error",
           title: "Información incompleta",
@@ -119,6 +126,7 @@ const PedidoOnline = () => {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
+    setComponentToRender(<Blog />);
   };
 
   const deleteAll = () => {

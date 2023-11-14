@@ -1,6 +1,5 @@
 import React from "react";
 import { useEffect } from "react";
-
 import { firestore } from "../../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { storage } from "../../firebase";
@@ -11,7 +10,6 @@ import {
   Grid,
   TextField, Select, MenuItem, FormControl, InputLabel
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Swal from "sweetalert2";
@@ -19,36 +17,38 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useFirebase } from "../../context/DatabaseContext";
 import "./PersonalOrderStore.css";
 import UploadImageInput from "../../components/UploadImageInput";
+import { useGlobalContext } from "../../GlobalContext/GlobalContext";
+import Blog from "../HomePage/HomePage.jsx";
 
 function Personal_Order() {
   const firebase = useFirebase();
-
+  const { setComponentToRender } = useGlobalContext();
   const [direccionSeleccionada, setDireccionSeleccionada] = useState({});
   const [label, setLabel] = useState();
   const [address, setAddress] = useState([]);
-
-  const [fields, setFields] = useState([
-    { description: "", image: null, url_file: null, url_fire: null },
-  ]);
+  const [fields, setFields] = useState([{ description: "", image: null, url_file: null, url_fire: null },]);
   const [imagenes, setImagenes] = useState([]);
   const [flagUpdate, setFlagUpdate] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const referencia = collection(firestore, "pedidosPersonales");
-  const [open, setOpen] = useState(false);
   const auth = useAuth();
   const email = auth.user.email;
 
-  const VisuallyHiddenInput = styled("input")`
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    white-space: nowrap;
-    width: 1px;
-  `;
+  useEffect(() => {
+    const fetchData = async () => {
+      const email = localStorage.getItem("currentUser");
+
+      const data = await firebase.getUserData(email);
+      setDireccionSeleccionada(data.direccionEnvio);
+
+      const direcciones = await firebase.getUserAdress(email)
+      setAddress(direcciones);
+    };
+
+    setFlagUpdate(false);
+
+    fetchData();
+  }, [flagUpdate, searchQuery]);
 
   const handleFieldChange = (index, fieldName, value) => {
     const updatedFields = [...fields];
@@ -184,6 +184,7 @@ function Personal_Order() {
       cleanData();
     } catch (e) {
       console.error("Error adding document: ", e);
+      return;
     }
 
     //=========================================================
@@ -209,6 +210,7 @@ function Personal_Order() {
     // Abre una nueva ventana o pestaña con la URL
     window.open(url, "_blank").focus();
     //=========================================================
+    setComponentToRender(<Blog/>);
   };
 
   const cleanData = () => {
@@ -219,19 +221,6 @@ function Personal_Order() {
     setLabel(null);
     setFlagUpdate(true);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await firebase.getUserData("josuedaniel.cha@gmail.com");
-      setDireccionSeleccionada(data.direccionEnvio);
-      const direcciones = await firebase.getUserAdress("josuedaniel.cha@gmail.com")
-      setAddress(direcciones);
-    };
-
-    setFlagUpdate(false);
-
-    fetchData();
-  }, [flagUpdate, searchQuery]);
 
   return (
     <>

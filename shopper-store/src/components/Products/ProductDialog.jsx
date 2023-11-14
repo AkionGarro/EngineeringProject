@@ -233,8 +233,8 @@ const ProductDialog = props => {
 
 			<DialogContent id="scroll-dialog-description" ref={descriptionElementRef} tabIndex={-1} dividers={true}>
 				<form id="product_information_dialog_form" onSubmit={handleAddItem}>
-					<Grid container spacing={2} className="dialog_grid_container">
-						<Grid xs={12} md={5} className="izq">
+					<Grid container spacing={2}>
+						<Grid xs={12} md={5} id="dialog_grid_container">
 							<Carousel className="dialog_carousel">
 								{product.images.map((image, i) => (
 									<img className="dialog_carousel_image" key={`carousel_image_${i}_${image}`} src={image} alt="" />
@@ -245,7 +245,14 @@ const ProductDialog = props => {
 						<Grid xs={12} md={7} className="der">
 							<>
 								<Grid container spacing={2}>
-									<Grid xs={12}>Precio: ${product.price}</Grid>
+									<Grid xs={12}>
+
+										<h3>
+										Precio: ${product.price}
+										</h3>
+									
+										
+										</Grid>
 
 									{attributeList.map(attr => (
 										<Grid key={`attr-dialog-${attr.name}`} xs={12}>

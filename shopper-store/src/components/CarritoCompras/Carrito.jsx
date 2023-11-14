@@ -185,7 +185,7 @@ const Carrito = (props) => {
               ? userInfo.direccionEnvio
               : "Direccion no especificada",
           productos: carrito,
-          estado: 1,
+          estado: "1",
         };
 
         // Realizar la operación addDocument solo si no se lanzó una excepción

@@ -1,6 +1,9 @@
 #products_container_component{
   display: flex;
   align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
 }
 
 #products_container_component_info{

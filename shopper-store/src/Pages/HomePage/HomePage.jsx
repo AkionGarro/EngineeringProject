@@ -88,14 +88,14 @@ const Blog = (props) => {
       <CssBaseline />
       <Container maxWidth="lg">
         <main>
-          <div>
+          <div> 
             <Typography
               variant="h5"
               gutterBottom
               sx={{ mt: 3, textAlign: "center" }}
               color="textSecondary"
             >
-              En Verocam_shop conseguimos los productos que necesitas de tus
+              En VeroCam Shop conseguimos los productos que necesitas de tus
               tiendas favoritas
             </Typography>
             <Carrousel />
