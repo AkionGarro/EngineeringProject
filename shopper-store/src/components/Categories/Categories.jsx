@@ -6,6 +6,7 @@ import Grid from "@mui/material/Unstable_Grid2" // Grid version 2
 
 import CircularProgress from "@mui/material/CircularProgress"
 import { Box } from "@mui/material"
+import "./Categories.css"
 
 const Categories = props => {
 	//Si carritoCompras no existe en LocalStorage, lo crea. De lo contrario no entra en el condicional.
@@ -60,7 +61,7 @@ const Categories = props => {
 		categories.forEach(element => {
 			mappedCategories.push(
 
-        <Grid key={`catt-card-${element.id}`} xs={3} sm={4} md={4} lg={4} xl={4}>
+        <Grid id="category_component_info" key={`catt-card-${element.id}`} xs={3} >
             <CategoryCard categoryInfo={element} onCategoryClick={onCategoryClick} />
         </Grid>
       
@@ -78,9 +79,9 @@ const Categories = props => {
 				</Box>
 			) : (
 
-				<div>
+				<div id="categories_div_container">
           <h3 id="categories_component_title">Categorias</h3>
-					<Grid container xs={12} spacing={1} >{createCategoryComponents()}</Grid>
+					<Grid id="categories_container_component" container xs={12} spacing={1} >{createCategoryComponents()}</Grid>
 				</div>
 			)}
 		</>
