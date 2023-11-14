@@ -1,1 +1,11 @@
+@media only screen and (max-width: 600px) {
+  .button-navBar {
+    font-size: 13px !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+  }
 
+  .toolbar-homepage {
+    padding: 0 !important;
+  }
+}

@@ -22,7 +22,6 @@ import "./PedidoOnline.css";
 import { useGlobalContext } from "../../GlobalContext/GlobalContext";
 import Blog from "../HomePage/HomePage.jsx";
 
-
 const PedidoOnline = () => {
   const api = useFirebase();
   const [actualName, setActualName] = useState("");
@@ -71,8 +70,12 @@ const PedidoOnline = () => {
     //=========================================================
     e.preventDefault();
 
-    for (let pedido in linkFields) {
-      if (pedido.description == "" || pedido.url == "") {
+    for (let pedido of linkFields) {
+      console.log("Pedido");
+      console.log(pedido);
+      console.log("=====================================");
+      if (pedido.comentario === "" || pedido.url === "") {
+        console.log("Entro porque hay campos vacios");
         Swal.fire({
           icon: "error",
           title: "Información incompleta",
@@ -123,7 +126,7 @@ const PedidoOnline = () => {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
-    setComponentToRender(<Blog/>);
+    setComponentToRender(<Blog />);
   };
 
   const deleteAll = () => {
