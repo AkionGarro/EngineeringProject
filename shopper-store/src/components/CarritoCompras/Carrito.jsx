@@ -7,19 +7,13 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { useFirebase } from "../../context/DatabaseContext";
 import Swal from "sweetalert2";
 import Loader from "./Loader";
-import { useAuth } from "../../context/AuthContext";
 import { firestore } from "../../firebase";
 import { addDocument } from "../../firebase";
 import { collection } from "firebase/firestore";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 
 import "./Carrito.css";
 
@@ -35,10 +29,8 @@ const Carrito = (props) => {
   const firebase = useFirebase();
 
   const email = localStorage.getItem("currentUser");
-  console.log("Email");
 
   const agregarAlCarrito = (product, id) => {
-    console.log("PRODUCTO AL CARRO: ", product);
     const nuevoCarrito = [...carrito];
     var carritoComprasJSON = localStorage.getItem("carritoCompras");
     var carritoCompras = JSON.parse(carritoComprasJSON);
@@ -173,9 +165,29 @@ const Carrito = (props) => {
       if (noErrors) {
         // Obtener información del usuario
         const userInfo = await firebase.getUserData(email);
-        console.log("Info usuario Carrito");
-        console.log(userInfo);
-        console.log("===================================================");
+
+        const productos = carrito.map((producto) => {
+          return `Producto: ${producto.name} -- *Comentario*: ${producto.comentario} `;
+        });
+        const message = productos.join("\n");
+        const phoneNumber = "+50685045830";
+
+        // Construye la URL de WhatsApp
+        const url =
+          "https://wa.me/" +
+          phoneNumber +
+          "?text=" +
+          encodeURIComponent(
+            `*Pedido en Tienda*\n\n` +
+              `*Nombre:* ${userInfo.fullName}\n\n` +
+              `*Productos:*\n${message}\n\n` +
+              `_[Enviado desde la página web de VeroCam Shop]_`
+          );
+
+        // Abre una nueva ventana o pestaña con la URL
+        window.open(url, "_blank").focus();
+
+        //=========================================================
 
         // Construir el objeto de datos
         let data = {
