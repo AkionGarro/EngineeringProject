@@ -140,9 +140,12 @@ function Personal_Order() {
       setFields(updatedFields);
     }
 
+    const dataUser = await firebase.getUserData(user.email);
+    const direccion = dataUser.direccionEnvio;
+
     let data = {
       usuario: user.email,
-      direccion: direction,
+      direccion: direccion,
       productos: fields,
       estado: 0,
     };

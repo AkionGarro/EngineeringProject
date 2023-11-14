@@ -41,12 +41,15 @@ const PedidoOnline = () => {
     setOpen(true);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const dataUser = await firebase.getUserData(user.email);
+    const direccion = dataUser.direccionEnvio;
 
     let data = {
       usuario: selectedUser.email,
-      direccion: direction,
+      direccion: direccion,
       productos: linkFields,
       estado: 0,
     };
