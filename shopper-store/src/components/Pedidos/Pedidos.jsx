@@ -75,7 +75,6 @@ function Pedidos() {
 
   const onChangeInput = async (idOrder) => {
 
-    console.log("ID ORDER onChangeInput: ", idOrder);
     const data = await firebase.getOrder(idOrder);
     if (data !== null) {
       setOrders([data]);

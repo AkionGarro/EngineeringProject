@@ -112,9 +112,11 @@ const ProductDialog = props => {
 
 		console.log("valorAtributos", attributeList)
 		console.log("comentario", commentValue)
-
+		
+		product.producto = product
 		product.comentario = commentValue
 		product.valorAtributos = attributeList
+		
 
 		carritoCompras.push(product)
 		var carritoComprasActualizadoJSON = JSON.stringify(carritoCompras)
@@ -138,7 +140,7 @@ const ProductDialog = props => {
 
 		if (foundProduct === -1) {
 			updateCarritoCompras(product)
-      handleClose()
+			handleClose()
 		} else {
 			var productoAumentar = carritoCompras[foundProduct]
 
@@ -147,15 +149,15 @@ const ProductDialog = props => {
 
 			productoAumentar.valorAtributos.map(atributo => {
 
-        let atributoNuevo = attributeList.find(attr => attr.name === atributo.name)
+				let atributoNuevo = attributeList.find(attr => attr.name === atributo.name)
 
-        if (atributoNuevo.value !== atributo.value) {
-          atributosIguales = false
-        }
+				if (atributoNuevo.value !== atributo.value) {
+					atributosIguales = false
+				}
 
 			})
 
-      if( commentValue !== productoAumentar.comentario) atributosIguales = false
+			if (commentValue !== productoAumentar.comentario) atributosIguales = false
 
 
 			if (atributosIguales) {

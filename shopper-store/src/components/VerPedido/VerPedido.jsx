@@ -48,6 +48,7 @@ function VerPedido(props) {
     };
 
     const openProductModal = (product) => {
+        console.log("PRODUCTO FOR M0DAL: ", product);
         setProductDetailsOpen(!productDetailsOpen);
 
         setSelectedProduct(product);
@@ -83,6 +84,7 @@ function VerPedido(props) {
             // hacer que en doc.productos en cada producto se guarde el nombre del producto ubicado en producto.name
 
             doc.productos.forEach((producto) => {
+                console.log("PRODUCTO: ", producto);
                 try {
                     producto.nombre = producto.producto.name;
                 } catch (error) {

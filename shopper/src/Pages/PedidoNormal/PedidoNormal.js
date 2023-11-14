@@ -73,7 +73,7 @@ const PedidoNormal = () => {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        setLinkFields([{ link: "", comentario: "" }]);
+        setLinkFields([{ producto: null, cantidad: null, comentario:null }]);
       }
     });
   };
