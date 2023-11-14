@@ -44,7 +44,7 @@ const PedidoOnline = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const dataUser = await firebase.getUserData(user.email);
+    const dataUser = await api.getUserData(selectedUser.email);
     const direccion = dataUser.direccionEnvio;
 
     let data = {

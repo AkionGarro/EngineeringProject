@@ -126,8 +126,6 @@ function Personal_Order() {
 
     event.preventDefault();
 
-    console.log(imagenes.length)
-
     if(imagenes.length !== 0){
       for (let i = 0; i < imagenes.length; i++) {
         const foto = imagenes[i];
@@ -156,8 +154,6 @@ function Personal_Order() {
       return;
     }
     
-
-    console.log(fields)
 
     for (var i = 0; i < fields.length; i++) {
       var objeto = fields[i];
