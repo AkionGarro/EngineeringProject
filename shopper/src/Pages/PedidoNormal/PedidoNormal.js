@@ -264,26 +264,7 @@ const PedidoNormal = () => {
         </Button>
       </div>
 
-      <div className="opciones-direccion">
-        <h4 className="texto">
-          Selecciona la dirección en la cual se entregaran tus productos
-        </h4>
-        <Select
-          fullWidth
-          variant="outlined"
-          value={direction}
-          onChange={handleDirectionOnSelect}
-          displayEmpty
-          id="seleccionar"
-        >
-          <MenuItem value="" disabled>
-            Seleccionar dirección
-          </MenuItem>
-          <MenuItem value="rojo">Rojo</MenuItem>
-          <MenuItem value="azul">Azul</MenuItem>
-          <MenuItem value="verde">Verde</MenuItem>
-        </Select>
-      </div>
+      
 
       <div className="opciones-direccion">
         <h4 className="texto">
@@ -301,7 +282,9 @@ const PedidoNormal = () => {
 								<TextField
 									{...params}
 									label="Buscar por correo electrónico"
+                  placeholder="Escribe el correo electrónico del usuario"
 									variant="outlined"
+                  value= ''
 									fullWidth
 									InputProps={{
 										...params.InputProps,

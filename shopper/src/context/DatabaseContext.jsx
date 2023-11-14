@@ -14,84 +14,6 @@ import {
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-const orders = [
-  {
-    direccion: "Dirección A",
-    estado: "0",
-    usuario: "a6ENLApVIUVE0fxYVRV3",
-  },
-  {
-    direccion: "Dirección B",
-    estado: "1",
-    usuario: "a6ENLApVIUVE0fxYVRV3",
-  },
-  {
-    direccion: "Dirección C",
-    estado: "2",
-    usuario: "UiWsWa6VYHLzWHGNC0bZ",
-  },
-  {
-    direccion: "Dirección D",
-    estado: "3",
-    usuario: "UiWsWa6VYHLzWHGNC0bZ",
-  },
-  {
-    direccion: "Dirección E",
-    estado: "4",
-    usuario: "SbhqxrHmPPcWax1ZNA1k",
-  },
-  {
-    direccion: "Dirección F",
-    estado: "1",
-  },
-  {
-    direccion: "Dirección G",
-    estado: "2",
-    usuario: "SbhqxrHmPPcWax1ZNA1k",
-  },
-  {
-    direccion: "Dirección H",
-    estado: "3",
-    usuario: "SbhqxrHmPPcWax1ZNA1k",
-  },
-  {
-    direccion: "Dirección I",
-    estado: "4",
-    usuario: "SbhqxrHmPPcWax1ZNA1k",
-  },
-  {
-    direccion: "Dirección J",
-    estado: "1",
-    usuario: "GI0khObDJbj1jt67DZsF",
-  },
-  {
-    direccion: "Dirección K",
-    estado: "3",
-    usuario: "GI0khObDJbj1jt67DZsF",
-  },
-  {
-    direccion: "Dirección L",
-    estado: "3",
-    usuario: "GI0khObDJbj1jt67DZsF",
-  },
-  {
-    direccion: "Dirección M",
-    estado: "1",
-    usuario: "s4gHRcWCwVE0ZSNFwYxD",
-  },
-  {
-    direccion: "Dirección N",
-    estado: "2",
-    usuario: "s4gHRcWCwVE0ZSNFwYxD",
-  },
-  {
-    direccion: "Dirección O",
-    estado: "3",
-    usuario: "s4gHRcWCwVE0ZSNFwYxD",
-  },
-  // Agrega más pedidos aquí según sea necesario
-];
-
 /* Creating a context object. */
 export const databaseContext = createContext();
 
@@ -367,7 +289,7 @@ export function DatabaseProvider({ children }) {
 
   const getAllOrdersWithID = async (filtroParametro, filtroParametro2) => {
     let orders = [];
-
+  
     let collections = null;
     if (filtroParametro2 === "Todos") {
       collections = ["pedidosTest", "pedidosPersonales", "pedidosOnline"];
@@ -376,43 +298,79 @@ export function DatabaseProvider({ children }) {
     }
     console.log("Filtro 1: ", filtroParametro);
     console.log("Filtro 2: ", collections);
+  
+    // Realizar una única consulta a la colección "users" para obtener la información de todos los usuarios
+    const usersQueryRef = collection(firestore, 'users');
+    const usersQuerySnapshot = await getDocs(usersQueryRef);
+    const usersData = {};
+    usersQuerySnapshot.forEach((userDoc) => {
+      const userData = userDoc.data();
+      console.log("USER DATA: ", userData.email);
+      usersData[userData.email] = userData;
+    });
 
+    console.log("USERS DATA: ", usersData);
+  
     for (const collectionName of collections) {
       const collectionRef = collection(firestore, collectionName);
-
+  
       if (filtroParametro !== "Todos") {
         const queryRef = query(
           collectionRef,
           where("estado", "==", filtroParametro)
         );
         const snapshot = await getDocs(queryRef);
-        snapshot.forEach((doc) => {
-          orders.push({ id: doc.id, ...doc.data() });
-        });
+        for (const docSnapshot of snapshot.docs) {
+          try {
+            // Obtener información adicional del usuario desde el objeto usersData
+            const userEmail = docSnapshot.data().usuario;
+            const userData = usersData[userEmail];
+  
+            if (userData) {
+              // Agregar información del usuario al objeto orders
+              orders.push({
+                id: docSnapshot.id,
+                ...docSnapshot.data(),
+                fullName: userData.fullName,
+                phone: userData.phone
+              });
+            } else {
+              console.log(`No se encontró información de usuario para la orden con ID ${docSnapshot.id}`);
+            }
+          } catch (error) {
+            console.error("Error al obtener información de usuario:", error);
+          }
+        }
       } else {
         const snapshot = await getDocs(collectionRef);
-        snapshot.forEach((doc) => {
-          orders.push({ id: doc.id, ...doc.data() });
-        });
+        for (const docSnapshot of snapshot.docs) {
+          try {
+            // Obtener información adicional del usuario desde el objeto usersData
+            const userEmail = docSnapshot.data().usuario;
+            const userData = usersData[userEmail];
+  
+            if (userData) {
+              orders.push({
+                id: docSnapshot.id,
+                ...docSnapshot.data(),
+                fullName: userData.fullName,
+                phone: userData.phone
+              });
+            } else {
+              console.log(`No se encontró información de usuario para la orden con ID ${docSnapshot.id}`);
+            }
+          } catch (error) {
+            console.error("Error al obtener información de usuario:", error);
+          }
+        }
       }
     }
-
+  
     console.log("ORDERS: ", orders);
     return orders;
   };
+    
 
-  const setTestDatabase = async () => {
-    //agregar cada diccionario en orders a la base de datos, a la tabla pedidosTest
-    const ref = collection(firestore, "pedidosTest");
-    orders.forEach(async (order) => {
-      try {
-        const docRef = await addDoc(ref, order);
-        console.log("Document written with ID: ", docRef.id);
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-    });
-  };
 
   const deleteOrder = async (orderId) => {
     const db = firestore; // Obtén la instancia de Firestore
@@ -420,27 +378,24 @@ export function DatabaseProvider({ children }) {
 
     try {
       // Busca el documento con el campo personalizado "id" igual a orderId
-      const querySnapshot = await getDocs(
-        query(ordersCollectionRef, where("pedido.id", "==", orderId))
-      );
+      const orderDocRef = doc(ordersCollectionRef, orderId);
+      const orderDocSnapshot = await getDoc(orderDocRef);
 
-      // Si se encuentra un documento, elimínalo
-      querySnapshot.forEach((doc) => {
-        deleteDoc(doc.ref);
+      // Verifica si el documento existe antes de intentar eliminarlo
+      if (orderDocSnapshot.exists()) {
+        await deleteDoc(orderDocRef);
+
         return true;
-      });
+      } else {
 
-      // Si no se encuentra ningún documento con ese ID, muestra un mensaje
-      if (querySnapshot.empty) {
-        console.log(`No se encontró ninguna orden con ID ${orderId}`);
         return false;
       }
-      return true;
     } catch (error) {
-      console.error("Error al eliminar la orden:", error);
+
       return false;
     }
   };
+
 
   /*********************************************************
    * Categorias de productos para la Vista de Administrador *
@@ -796,7 +751,6 @@ export function DatabaseProvider({ children }) {
         addNewCategory,
         uploadCategoryImage,
         getAllOrdersWithID,
-        setTestDatabase,
         getCategoryByID,
         //Productos para la Vista de Administrador
         getAllProducts,
