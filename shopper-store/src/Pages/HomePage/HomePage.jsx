@@ -95,7 +95,7 @@ const Blog = (props) => {
               sx={{ mt: 3, textAlign: "center" }}
               color="textSecondary"
             >
-              En Verocam_shop conseguimos los productos que necesitas de tus
+              En VeroCam Shop conseguimos los productos que necesitas de tus
               tiendas favoritas
             </Typography>
             <Carrousel />
