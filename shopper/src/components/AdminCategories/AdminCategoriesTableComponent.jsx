@@ -31,14 +31,16 @@ import { useFirebase } from "../../context/DatabaseContext"
 import AdminCategoryForm from "./AdminCategoryForm"
 import FilterBar from "../ProductCategoryFilter/FilterBar"
 
+import "./AdminCategoriesTableComponent.css"
+
 const Filters = [
-	{ key: 0, label: "All" },
-	{ key: 1, label: "Active" },
-	{ key: 2, label: "Inactive" }
+	{ key: 0, label: "Todos" },
+	{ key: 1, label: "Activos" },
+	{ key: 2, label: "Inactivos" }
 ]
 
 const AdminCategoriesTableComponent = props => {
-	const [filter, setFilter] = useState("Active")
+	const [filter, setFilter] = useState("Activos")
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [categories, setCategories] = useState([])
@@ -55,9 +57,9 @@ const AdminCategoriesTableComponent = props => {
 			try {
 				let querySnapshot = null
 
-				if (filter === "Active") {
+				if (filter === "Activos") {
 					querySnapshot = await api.getCategoriesByStatus(1)
-				} else if (filter === "Inactive") {
+				} else if (filter === "Inactivos") {
 					querySnapshot = await api.getCategoriesByStatus(0)
 				} else {
 					querySnapshot = await api.getAllCategories()
@@ -66,7 +68,7 @@ const AdminCategoriesTableComponent = props => {
 				setCategories(querySnapshot)
 				setLoading(false)
 			} catch (error) {
-				console.log("Error al Obtener Datos de Categorias de Firebase", error)
+				// console.log("Error al Obtener Datos de Categorias de Firebase", error)
 			}
 		}
 
@@ -122,7 +124,7 @@ const AdminCategoriesTableComponent = props => {
 	const endIndex = startIndex + rowsPerPage
 
 	return (
-		<>
+		<div id="admin_categories_c">
 			{loading ? (
 				<Box sx={{ display: "flex" }}>
 					<CircularProgress />
@@ -132,7 +134,7 @@ const AdminCategoriesTableComponent = props => {
 					<FilterBar FilterList={Filters} filter={filter} handleFilterChange={handleFilterChange} />
 
 					<Button variant="contained" onClick={() => handleOpenModal()} startIcon={<AddIcon />} sx={{mt:2, mb:2}}>
-						Add Category
+						Crear Nueva Categoría
 					</Button>
 
 
@@ -140,13 +142,13 @@ const AdminCategoriesTableComponent = props => {
 						<Table>
 							<TableHead>
 								<TableRow>
-									<TableCell>Name</TableCell>
-									<TableCell className="hide-on-mobile ">Description</TableCell>
-									<TableCell className="hide-on-mobile ">Status</TableCell>
-									<TableCell className="hide-on-mobile ">Personalized Fields</TableCell>
-									<TableCell className="hide-on-mobile ">Background Image</TableCell>
-									<TableCell>Icon Image</TableCell>
-									<TableCell>Actions</TableCell>
+									<TableCell>Nombre</TableCell>
+									<TableCell className="hide-on-mobile ">Descripción</TableCell>
+									<TableCell className="hide-on-mobile ">Estado</TableCell>
+									<TableCell className="hide-on-mobile ">Atributos</TableCell>
+									<TableCell className="hide-on-mobile ">Imagen de Fondo</TableCell>
+									<TableCell>Ícono</TableCell>
+									<TableCell>Acciones</TableCell>
 								</TableRow>
 							</TableHead>
 
@@ -160,7 +162,7 @@ const AdminCategoriesTableComponent = props => {
 												<Chip
 													id="status-chip"
 													icon={<SentimentSatisfiedAltIcon />}
-													label="  Active"
+													label="  Activo"
 													color="success"
 													size="small"
 												/>
@@ -170,7 +172,7 @@ const AdminCategoriesTableComponent = props => {
 												<Chip
 													id="status-chip"
 													icon={<SentimentVeryDissatisfiedIcon />}
-													label="Inactive"
+													label="Inactivo"
 													color="error"
 													size="small"
 												/>
@@ -221,7 +223,7 @@ const AdminCategoriesTableComponent = props => {
 					<AdminCategoryForm setLoading={setLoading} open={open} closeModal={handleCloseModal} category={editCategory} />
 				</>
 			)}
-		</>
+		</div>
 	)
 }
 
