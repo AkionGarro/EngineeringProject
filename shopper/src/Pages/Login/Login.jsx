@@ -68,22 +68,37 @@ export default function Login() {
       email: dataForm.get("email"),
       password: dataForm.get("password"),
     };
-
-    try {
-      await auth.login(data.email, data.password);
-      if (await auth.user) {
-        setEmail("");
-        setPassword("");
-        goToHomePageAdmin();
-      }
-    } catch (e) {
+    if (data.email === "" || data.password === "") {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Usuario o contraseña incorrectos",
+        text: "Por favor, complete todos los campos",
       });
-      console.error("Error adding document: ", e);
+      return;
+    }else{
+      try {
+        await auth.login(data.email, data.password).then((res) => {
+          if (res.user) {
+            setEmail("");
+            setPassword("");
+            goToHomePageAdmin();
+          }else{
+            console.log("Usuario no encontrado");
+          }
+        });
+       
+      } catch (e) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Usuario o contraseña incorrectos",
+        });
+        console.error("Error adding document: ", e);
+      }
+
     }
+
+
   };
 
   return (
