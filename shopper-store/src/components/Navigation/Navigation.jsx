@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import logo from "../../imagenes/logoBlanco.png";
 import { useAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useGlobalContext } from "../../GlobalContext/GlobalContext.js";
 import Cuenta from "../../Pages/Account/Account";
 import Blog from "../../Pages/HomePage/HomePage.jsx";
@@ -29,7 +29,7 @@ const pages2 = [{ name: "Inicio", route: "/" }];
 
 const section = [
   { name: "Mi Cuenta", route: <Cuenta /> },
-  { name: "Pedidos", route: <Pedidos /> },
+  { name: "Historial de pedidos", route: <Pedidos /> },
 ];
 
 const pageBlog = <Blog />;
@@ -38,6 +38,7 @@ function ResponsiveAppBar(props) {
   const { onClickCarrito } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const [userAuthenticated, setUserAuthenticated] = useState(false);
+  const location = useLocation();
 
   const auth = useAuth();
   const navigate = useNavigate();
@@ -72,6 +73,7 @@ function ResponsiveAppBar(props) {
     localStorage.removeItem("carritoCompras");
     localStorage.removeItem("CarritoCompras");
     localStorage.removeItem("currentUser");
+    setComponentToRender(<Blog />);
     auth.logout();
     setComponentToRender(pageBlog);
   };
@@ -80,27 +82,26 @@ function ResponsiveAppBar(props) {
     navigate("/Login");
   };
 
+  const handleInicio = () => {
+    if (location.pathname === "/Login") {
+      navigate("/");
+    } else {
+      setComponentToRender(<Blog />);
+    }
+  };
+
   const renderLogin = () => {
     return (
       <Box
         sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
         className="container-nav"
       >
-        {pages.map((page) => (
-          <Link
-            to={`${page.route.toLowerCase()}`}
-            key={page.route}
-            style={{ textDecoration: "none" }}
-          >
-            <Button
-              key={page.name}
-              onClick={page.clicked}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
-              {page.name}
-            </Button>
-          </Link>
-        ))}
+        <Button
+          onClick={handleInicio}
+          sx={{ my: 2, color: "white", display: "block" }}
+        >
+          Inicio
+        </Button>
         <Button
           key="login"
           onClick={handleLogin}
@@ -171,7 +172,7 @@ function ResponsiveAppBar(props) {
           maxWidth: "xl",
         }}
       >
-        <Toolbar disableGutters>
+        <Toolbar>
           <Typography
             variant="h5"
             noWrap
@@ -256,21 +257,12 @@ function ResponsiveAppBar(props) {
                   </MenuItem>
                 ))}
                 <MenuItem onClick={() => handleMenuItemClick()}>
-                  {pages2.map((page) => (
-                    <Link
-                      to={`${page.route.toLowerCase()}`}
-                      key={page.route}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <Button
-                        key={page.name}
-                        onClick={page.clicked}
-                        sx={{ color: "black" }}
-                      >
-                        {page.name}
-                      </Button>
-                    </Link>
-                  ))}
+                  <Button
+                    onClick={handleInicio}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    Inicio
+                  </Button>
                 </MenuItem>
                 <MenuItem onClick={() => handleMenuItemClick()}>
                   <Button

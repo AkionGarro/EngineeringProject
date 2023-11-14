@@ -111,7 +111,8 @@ export function DatabaseProvider({ children }) {
     fullnameF,
     emailF,
     phoneF,
-    identificationF
+    identificationF,
+    direccion
   ) => {
     const ref = collection(firestore, "users");
     let data = {
@@ -120,6 +121,7 @@ export function DatabaseProvider({ children }) {
       phone: phoneF,
       userType: "user",
       identification: identificationF,
+      direccionEnvio: direccion
     };
 
     try {

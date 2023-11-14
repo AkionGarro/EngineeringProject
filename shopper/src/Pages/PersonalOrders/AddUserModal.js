@@ -55,16 +55,18 @@ const AddUserModal = (props) => {
       address: dataForm.get("address"),
     };
 
+    const direccion = {"address":dataAddress.address,"canton":dataAddress.canton,"country":dataAddress.country,"district":dataAddress.district,"email":dataAddress.email,"province":dataAddress.province};
+
     try {
       await auth.register(data.email, data.password);
 
       try {
-        await firebase
-          .registerDataUser(
+        await firebase.registerDataUser(
             data.fullname,
             data.email,
             data.phone,
-            data.identification
+            data.identification,
+            direccion
           )
           .finally(() => {
             try {

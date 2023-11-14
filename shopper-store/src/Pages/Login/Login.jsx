@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState ,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 /* Material imports */
@@ -46,11 +46,19 @@ export default function Login() {
       const response = await auth.loginWithGoogle();
       if (await response) {
         console.log("----------------");
-        console.log(response.user.email);
-        firebase.userIsRegistered(response.user.email);
-        console.log(response.user.displayName);
-        console.log("----------------");
-        goToHomePageAdmin();
+        const userData = {
+          email: response.user.email,
+          displayName: response.user.displayName,
+        };
+
+        await firebase.userIsRegistered(userData).then((res) => {
+          if (res) {
+            console.log("Usuario encontrado");
+            goToHomePageAdmin();
+          } else {
+            goToHomePageAdmin();
+          }
+        });
       }
     } catch (e) {
       console.error("Error adding document: ", e);

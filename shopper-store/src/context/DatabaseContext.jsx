@@ -111,7 +111,8 @@ export function DatabaseProvider({ children }) {
     fullnameF,
     emailF,
     phoneF,
-    identificationF
+    identificationF,
+    direccion
   ) => {
     const ref = collection(firestore, "users");
     let data = {
@@ -120,9 +121,11 @@ export function DatabaseProvider({ children }) {
       phone: phoneF,
       userType: "user",
       identification: identificationF,
+      direccionEnvio: direccion
     };
 
     try {
+      console.log(data)
       const docRef = await addDoc(ref, data);
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
@@ -130,19 +133,52 @@ export function DatabaseProvider({ children }) {
     }
   };
 
-  const userIsRegistered = async (email) => {
+  const userIsRegistered = async (data) => {
+    const ref = collection(firestore, "users");
+    const q = query(ref, where("email", "==", data.email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.docs.length === 0) {
+      console.log("Usuario se tuvo que registrar.");
+      registerDataUser(data.displayName, data.email, "empty", "empty");
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const checkCompleteUserInfo = async (email) => {
     const ref = collection(firestore, "users");
     const q = query(ref, where("email", "==", email));
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.docs.length === 0) {
       console.log("Usuario no encontrado.");
-      return false;
-    }else{
-      console.log("Usuario encontrado.");
-      return true;
+    } else {
+      const userDoc = querySnapshot.docs[0];
+      const userData = userDoc.data();
+      console.log("----------------");
+      console.log(userData);
+      console.log("----------------");
+      if (
+        userData.dirreccionEnvio === "empty" ||
+        userData.phone === "empty" ||
+        userData.identification === "empty" ||
+        userData.dirreccionEnvio === "" ||
+        userData.phone === "" ||
+        userData.identification === "" ||
+        userData.dirreccionEnvio === null ||
+        userData.phone === null ||
+        userData.identification === null ||
+        userData.dirreccionEnvio === undefined ||
+        userData.phone === undefined ||
+        userData.identification === undefined
+      ) {
+        return false;
+      } else {
+        return true;
+      }
     }
-   
   };
 
   const addAddressToUser = async (data) => {
@@ -205,7 +241,6 @@ export function DatabaseProvider({ children }) {
   };
 
   const getOrder = async (orderId) => {
-   
     let order = null;
 
     const collections = ["pedidosTest", "pedidosPersonales", "pedidosOnline"];
@@ -216,17 +251,29 @@ export function DatabaseProvider({ children }) {
         let orderRef = doc(db, collectionName, orderId); // Utiliza doc() para referenciar un documento específico
 
         const orderDoc = await getDoc(orderRef);
-         // Obtiene la marca de tiempo de creación como un objeto Date
-        
+        // Obtiene la marca de tiempo de creación como un objeto Date
+
         if (orderDoc.exists()) {
-          
-          const timestamp = orderDoc._document.createTime.timestamp;          ;
-          const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-          const opcionesDeFormato = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-          const fechaFormateada = date.toLocaleDateString('es-ES', opcionesDeFormato);
-          
-      
-          order = { id: orderDoc.id, fecha: fechaFormateada, ...orderDoc.data() };
+          const timestamp = orderDoc._document.createTime.timestamp;
+          const date = new Date(
+            timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+          );
+          const opcionesDeFormato = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          };
+          const fechaFormateada = date.toLocaleDateString(
+            "es-ES",
+            opcionesDeFormato
+          );
+
+          order = {
+            id: orderDoc.id,
+            fecha: fechaFormateada,
+            ...orderDoc.data(),
+          };
           break; // Si encontramos la orden en una colección, salimos del bucle
         }
       } catch (error) {
@@ -273,23 +320,22 @@ export function DatabaseProvider({ children }) {
     return userData.data();
   };
 
-  
   const getUserAdress = async (email) => {
     let direcciones = [];
     let ref = collection(firestore, "usersAddress");
     ref = query(ref, where("email", "==", email));
 
     const snapshot = await getDocs(ref);
-  
+
     try {
       snapshot.forEach((doc) => {
         direcciones.push(doc.data());
       });
-    }catch (error) {
+    } catch (error) {
       console.error("No hay direcciones", error);
     }
 
-    console.log(direcciones)
+    console.log(direcciones);
 
     return direcciones;
   };
@@ -468,11 +514,21 @@ export function DatabaseProvider({ children }) {
         const snapshot = await getDocs(queryRef);
         console.log("SNAPSHOT: ", snapshot);
         snapshot.forEach((doc) => {
-          const timestamp = doc._document.createTime.timestamp;          ;
-          const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-          const opcionesDeFormato = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-          const fechaFormateada = date.toLocaleDateString('es-ES', opcionesDeFormato);
-          orders.push({ id: doc.id, fecha:fechaFormateada, ...doc.data() });
+          const timestamp = doc._document.createTime.timestamp;
+          const date = new Date(
+            timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+          );
+          const opcionesDeFormato = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          };
+          const fechaFormateada = date.toLocaleDateString(
+            "es-ES",
+            opcionesDeFormato
+          );
+          orders.push({ id: doc.id, fecha: fechaFormateada, ...doc.data() });
         });
       } else {
         const queryRef = query(
@@ -481,11 +537,21 @@ export function DatabaseProvider({ children }) {
         );
         const snapshot = await getDocs(queryRef);
         snapshot.forEach((doc) => {
-          const timestamp = doc._document.createTime.timestamp;          ;
-          const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-          const opcionesDeFormato = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-          const fechaFormateada = date.toLocaleDateString('es-ES', opcionesDeFormato);
-          orders.push({ id: doc.id, fecha:fechaFormateada, ...doc.data() });
+          const timestamp = doc._document.createTime.timestamp;
+          const date = new Date(
+            timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+          );
+          const opcionesDeFormato = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          };
+          const fechaFormateada = date.toLocaleDateString(
+            "es-ES",
+            opcionesDeFormato
+          );
+          orders.push({ id: doc.id, fecha: fechaFormateada, ...doc.data() });
         });
       }
     }
@@ -926,6 +992,7 @@ export function DatabaseProvider({ children }) {
         updateUserData,
         addAddressToUser,
         userIsRegistered,
+        checkCompleteUserInfo,
         //Categorias de productos para la Vista de Administrador
         getCategoryReference,
         getAllCategories,

@@ -1,0 +1,19 @@
+
+
+#categories_container_component {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start; /* Adjust as needed */
+  align-items: center;
+  overflow-x: auto; /* Use 'auto' for automatic scrolling when needed */
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding: 0; /* Adjust as needed */
+}
+
+#category_component_info{
+
+  width: 100px;
+  flex-shrink: 0; 
+}
