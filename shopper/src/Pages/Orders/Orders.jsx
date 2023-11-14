@@ -296,8 +296,8 @@ function Orders() {
     { field: "id", headerName: "ID", width: 95 },
     { field: "fullName", headerName: "Cliente", width: 170 },
     { field: "phone", headerName: "Telefono", width: 140 },
-    { field: "direccion", headerName: "Dirección", width: 200, },
-    { field: "estado", headerName: "Estado", width: 140 },
+    { field: "direccionString", headerName: "Dirección", width: 400, },
+    
     {
       headerName: "Acciones",
       width: 300,

@@ -23,7 +23,6 @@ import AddUserModal from "../PersonalOrders/AddUserModal"
 const PedidoNormal = () => {
   const ref = collection(firestore, "pedidosTest");
   const [linkFields, setLinkFields] = useState([{ producto: null, cantidad: null, comentario:null }]);
-  const [direction, setDirection] = useState("");
   const [flagUpdate, setFlagUpdate] = useState(false)
   const user = auth.currentUser;
   const api = useFirebase()
@@ -32,15 +31,17 @@ const PedidoNormal = () => {
 
   const cleanData = () => {
     setLinkFields([{ producto: null, cantidad: null, comentario:null }]);
-    setDirection("");
+
   };
   const [searchQuery, setSearchQuery] = useState(null)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const dataUser = await api.getUserData(selectedUser.email);
+    const direccion = dataUser.direccionEnvio;
 
     let data = {
-      direccion: direction,
+      direccion: direccion,
       estado: "0",
       usuario: selectedUser.email,
       productos: linkFields,
@@ -111,12 +112,6 @@ const PedidoNormal = () => {
   };
 
  
-
-  const handleDirectionOnSelect = (event) => {
-    setDirection(event.target.value);
-    
-  };
-
   const [loading, setLoading] = useState(true)
 
 	const [open, setOpen] = useState(false)
@@ -273,7 +268,7 @@ const PedidoNormal = () => {
         <Autocomplete
 							options={users}
 							getOptionLabel={user => user.email}
-							value={selectedUser}
+							
 							onChange={(event, newValue) => {
               
 								setSelectedUser(newValue)
@@ -284,13 +279,13 @@ const PedidoNormal = () => {
 									label="Buscar por correo electrónico"
                   placeholder="Escribe el correo electrónico del usuario"
 									variant="outlined"
-                  value= ''
 									fullWidth
 									InputProps={{
 										...params.InputProps,
 										startAdornment: <SearchIcon position="start" fontSize="small" />
 									}}
 									onChange={e => setSearchQuery(e.target.value)}
+                 
 								/>
 							)}
 							isOptionEqualToValue={(option, value) => option.email === value.email}

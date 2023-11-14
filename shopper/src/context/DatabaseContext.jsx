@@ -315,7 +315,7 @@ export function DatabaseProvider({ children }) {
   
     for (const collectionName of collections) {
       const collectionRef = collection(firestore, collectionName);
-  
+    
       if (filtroParametro !== "Todos") {
         const queryRef = query(
           collectionRef,
@@ -327,14 +327,23 @@ export function DatabaseProvider({ children }) {
             // Obtener información adicional del usuario desde el objeto usersData
             const userEmail = docSnapshot.data().usuario;
             const userData = usersData[userEmail];
-  
+    
             if (userData) {
+              // Transformar el campo "direccion" a un string combinado
+              const direccionObj = docSnapshot.data().direccion;
+              let direccionString = "No disponible";
+              //si direccionObj es undefined, no se puede acceder a sus propiedades
+              if (direccionObj !== undefined) {
+                direccionString = `${direccionObj.address}, ${direccionObj.canton}, ${direccionObj.country}, ${direccionObj.district}, ${direccionObj.province}`;
+              }
+    
               // Agregar información del usuario al objeto orders
               orders.push({
                 id: docSnapshot.id,
                 ...docSnapshot.data(),
                 fullName: userData.fullName,
-                phone: userData.phone
+                phone: userData.phone,
+                direccionString: direccionString // Reemplazar ...docSnapshot.data().direccion
               });
             } else {
               console.log(`No se encontró información de usuario para la orden con ID ${docSnapshot.id}`);
@@ -350,13 +359,22 @@ export function DatabaseProvider({ children }) {
             // Obtener información adicional del usuario desde el objeto usersData
             const userEmail = docSnapshot.data().usuario;
             const userData = usersData[userEmail];
-  
+    
             if (userData) {
+              // Transformar el campo "direccion" a un string combinado
+              const direccionObj = docSnapshot.data().direccion;
+              let direccionString = "No disponible";
+              //si direccionObj es undefined, no se puede acceder a sus propiedades
+              if (direccionObj !== undefined) {
+                direccionString = `${direccionObj.address}, ${direccionObj.canton}, ${direccionObj.country}, ${direccionObj.district}, ${direccionObj.province}`;
+              }
+    
               orders.push({
                 id: docSnapshot.id,
                 ...docSnapshot.data(),
                 fullName: userData.fullName,
-                phone: userData.phone
+                phone: userData.phone,
+                direccionString: direccionString // Reemplazar ...docSnapshot.data().direccion
               });
             } else {
               console.log(`No se encontró información de usuario para la orden con ID ${docSnapshot.id}`);
