@@ -38,11 +38,11 @@
   align-items: center;
 }
 
-.dialog_grid_container{
+/* .dialog_grid_container{
 
   height: 50vh;
 
-}
+} */
 
 
 .dialog_carousel{
@@ -84,10 +84,6 @@
 
 }
 
-
-
-
-
 .categoryCard p{
 
   font-size: 0.85rem;
@@ -118,6 +114,9 @@
 }
 
 
+#dialog_grid_container{
+  height: 50vh;
+}
 
 #categories_component_title{
   color: #6C98B4;

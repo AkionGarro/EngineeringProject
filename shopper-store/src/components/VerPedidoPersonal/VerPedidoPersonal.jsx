@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './VerPedido.css';
+import './VerPedidoPersonal.css';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useFirebase } from "../../context/DatabaseContext.jsx";
 import Button from "@mui/material/Button";
@@ -14,7 +14,7 @@ import DialogContent from "@mui/material/DialogContent"
 
 const defaultTheme = createTheme();
 
-function VerPedido(props) {
+function VerPedidoPersonal(props) {
     //recibe la funcion getPedido de props
     const { idPedido } = props;
     const { estado } = props;
@@ -51,12 +51,12 @@ function VerPedido(props) {
         setProductDetailsOpen(!productDetailsOpen);
 
         setSelectedProduct(product);
+        console.log("SELECTED PRODUCT: ", product);
     };
 
     const columns = [
-        { field: "nombre", headerName: "Nombre", width: 300 },
-        { field: "cantidad", headerName: "Cantidad", width: 100 },
-        { field: "comentario", headerName: "Comentario", width: 300 },
+       
+        { field: "description", headerName: "Comentario", width: 300 },
         {
             headerName: "Ver producto",
             width: 300,
@@ -67,7 +67,7 @@ function VerPedido(props) {
                         <Button
                             variant="outlined"
                             id={params.row.id}
-                            onClick={() => openProductModal(params.row.producto)}
+                            onClick={() => openProductModal(params.row)}
                             startIcon={<VisibilityIcon />}
                         ></Button>
                     </Stack>
@@ -113,36 +113,17 @@ function VerPedido(props) {
                             <DialogContent dividers>
                                 {selectedProduct && (
                                     <div>
-                                        <Typography justifyContent={"center"} variant="h5">{selectedProduct.name}</Typography>
+                                        {/* <Typography justifyContent={"center"} variant="h5">{selectedProduct.name}</Typography>
                                         <Typography justifyContent={"center"} variant="subtitle2">Categoría: {selectedProduct.categoryName}</Typography>
-                                        <Typography variant="subtitle1">Precio: {"$" + selectedProduct.price}</Typography>
+                                        <Typography variant="subtitle1">Precio: {"$" + selectedProduct.price}</Typography> */}
                                         <Carousel showThumbs={false}>
-                                            {selectedProduct.images.map((imageUrl, index) => (
-                                                <div key={index}>
-                                                    <img src={imageUrl} style={{ height: '350px', width: 'auto' }} alt={`Imagen ${index}`} />
+                                            
+                                                <div key={1}>
+                                                    <img src={selectedProduct.url_fire} style={{ height: '350px', width: 'auto' }} alt={`Imagen ${1}`} />
                                                 </div>
-                                            ))}
+                                            
                                         </Carousel>
-                                        <div>
-                                            <Typography variant="h6">Datos Personalizados</Typography>
-                                            <TableContainer component={Paper}>
-                                                <Table>
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell colSpan={2} style={{ textAlign: "center" }}>Características</TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {Object.keys(selectedProduct.personalizedFields).map((field, index) => (
-                                                            <TableRow key={index}>
-                                                                <TableCell>{field}</TableCell>
-                                                                <TableCell>{selectedProduct.personalizedFields[field]}</TableCell>
-                                                            </TableRow>
-                                                        ))}
-                                                    </TableBody>
-                                                </Table>
-                                            </TableContainer>
-                                        </div>
+                                 
                                         {/* Agrega más detalles aquí según tus necesidades */}
                                     </div>
                                 )}
@@ -197,4 +178,4 @@ function VerPedido(props) {
     );
 }
 
-export default VerPedido;
+export default VerPedidoPersonal;

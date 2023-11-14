@@ -31,12 +31,15 @@ const Atributo = props => {
 
       <div className="toggle-button-scroll-container">
 
-      <ToggleButtonGroup required value={option} exclusive onChange={handleChangeOption} aria-label="text alignment">
+      <ToggleButtonGroup id="button_group_container" required value={option} exclusive onChange={handleChangeOption} aria-label="text alignment">
 				{values.map(attribute => {
 					return (
-						<ToggleButton key={`attr-option-${attribute}`} value={attribute} aria-label="centered">
+
+						<ToggleButton key={`attr-option-${attribute}`} value={attribute} aria-label="left aligned">
 							{attribute}
 						</ToggleButton>
+
+						
 					)
 				})}
 

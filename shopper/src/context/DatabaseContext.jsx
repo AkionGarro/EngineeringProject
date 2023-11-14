@@ -356,6 +356,8 @@ export function DatabaseProvider({ children }) {
       console.log("USER DATA: ", userData.email);
       usersData[userData.email] = userData;
     });
+
+
   
     for (const collectionName of collections) {
       const collectionRef = collection(firestore, collectionName);
