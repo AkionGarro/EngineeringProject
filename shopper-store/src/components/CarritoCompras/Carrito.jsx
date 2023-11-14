@@ -38,6 +38,7 @@ const Carrito = (props) => {
   console.log("Email");
 
   const agregarAlCarrito = (product, id) => {
+    console.log("PRODUCTO AL CARRO: ", product);
     const nuevoCarrito = [...carrito];
     var carritoComprasJSON = localStorage.getItem("carritoCompras");
     var carritoCompras = JSON.parse(carritoComprasJSON);

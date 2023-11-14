@@ -50,7 +50,7 @@ function OrdenesDeCompraTable(){
   //console.log("ORDERS: ", orders[0].then((data) => console.log(data)));
 
   const handleChangePage = (event, newPage) => {
-    console.log("DATA: ", orders);
+
     setPage(newPage);
   };
 
