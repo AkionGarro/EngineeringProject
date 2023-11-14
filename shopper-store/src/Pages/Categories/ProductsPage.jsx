@@ -41,31 +41,24 @@ const ProductsPage = () => {
 
 	return (
 		<>
-			<Grid container spacing={2} className="products-page">
+			<Grid container spacing={2} id="products-page">
 
+				<Grid xs={12}  id="products-category-title-w-background">
+					<div className="text-overlay">
+						<h2>{category.name}</h2>
+					</div>
 
-			<Grid xs={12} className="products-category-title-w-background">
+					<img src={category.backgroundImage} alt="" />
+				</Grid>
 
-						<div className="text-overlay">
-							<h2>{category.name}</h2>
-						</div>
-
-						<img src={category.backgroundImage} alt="" />
-					</Grid>
-
-
-				<Grid xs={12} sm={3} md={3} lg={3} xl={3} className="categories_products_page">
-	
+				<Grid xs={12} md={9} id="categories_products_page">
 					<Categories handleCategoryChange={handleCategoryChange} />
 				</Grid>
 
-
-				<Grid xs={12} sm={9} md={9} lg={9} xl={9} className="products_products_page">
-					
-					
-
+				<Grid xs={9} id="products_products_page">
 					<Products category={category} handleProductClick={handleProductChange} />
 				</Grid>
+
 			</Grid>
 
 			<ProductDialog open={open} setOpen={setOpen} product={product} />

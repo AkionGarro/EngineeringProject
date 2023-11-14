@@ -1,0 +1,8 @@
+#products_container_component{
+  display: flex;
+  align-items: center;
+}
+
+#products_container_component_info{
+  align-items: center;
+}

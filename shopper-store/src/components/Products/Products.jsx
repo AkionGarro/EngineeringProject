@@ -5,6 +5,7 @@ import Grid from "@mui/material/Unstable_Grid2" // Grid version 2
 
 import { Box } from "@mui/material"
 import CircularProgress from "@mui/material/CircularProgress"
+import "./Products.css"
 
 const Products = props => {
 	const { category, handleProductClick } = props
@@ -41,7 +42,7 @@ const Products = props => {
 
 		products.forEach(element => {
 			mappedProducts.push(
-				<Grid xs={12} sm={6} md={4} lg={3}>
+				<Grid id="products_container_component_info" key={`product-card-${element.id}`} xs={12} sm={6} md={4} lg={3}>
 					<ProductCard productInfo={element} onClickHandler={handleProductClick} />
 				</Grid>
 			)
@@ -57,7 +58,7 @@ const Products = props => {
 					<CircularProgress />
 				</Box>
 			) : (
-				<Grid container xs={12} spacing={3}>
+				<Grid id="products_container_component" container xs={12} spacing={3}>
 					{createProductComponents()}
 				</Grid>
 			)}
