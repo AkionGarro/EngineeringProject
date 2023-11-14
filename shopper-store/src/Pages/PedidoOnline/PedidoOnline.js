@@ -29,7 +29,7 @@ const PedidoOnline = () => {
   const ref = collection(firestore, "pedidosOnline");
   const [linkFields, setLinkFields] = useState([{ url: "", comentario: "" }]);
   const auth = useAuth();
-  const email = auth.user.email;
+  const email = localStorage.getItem("currentUser");
 
   const cleanData = () => {
     setLinkFields([{ url: "", comentario: "" }]);
@@ -46,7 +46,7 @@ const PedidoOnline = () => {
 
   useEffect(() => {
     const datosUser = async () => {
-      const email = auth.user.email;
+      const email = localStorage.getItem("currentUser");
       //Direcciones
       const direcciones = await api.getUserAdress(email);
       setAddress(direcciones);
