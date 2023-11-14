@@ -61,8 +61,7 @@ const AddUserModal = (props) => {
       await auth.register(data.email, data.password);
 
       try {
-        await firebase
-          .registerDataUser(
+        await firebase.registerDataUser(
             data.fullname,
             data.email,
             data.phone,
