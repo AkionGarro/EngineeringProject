@@ -5,6 +5,7 @@ import { useGlobalContext } from "../../GlobalContext/GlobalContext.js"
 import PropTypes from "prop-types"
 import Blog from "../../Pages/HomePage/HomePage.jsx"
 import ProductsPage from "../../Pages/Categories/ProductsPage.jsx"
+import "./NavBar.css";
 
 const sections = [
     { id: "Pedido", title: "Realizar pedido", route: <Blog goTo={1} /> },
@@ -23,7 +24,7 @@ const Navbar = () => {
 
     return (
         <div>
-            <Toolbar component="nav" variant="dense" sx={{ justifyContent: "center", overflowX: "auto"}}>
+            <Toolbar component="nav" variant="dense" sx={{ justifyContent: "center", overflowX: "auto"}} className='toolbar'>
                 {sections.map(section => (
                     <Button
                         key={section.id}

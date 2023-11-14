@@ -10,7 +10,7 @@ import { SliderValueLabel } from "@mui/material"
 import "./Atributo.css"
 
 const Atributo = props => {
-	let { name, values, value } = props.info
+	let { name, values, value} = props.info
 
 	const [option, setOption] = React.useState(value)
 
@@ -20,6 +20,9 @@ const Atributo = props => {
 		if (optionValue !== null) {
 			setOption(optionValue)
 		}
+
+		props.changeAttribute(optionValue, name)
+
 	}
 
 	return (
@@ -31,7 +34,7 @@ const Atributo = props => {
       <ToggleButtonGroup required value={option} exclusive onChange={handleChangeOption} aria-label="text alignment">
 				{values.map(attribute => {
 					return (
-						<ToggleButton value={attribute} aria-label="centered">
+						<ToggleButton key={`attr-option-${attribute}`} value={attribute} aria-label="centered">
 							{attribute}
 						</ToggleButton>
 					)

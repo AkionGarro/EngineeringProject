@@ -19,6 +19,7 @@ function Pedidos(props) {
   const { setComponentToRender } = useGlobalContext();
 
   const handleNavoptions = async () => {
+    setComponentToRender(pedido.route);
     const userAuth = localStorage.getItem("currentUser");
     if (userAuth == null || userAuth == undefined) {
       Swal.fire({
