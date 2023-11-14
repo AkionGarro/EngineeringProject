@@ -159,14 +159,14 @@ const AdminCategoryForm = props => {
 		//Check the user if wan ttop upload the data
 		const result = await Swal.fire({
 			target: document.getElementById("form-modal"),
-			title: "Are you sure?",
-			text: "You won't be able to revert this!",
+			title: "¿Está seguro que quiere guardar los cambios?",
+			text: "Una vez guardados, no podrá deshacer los cambios",
 			icon: "warning",
 			showCancelButton: true,
 			cancelButtonColor: "#d33",
 			confirmButtonColor: "#3085d6",
-			cancelButtonText: "Cancel",
-			confirmButtonText: "Yes, save it!"
+			cancelButtonText: "Cancelar",
+			confirmButtonText: "Guardar Cambios"
 		})
 
 		
@@ -226,14 +226,14 @@ const AdminCategoryForm = props => {
 	const handleClose = () => {
 		Swal.fire({
 			target: document.getElementById("form-modal"),
-			title: "You have unsaved changes!",
-			text: "Are you sure you want to leave without saving?",
+			title: "¡Tiene cambios sin guardar!",
+			text: "¿Está seguro que quiere salir sin antes guardar?",
 			icon: "warning",
 			showCancelButton: true,
 			cancelButtonColor: "#3085d6",
 			confirmButtonColor: "#d33",
-			cancelButtonText: "Stay on this Page",
-			confirmButtonText: "Discard Changes"
+			cancelButtonText: "Quedarme en la página",
+			confirmButtonText: "Salir sin guardar"
 		}).then(result => {
 			if (result.isConfirmed) {
 				props.closeModal()
@@ -256,7 +256,7 @@ const AdminCategoryForm = props => {
 						<Grid id="FormContainer" container spacing={1}>
 							<Grid id="Title-Exit" container xs={12}>
 								<Grid id="Title" xs={10}>
-									<h3>Category Form</h3>
+									<h3>Nueva Categoría</h3>
 								</Grid>
 
 								<Grid id="Exit_Button" xs={2} display="flex" justifyContent="end" alignItems="center">
@@ -268,11 +268,11 @@ const AdminCategoryForm = props => {
 
 							<Grid container id="InputContainer" xs={12} sm={6} spacing={0}>
 								<Grid xs={12}>
-									<p>General Information</p>
+									<p>Información General</p>
 
 									<TextField
 										InputLabelProps={{ shrink: true }}
-										label="Name"
+										label="Nombre"
 										name="name"
 										required
 										value={formData.name}
@@ -283,7 +283,7 @@ const AdminCategoryForm = props => {
 
 									<TextField
 										InputLabelProps={{ shrink: true }}
-										label="Description"
+										label="Descripción"
 										name="description"
 										required
 										value={formData.description}
@@ -294,7 +294,7 @@ const AdminCategoryForm = props => {
 
 									<TextField
 										InputLabelProps={{ shrink: true }}
-										label="Status"
+										label="Estado"
 										name="status"
 										required
 										value={formData.status}
@@ -302,14 +302,14 @@ const AdminCategoryForm = props => {
 										select
 										fullWidth
 										margin="normal">
-										<MenuItem value={1}>Active</MenuItem>
-										<MenuItem value={0}>Inactive</MenuItem>
+										<MenuItem value={1}>Activo</MenuItem>
+										<MenuItem value={0}>Inactivo</MenuItem>
 									</TextField>
 								</Grid>
 
 								<Grid container xs={12} id="ImagesInput" spacing={0}>
 									<Grid xs={12}>
-										<p>Category Images</p>
+										<p>Imágenes</p>
 									</Grid>
 
 									<UploadImageInput
@@ -328,17 +328,17 @@ const AdminCategoryForm = props => {
 							</Grid>
 
 							<Grid id="AttributesContainer" xs={12} sm={6}>
-								<p>Category Attributes</p>
+								<p>Atributos de la Categoría</p>
 
 								<Button onClick={handleAddField} variant="outlined" fullWidth sx={{ mt: 2 }}>
-									Add Attribute
+									Añadir Atributo
 								</Button>
 
 								<Paper xs={12} style={{ height: "50vh", minWidth: "100%", overflow: "auto" }} sx={{ mt: 2 }}>
 									{fieldsFormData.map((field, index) => (
 										<Stack direction="row" spacing={2} key={index} sx={{ mt: 2 }}>
 											<TextField
-												label="Attribute"
+												label="Atributo"
 												name="name"
 												required
 												value={field.name}
@@ -403,12 +403,12 @@ const AdminCategoryForm = props => {
 							<Grid container id="Action Buttons" xs={12}>
 								<Grid xs={6}>
 									<Button onClick={handleClose} variant="contained" color="error" fullWidth>
-										Discard Changes
+										Cancelar
 									</Button>
 								</Grid>
 								<Grid xs={6}>
 									<Button type="submit" variant="contained" color="success" fullWidth>
-										Save Changes
+										Guardar Cambios
 									</Button>
 								</Grid>
 							</Grid>
