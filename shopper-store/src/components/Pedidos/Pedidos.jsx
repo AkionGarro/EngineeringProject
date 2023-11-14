@@ -15,6 +15,8 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import VerPedido from "../VerPedido/VerPedido.jsx";
 import VerPedidoOnline from "../VerPedidoOnline/VerPedidoOnline.jsx";
 import VerPedidoPersonal from "../VerPedidoPersonal/VerPedidoPersonal.jsx";
+import Typography from "@mui/material/Typography";
+
 const defaultTheme = createTheme();
 
 function Pedidos() {
@@ -294,10 +296,44 @@ function Pedidos() {
         <ThemeProvider theme={defaultTheme}>
           
           <div style={{ padding: '0 0.4rem' }}>
-            <Box component="div" ><h4>Filtros de Mis pedidos</h4></Box>
-            <Box sx={{ display: 'block', gridTemplateRows: 'repeat(3, 1fr)' }}>
+          <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                mt: 3,
+                textAlign: "center",
+                color: "#457B9D",
+              }}
+            >
+              Historial de pedidos
+            </Typography>
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                mt: 3,
+                textAlign: "left",
+                color: "textSecondary",
+                marginBottom: "10px",
+              }}
+            >
+              Filtro para los pedidos
+            </Typography>
+            <Box sx={{ display: 'block' }}>
     
               <div >
+              <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                mt: 2,
+                textAlign: "left",
+                color: "gray",
+                marginBottom: "10px",
+              }}
+            >
+              Filtro por estado de pedido
+            </Typography>
                 <Box component="div" className='filtro-buttons' sx={{
                   ...commonStyles,
                   display: {
@@ -306,7 +342,7 @@ function Pedidos() {
                     lg: 'block'
                   },
                   
-                  verticalAlign: 'middle', border: 1
+                  verticalAlign: 'middle'
                 }}>
     
                   <Box sx={{ textAlign: '', m: '0.1rem auto',  }}>
@@ -321,6 +357,17 @@ function Pedidos() {
                     ))}
                   </Box>
                 </Box>
+                <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                mt: 2,
+                textAlign: "left",
+                color: "gray",
+              }}
+            >
+              Filtro por tipo de pedido
+            </Typography>
                 <Box component="div" className='filtro-buttons' sx={{
                   ...commonStyles,
                   display: {
@@ -329,7 +376,6 @@ function Pedidos() {
                     lg: 'block'
                   },
                   verticalAlign: 'middle',
-                  border: 1
                 }}>
     
                   <Box sx={{ textAlign: '', m: '0.1rem auto' }}>
@@ -351,10 +397,7 @@ function Pedidos() {
                   <div>
                     <SearchInputField placeholder="Buscar por ID de orden" searchFunc={onChangeInput} />
                   </div>
-    
-    
                 </Box>
-                
               </div>
               <div >
     
