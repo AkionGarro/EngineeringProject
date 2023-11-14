@@ -121,8 +121,8 @@ const ProductDialog = props => {
 			categoryName: product.categoryName,
 			price: product.price,
 			images: product.images,
-			personalizedFields: product.personalizedFields,
-		  };
+			personalizedFields: product.personalizedFields
+		};
 		product.comentario = commentValue
 		product.valorAtributos = attributeList
 		
