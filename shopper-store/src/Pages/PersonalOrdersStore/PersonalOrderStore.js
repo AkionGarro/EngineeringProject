@@ -201,8 +201,8 @@ function Personal_Order() {
       phoneNumber +
       "?text=" +
       encodeURIComponent(
-        `*Pedido Online*\n\n` +
-        `*Nombre:* ${auth.user.displayName}\n\n` +
+        `*Pedido Personal*\n\n` +
+        `*Nombre:* ${email}\n\n` +
         `*Productos:*\n${message}\n\n` +
         `_[Enviado desde la página web de VeroCam Shop]_`
       );
