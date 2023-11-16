@@ -25,6 +25,9 @@ function VerPedido(props) {
     const [productDetailsOpen, setProductDetailsOpen] = useState(false);
     const firebase = useFirebase();
 
+    const [atributos, setAtributos] = useState([]);
+
+
     const closeProductDetails = () => {
         setSelectedProduct(null);
         setProductDetailsOpen(false);
@@ -47,9 +50,18 @@ function VerPedido(props) {
         return indiceProdcutos;
     };
 
-    const openProductModal = (product) => {
-        setProductDetailsOpen(!productDetailsOpen);
+    const openProductModal = (product, row) => {
+        console.log("PRODUCTO FOR M0DAL: ", product);
+        console.log("Row FOR M0DAL: ", row);
 
+        if(row.valorAtributos !== undefined){
+            setAtributos(row.valorAtributos)
+            console.log("tiene esa vara")
+        }else{
+            console.log("no tiene esa vara")
+        }
+
+        setProductDetailsOpen(!productDetailsOpen);
         setSelectedProduct(product);
     };
 
@@ -67,7 +79,7 @@ function VerPedido(props) {
                         <Button
                             variant="outlined"
                             id={params.row.id}
-                            onClick={() => openProductModal(params.row.producto)}
+                            onClick={() => openProductModal(params.row.producto, params.row )}
                             startIcon={<VisibilityIcon />}
                         ></Button>
                     </Stack>
@@ -83,6 +95,7 @@ function VerPedido(props) {
             // hacer que en doc.productos en cada producto se guarde el nombre del producto ubicado en producto.name
 
             doc.productos.forEach((producto) => {
+                console.log("PRODUCTO: ", producto);
                 try {
                     producto.nombre = producto.producto.name;
                 } catch (error) {
@@ -143,6 +156,29 @@ function VerPedido(props) {
                                                 </Table>
                                             </TableContainer>
                                         </div>
+
+                                        <div>
+                                            <Typography variant="h6">Atributos</Typography>
+                                            <TableContainer component={Paper}>
+                                                <Table>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell colSpan={2} style={{ textAlign: "center" }}>Atributos del Usuario</TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {atributos.map((field, index) => (
+                                                            <TableRow key={"att-"+index}>
+                                                                <TableCell>{field.name}</TableCell>
+                                                                <TableCell>{field.value}</TableCell>
+                                                            </TableRow>
+                                                        ))}
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
+                                        </div>
+
+                                        
                                         {/* Agrega más detalles aquí según tus necesidades */}
                                     </div>
                                 )}

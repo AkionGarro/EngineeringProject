@@ -77,7 +77,6 @@ function Pedidos() {
 
   const onChangeInput = async (idOrder) => {
 
-    console.log("ID ORDER onChangeInput: ", idOrder);
     const data = await firebase.getOrder(idOrder);
     if (data !== null) {
       setOrders([data]);
@@ -393,7 +392,7 @@ function Pedidos() {
     
               </div>
               <div style={{ display: 'block' }}>
-                <Box sx={{ display: '', gridTemplateColumns: 'repeat(1, 1fr)', alignContent: 'center',textAlign: 'center' ,width: { xs: '99vw', sm: '99vw', md: '99vw', lg: '100%'} }}>
+                <Box sx={{ display: '', gridTemplateColumns: 'repeat(1, 1fr)', alignContent: 'center',textAlign: 'center' ,width: { xs: '70vw', sm: '70vw', md: '70vw', lg: '70%'} }}>
                   <div>
                     <SearchInputField placeholder="Buscar por ID de orden" searchFunc={onChangeInput} />
                   </div>

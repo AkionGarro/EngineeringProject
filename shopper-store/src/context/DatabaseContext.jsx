@@ -511,15 +511,8 @@ export function DatabaseProvider({ children }) {
     } else {
       collections = [filtroParametro2];
     }
-    console.log("Filtro 1: ", filtroParametro);
-    console.log("Filtro 2: ", collections);
-    console.log("Filtro 3: ", email);
-
-    
-  
 
     const userDoc = await getUserIdFBDoc(email);
-    console.log("USER CODUMENT: ", userDoc);
 
     for (const collectionName of collections) {
       const collectionRef = collection(firestore, collectionName);
@@ -531,7 +524,7 @@ export function DatabaseProvider({ children }) {
           where("usuario", "in", [email, userDoc])
         );
         const snapshot = await getDocs(queryRef);
-        console.log("SNAPSHOT: ", snapshot);
+
         snapshot.forEach((doc) => {
           const timestamp = doc._document.createTime.timestamp;
           const date = new Date(
@@ -643,9 +636,9 @@ export function DatabaseProvider({ children }) {
     orders.forEach(async (order) => {
       try {
         const docRef = await addDoc(ref, order);
-        console.log("Document written with ID: ", docRef.id);
+
       } catch (e) {
-        console.error("Error adding document: ", e);
+       
       }
     });
   };
@@ -668,12 +661,12 @@ export function DatabaseProvider({ children }) {
 
       // Si no se encuentra ningún documento con ese ID, muestra un mensaje
       if (querySnapshot.empty) {
-        console.log(`No se encontró ninguna orden con ID ${orderId}`);
+      
         return false;
       }
       return true;
     } catch (error) {
-      console.error("Error al eliminar la orden:", error);
+     
       return false;
     }
   };
@@ -701,7 +694,7 @@ export function DatabaseProvider({ children }) {
 
   //Trae los documentos de las categorias de productos
   const getAllCategories = async () => {
-    console.log("Get all categories");
+  
     try {
       const ref = collection(firestore, "productCategories");
       const snapshot = await getDocs(ref);
@@ -711,7 +704,7 @@ export function DatabaseProvider({ children }) {
       }));
       return listCategories;
     } catch (e) {
-      console.log(e);
+
     }
   };
 

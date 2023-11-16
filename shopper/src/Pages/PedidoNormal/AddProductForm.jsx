@@ -96,16 +96,16 @@ const AddProductForm = props => {
 	const handleStatusChange = e => {
 		console.log(".>", e.target.value);
 		let querySnapshot2 = null;
-		
+
 		const fetchData = async () => {
 			try {
-				
-				if(e.target.value == "Todas"){
+
+				if (e.target.value == "Todas") {
 					querySnapshot2 = await api.getAllProducts()
-				}else{
+				} else {
 					querySnapshot2 = await api.getProductsByCategory(e.target.value);
 				}
-				
+
 				console.log("Products by category:", querySnapshot2)
 				setProducts(querySnapshot2)
 			} catch (error) {
@@ -115,7 +115,7 @@ const AddProductForm = props => {
 
 		fetchData();
 	}
-	
+
 
 	//Actualiza el icono de la categoria
 	const handleIconChange = e => {
@@ -181,47 +181,47 @@ const AddProductForm = props => {
 	const handleSubmit = async e => {
 		e.preventDefault()
 
-		
 
-			let iconUrl = formData.icon
-			let bgUrl = formData.backgroundImage
 
-			if (iconFormData != null) {
-				iconUrl = await api.uploadCategoryImage(iconFormData, "icon").then(iconUrl => {
-					return iconUrl
-				})
-			}
+		let iconUrl = formData.icon
+		let bgUrl = formData.backgroundImage
 
-			if (backgroundImageFormData != null) {
-				bgUrl = await api.uploadCategoryImage(backgroundImageFormData, "backgroundImage").then(bgUrl => {
-					return bgUrl
-				})
-			}
+		if (iconFormData != null) {
+			iconUrl = await api.uploadCategoryImage(iconFormData, "icon").then(iconUrl => {
+				return iconUrl
+			})
+		}
 
-			const newFormData = {
-				id: formData.id,
-				name: formData.name,
-				description: formData.description,
-				icon: iconUrl,
-				backgroundImage: bgUrl,
-				personalizedFields: fieldsFormData,
-				status: formData.status
-			}
+		if (backgroundImageFormData != null) {
+			bgUrl = await api.uploadCategoryImage(backgroundImageFormData, "backgroundImage").then(bgUrl => {
+				return bgUrl
+			})
+		}
 
-			//Si el id esta vacio, crea una nueva categoria
-			//Si no la actualiza
-			if (newFormData.id === "") {
-				//console.log("Creando nueva categoria")
-				await api.addNewCategory(newFormData).then(() => {
-					// props.onClose()
-				})
-			} else {
-				//console.log("Actualizando categoria");
-				//Si el id no esta vacio, actualiza la categoria
-				await api.updateCategoryData(newFormData).then(() => {
-					// props.onClose()
-				})
-			
+		const newFormData = {
+			id: formData.id,
+			name: formData.name,
+			description: formData.description,
+			icon: iconUrl,
+			backgroundImage: bgUrl,
+			personalizedFields: fieldsFormData,
+			status: formData.status
+		}
+
+		//Si el id esta vacio, crea una nueva categoria
+		//Si no la actualiza
+		if (newFormData.id === "") {
+			//console.log("Creando nueva categoria")
+			await api.addNewCategory(newFormData).then(() => {
+				// props.onClose()
+			})
+		} else {
+			//console.log("Actualizando categoria");
+			//Si el id no esta vacio, actualiza la categoria
+			await api.updateCategoryData(newFormData).then(() => {
+				// props.onClose()
+			})
+
 
 			//Limpiamos los datos del formulario
 			setFormData(initialFormData)
@@ -234,9 +234,9 @@ const AddProductForm = props => {
 	}
 
 	const handleClose = () => {
-		
-				props.closeModal()
-			
+
+		props.closeModal()
+
 	}
 	const [productosSeleccionados, setProductosSeleccionados] = useState([]);
 
@@ -265,170 +265,145 @@ const AddProductForm = props => {
 		setProductDetailsOpen(false);
 	};
 
-	const closeDetailsProduct = (product) =>{
+	const closeDetailsProduct = (product) => {
 		props.setProduct(product);
 		closeProductDetails();
 		props.closeModal();
 	};
 
 	return (
-		<>
-			<Dialog
-				id="form-modal"
-				open={props.open}
-				onClose={handleClose}
-				scroll="paper"
-				maxWidth="lg"
 
-				aria-labelledby="modal-modal-title"
-				aria-describedby="modal-modal-description">
-				<DialogContent dividers>
-					<form onSubmit={handleSubmit}>
-						<Grid id="FormContainer" container spacing={1}>
-							<Grid id="Title-Exit" container xs={12}>
-								<Grid id="Title" xs={10}>
-									<h1>Agregar Producto</h1>
-								</Grid>
+		<Dialog
+			id="form-modal"
+			open={props.open}
+			onClose={handleClose}
+			scroll="paper"
+			maxWidth="lg"
 
-								<Grid id="Exit_Button" xs={2} display="flex" justifyContent="end" alignItems="center">
-									<IconButton onClick={handleClose}>
-										<CloseIcon />
-									</IconButton>
-								</Grid>
+			aria-labelledby="modal-modal-title"
+			aria-describedby="modal-modal-description">
+			<DialogContent dividers>
+				<form onSubmit={handleSubmit}>
+					<Grid id="FormContainer" container spacing={1}>
+						<Grid id="Title-Exit" container xs={12}>
+							<Grid id="Title" xs={10}>
+								<h1>Agregar Producto</h1>
 							</Grid>
 
-							<Grid container id="InputContainer" xs={12} sm={12} spacing={0}>
-								<Grid xs={14}>
-									<h4>Selecciona el producto a agregar</h4>
-
-									{/* <TextField
-										InputLabelProps={{ shrink: true }}
-										label="Name"
-										name="name"
-										required
-										value={formData.name}
-										onChange={e => handleNameChange(e)}
-										fullWidth
-										margin="normal"
-									/> */}
-
-									<TextField
-										InputLabelProps={{ shrink: true }}
-										label="Filtrar producto por categoría"
-										name="categoria"
-
-										onChange={e => handleStatusChange(e)}
-										select
-										fullWidth
-										margin="normal">
-										<MenuItem value="Todas">Todas las categorías</MenuItem>
-										{categories.map((item, index) => (
-											<MenuItem value={item.name}>{item.name}</MenuItem>
-										))}
-
-									</TextField>
-
-									{/* <TextField
-										InputLabelProps={{ shrink: true }}
-										label="Description"
-										name="description"
-										required
-										value={formData.description}
-										onChange={e => handleDescriptionChange(e)}
-										fullWidth
-										margin="normal"
-									/> */}
-								</Grid>
-
-								<Grid container xs={12} id="ImagesInput" spacing={0}>
-									<Grid xs={12}>
-										<p style={{fontSize:"17px"}}>Productos</p>
-									</Grid>
-
-									<List>
-										{productos.map((producto) => (
-											<Card
-												key={producto.id}
-												sx={{ display: 'inline-block', margin: '5px' }}
-												onClick={() => openProductDetails(producto)} // Abre detalles del producto en clic
-											>
-												<CardMedia
-													component="img"
-													alt={producto.name}
-													height="140px"
-
-													image={producto.images[0]}
-												/>
-												<CardContent>
-													<Typography variant="h6">{producto.name}</Typography>
-													<Typography variant="subtitle1">Precio: {"$" + producto.price}</Typography>
-												</CardContent>
-											</Card>
-										))}
-									</List>
-									{/* Modal para mostrar detalles del producto */}
-									<Dialog
-										open={productDetailsOpen}
-										onClose={closeProductDetails}
-										scroll="paper"
-										maxWidth="lg"
-									>
-										<DialogContent dividers>
-											{selectedProduct && (
-												<div>
-													<Typography justifyContent={"center"} variant="h5">{selectedProduct.name}</Typography>
-													<Typography justifyContent={"center"} variant="subtitle2">Categoría: {selectedProduct.categoryName}</Typography>
-													<Typography variant="subtitle1">Precio: {"$" + selectedProduct.price}</Typography>
-													<Carousel showThumbs={false}>
-														{selectedProduct.images.map((imageUrl, index) => (
-															<div key={index}>
-																<img src={imageUrl} style={{ height: '350px', width: 'auto' }} alt={`Imagen ${index}`} />
-															</div>
-														))}
-													</Carousel>
-													<div>
-														<Typography variant="h6">Datos Personalizados</Typography>
-														<TableContainer component={Paper}>
-															<Table>
-																<TableHead>
-																	<TableRow>
-																		<TableCell colSpan={2} style={{ textAlign: "center" }}>Características</TableCell>
-																	</TableRow>
-																</TableHead>
-																<TableBody>
-																	{Object.keys(selectedProduct.personalizedFields).map((field, index) => (
-																		<TableRow key={index}>
-																			<TableCell>{field}</TableCell>
-																			<TableCell>{selectedProduct.personalizedFields[field]}</TableCell>
-																		</TableRow>
-																	))}
-																</TableBody>
-															</Table>
-														</TableContainer>
-													</div>
-													{/* Agrega más detalles aquí según tus necesidades */}
-												</div>
-											)}
-											<div className="row" style={{ display: "flex" }}>
-												<div className="col">
-													<Button style={{ marginTop: "5px" }} color="warning" onClick={closeProductDetails} variant="outlined">Cerrar</Button>
-													<Button style={{ marginTop: "5px", marginLeft: "50rem" }} color="success" onClick={() => closeDetailsProduct(selectedProduct)} variant="outlined">Agregar producto</Button>
-												</div>
-											</div>
-										</DialogContent>
-									</Dialog>
-
-								</Grid>
+							<Grid id="Exit_Button" xs={2} display="flex" justifyContent="end" alignItems="center">
+								<IconButton onClick={handleClose}>
+									<CloseIcon />
+								</IconButton>
 							</Grid>
-
-
-
-
 						</Grid>
-					</form>
-				</DialogContent>
-			</Dialog>
-		</>
+
+						<Grid container id="InputContainer" xs={12} sm={12} spacing={0}>
+							<Grid xs={14}>
+								<h4>Selecciona el producto a agregar</h4>
+
+								<TextField
+									InputLabelProps={{ shrink: true }}
+									label="Filtrar producto por categoría"
+									name="categoria"
+
+									onChange={e => handleStatusChange(e)}
+									select
+									fullWidth
+									margin="normal">
+									<MenuItem value="Todas">Todas las categorías</MenuItem>
+									{categories.map((item, index) => (
+										<MenuItem value={item.name}>{item.name}</MenuItem>
+									))}
+
+								</TextField>
+
+							</Grid>
+
+							<Grid container xs={12} id="ImagesInput" spacing={0}>
+								<Grid xs={12}>
+									<p style={{ fontSize: "17px" }}>Productos</p>
+								</Grid>
+
+								<List>
+									{productos.map((producto) => (
+										<Card
+											key={producto.id}
+											sx={{ display: 'inline-block', margin: '5px' }}
+											onClick={() => openProductDetails(producto)} // Abre detalles del producto en clic
+										>
+											<CardMedia
+												component="img"
+												alt={producto.name}
+												height="140px"
+
+												image={producto.images[0]}
+											/>
+											<CardContent>
+												<Typography variant="h6">{producto.name}</Typography>
+												<Typography variant="subtitle1">Precio: {"$" + producto.price}</Typography>
+											</CardContent>
+										</Card>
+									))}
+								</List>
+								{/* Modal para mostrar detalles del producto */}
+								<Dialog
+									open={productDetailsOpen}
+									onClose={closeProductDetails}
+									scroll="paper"
+									maxWidth="lg"
+								>
+									<DialogContent dividers>
+										{selectedProduct && (
+											<div>
+												<Typography justifyContent={"center"} variant="h5">{selectedProduct.name}</Typography>
+												<Typography justifyContent={"center"} variant="subtitle2">Categoría: {selectedProduct.categoryName}</Typography>
+												<Typography variant="subtitle1">Precio: {"$" + selectedProduct.price}</Typography>
+												<Carousel showThumbs={false}>
+													{selectedProduct.images.map((imageUrl, index) => (
+														<div key={index}>
+															<img src={imageUrl} style={{ height: '350px', width: 'auto' }} alt={`Imagen ${index}`} />
+														</div>
+													))}
+												</Carousel>
+												<div>
+													<Typography variant="h6">Datos Personalizados</Typography>
+													<TableContainer component={Paper}>
+														<Table>
+															<TableHead>
+																<TableRow>
+																	<TableCell colSpan={2} style={{ textAlign: "center" }}>Características</TableCell>
+																</TableRow>
+															</TableHead>
+															<TableBody>
+																{Object.keys(selectedProduct.personalizedFields).map((field, index) => (
+																	<TableRow key={index}>
+																		<TableCell>{field}</TableCell>
+																		<TableCell>{selectedProduct.personalizedFields[field]}</TableCell>
+																	</TableRow>
+																))}
+															</TableBody>
+														</Table>
+													</TableContainer>
+												</div>
+												{/* Agrega más detalles aquí según tus necesidades */}
+											</div>
+										)}
+										<div className="row" style={{ display: "flex" }}>
+											<div className="col">
+												<Button style={{ marginTop: "5px" }} color="warning" onClick={closeProductDetails} variant="outlined">Cerrar</Button>
+												<Button style={{ marginTop: "5px", marginLeft: "50rem" }} color="success" onClick={() => closeDetailsProduct(selectedProduct)} variant="outlined">Agregar producto</Button>
+											</div>
+										</div>
+									</DialogContent>
+								</Dialog>
+
+							</Grid>
+						</Grid>
+					</Grid>
+				</form>
+			</DialogContent>
+		</Dialog>
+
 	)
 }
 
