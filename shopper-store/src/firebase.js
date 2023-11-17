@@ -17,7 +17,7 @@ const firebaseConfig = {
   storageBucket: "veroshopper-cbeb1.appspot.com",
   messagingSenderId: "1055503157847",
   appId: "1:1055503157847:web:76aec16ae376c9f3333112",
-  measurementId: "G-GPB84QJMTF",
+  measurementId: "G-GPB84QJMTF"
 };
 
 // Initialize Firebase
