@@ -305,7 +305,7 @@ const AddProductForm = props => {
 									InputLabelProps={{ shrink: true }}
 									label="Filtrar producto por categoría"
 									name="categoria"
-
+									
 									onChange={e => handleStatusChange(e)}
 									select
 									fullWidth
@@ -324,27 +324,27 @@ const AddProductForm = props => {
 									<p style={{ fontSize: "17px" }}>Productos</p>
 								</Grid>
 
-								<List>
-									{productos.map((producto) => (
-										<Card
-											key={producto.id}
-											sx={{ display: 'inline-block', margin: '5px' }}
-											onClick={() => openProductDetails(producto)} // Abre detalles del producto en clic
-										>
-											<CardMedia
-												component="img"
-												alt={producto.name}
-												height="140px"
+								<List sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+  {productos.map((producto) => (
+    <Card
+      key={producto.id}
+      sx={{ flex: '1', minWidth: '300px', margin: '10px', cursor: 'pointer' }}
+      onClick={() => openProductDetails(producto)}
+    >
+      <CardMedia
+        component="img"
+        alt={producto.name}
+        height="140px"
+        image={producto.images[0]}
+      />
+      <CardContent>
+        <Typography variant="h6">{producto.name}</Typography>
+        <Typography variant="subtitle1">Precio: {"$" + producto.price}</Typography>
+      </CardContent>
+    </Card>
+  ))}
+</List>
 
-												image={producto.images[0]}
-											/>
-											<CardContent>
-												<Typography variant="h6">{producto.name}</Typography>
-												<Typography variant="subtitle1">Precio: {"$" + producto.price}</Typography>
-											</CardContent>
-										</Card>
-									))}
-								</List>
 								{/* Modal para mostrar detalles del producto */}
 								<Dialog
 									open={productDetailsOpen}
@@ -390,8 +390,12 @@ const AddProductForm = props => {
 										)}
 										<div className="row" style={{ display: "flex" }}>
 											<div className="col">
-												<Button style={{ marginTop: "5px" }} color="warning" onClick={closeProductDetails} variant="outlined">Cerrar</Button>
-												<Button style={{ marginTop: "5px", marginLeft: "50rem" }} color="success" onClick={() => closeDetailsProduct(selectedProduct)} variant="outlined">Agregar producto</Button>
+												<Button style={{ marginTop: "5px", width: "45%", marginRight: "5%" }} color="warning" onClick={closeProductDetails} variant="outlined">
+													Cerrar
+												</Button>
+												<Button style={{ marginTop: "5px", width: "45%" }} color="success" onClick={() => closeDetailsProduct(selectedProduct)} variant="outlined">
+													Agregar producto
+												</Button>
 											</div>
 										</div>
 									</DialogContent>

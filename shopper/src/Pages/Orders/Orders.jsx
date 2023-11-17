@@ -28,10 +28,16 @@ import Stack from "@mui/material/Stack";
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import { DataGrid } from '@mui/x-data-grid';
 import { firestore } from '../../firebase.js';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 //bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Box, { BoxProps } from '@mui/material/Box';
 import { Container } from '@mui/system';
+
+import VerPedido from "../../components/VerPedido/VerPedido.jsx";
+import VerPedidoOnline from "../../components/VerPedidoOnline/VerPedidoOnline.jsx";
+import VerPedidoPersonal from "../../components/VerPedidoPersonal/VerPedidoPersonal.jsx";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -77,8 +83,12 @@ function Orders() {
   const [filtroSeleccionado, setFiltroSeleccionado] = useState("Todos");
   const [filtroSeleccionado2, setFiltroSeleccionado2] = useState("Todos");
   const [filtroSeleccionadoFire, setFiltroSeleccionadoFire] = useState("Todos");
-  const [filtroSeleccionado2Fire, setFiltroSeleccionado2Fire] =
-    useState("Todos");
+  const [filtroSeleccionado2Fire, setFiltroSeleccionado2Fire] = useState("Todos");
+  const [open, setOpen] = useState(false);
+  const [openNormal, setOpenNormal] = useState(false);
+  const [openOnline, setOpenOnline] = useState(false);
+  const [openPersonal, setOpenPersonal] = useState(false);
+  const [loading, setLoading] = useState(true)
   const childRef = React.useRef();
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
   const classes = useStyles();
@@ -93,10 +103,15 @@ function Orders() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [order, setOrder] = useState(null);
   const [idOrder, setOrderId] = useState(0);
+  const [idOrderNormal, setIdOrderNormal] = useState(0);
+  const [idOrderOnline, setIdOrderOnline] = useState(0);
+  const [idOrderPersonal, setIdOrderPersonal] = useState(0);
+  const [estadoOrder, setEstadoOrder] = useState(0);
 
   const getIdForModal = () => {
     return idOrder;
   };
+
   const handleEditClick = (id) => {
     setOrderId(id);
     setPedidoSeleccionado(firebase.getOrder(id));
@@ -167,39 +182,39 @@ function Orders() {
         setFiltroSeleccionadoFire("Todos");
         break;
       case "Pendiente de confirmación":
-        filtro = "0";
+        filtro = 0;
         setFiltroSeleccionado("Pendiente de confirmación");
-        setFiltroSeleccionadoFire("0");
+        setFiltroSeleccionadoFire(0);
         break;
       case "En proceso":
-        filtro = "1";
+        filtro = 1;
         setFiltroSeleccionado("En proceso");
-        setFiltroSeleccionadoFire("1");
+        setFiltroSeleccionadoFire(1);
         break;
       case "Pendiente de pago":
-        filtro = "2";
+        filtro = 2;
         setFiltroSeleccionado("Pendiente de pago");
-        setFiltroSeleccionadoFire("2");
+        setFiltroSeleccionadoFire(2);
         break;
       case "Cancelado":
-        filtro = "3";
+        filtro = 3;
         setFiltroSeleccionado("Cancelado");
-        setFiltroSeleccionadoFire("3");
+        setFiltroSeleccionadoFire(3);
         break;
       case "Pagado":
-        filtro = "4";
+        filtro = 4;
         setFiltroSeleccionado("Pagado");
-        setFiltroSeleccionadoFire("4");
+        setFiltroSeleccionadoFire(4);
         break;
       case "Enviado":
-        filtro = "5";
+        filtro = 5;
         setFiltroSeleccionado("Enviado");
-        setFiltroSeleccionadoFire("5");
+        setFiltroSeleccionadoFire(5);
         break;
       case "Recibido":
-        filtro = "6";
+        filtro = 6;
         setFiltroSeleccionado("Recibido");
-        setFiltroSeleccionadoFire("6");
+        setFiltroSeleccionadoFire(6);
         break;
       default:
         filtro = "Todos";
@@ -231,7 +246,6 @@ function Orders() {
         //console.log("ERROR TO GET ORDER'S DATE: ", error);
       }
     });
-
     // Espera a que todas las fechas se procesen antes de actualizar la fecha en la interfaz de usuario
     await Promise.all(fechaPromises);
 
@@ -243,7 +257,7 @@ function Orders() {
   const firebase = useFirebase();
 
   useEffect(() => {
-  
+
 
     firebase.getAllOrdersWithID("Todos", "Todos").then((data) => {
       setOrders(data);
@@ -253,7 +267,7 @@ function Orders() {
 
 
   const handleChangePage = (event, newPage) => {
-   
+
     setPage(newPage);
   };
 
@@ -291,13 +305,49 @@ function Orders() {
       }
     }
   };
+  const handleCloseModalNormal = () => {
+    setOpenNormal(false)
+    setLoading(true)
+  }
+
+  const handleCloseModalOnline = () => {
+    setOpenOnline(false)
+    setLoading(true)
+  }
+
+  const handleCloseModalPersonal = () => {
+    setOpenPersonal(false)
+    setLoading(true)
+  }
+
+  const verPedido = (id, estado, tabla) => {
+    console.log("TABLA DEL PEDIDO A VER:", tabla)
+    setEstadoOrder(estado);
+    
+    
+    // Abre el modal de edición cuando se hace clic en el icono de editar
+    if (tabla === "pedidosOnline") {
+      //
+      setIdOrderOnline(id);
+      setOpenOnline(true);
+    } else if (tabla === "pedidosTest") {
+      //
+      setIdOrderNormal(id);
+      setOpenNormal(true);
+      
+    } else if (tabla === "pedidosPersonales") {
+      //
+      setIdOrderPersonal(id);
+      setOpenPersonal(true);
+    }
+  };
 
   const columns = [
     { field: "id", headerName: "ID", width: 95 },
     { field: "fullName", headerName: "Cliente", width: 170 },
     { field: "phone", headerName: "Telefono", width: 140 },
     { field: "direccionString", headerName: "Dirección", width: 400, },
-    
+
     {
       headerName: "Acciones",
       width: 300,
@@ -314,6 +364,12 @@ function Orders() {
               id={params.row.id}
               onClick={() => handleEditClick(params.row.id)}
               startIcon={<BorderColorRoundedIcon />}
+            ></Button>
+            <Button
+              variant="outlined"
+              id={params.row.id}
+              onClick={() => verPedido(params.row.id, params.row.estado, params.row.tabla)}
+              startIcon={<VisibilityIcon />}
             ></Button>
           </Stack>
         </div>
@@ -381,11 +437,11 @@ function Orders() {
 
         </div>
         <div style={{ display: 'block' }}>
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', textAlign: 'center' }}>
-           
-              <SearchInputField placeholder="Buscar por ID de orden" searchFunc={onChangeInput} />
-           
-            
+          <Box sx={{ display: 'grid', gridTemplateColumns: {lg: 'repeat(2, 1fr)', md: 'repeat(2, 1fr)'}, textAlign: 'center' }}>
+
+            <SearchInputField placeholder="Buscar por ID de orden" searchFunc={onChangeInput} />
+
+
 
           </Box>
         </div>
@@ -416,6 +472,9 @@ function Orders() {
         </div>
 
       </Box>
+      <VerPedido isOpen={openNormal} closeModal={handleCloseModalNormal} idNormal={idOrderNormal} estado={estadoOrder} />
+      <VerPedidoOnline isOpen={openOnline} closeModal={handleCloseModalOnline} idOnline={idOrderOnline} estado={estadoOrder} />
+      <VerPedidoPersonal isOpen={openPersonal} closeModal={handleCloseModalPersonal} idPersonal={idOrderPersonal} estado={estadoOrder} />
     </Container>
 
   );

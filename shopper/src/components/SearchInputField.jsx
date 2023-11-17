@@ -51,34 +51,9 @@ function SearchInputField({ placeholder, searchFunc }) {
                 </div>
                
                 </div>
-            {/* <div className="row">{searchText}</div> */}
+
         </div>
     );
 }
 
 export default SearchInputField;
-
-{/* <div className="col-6" style={{backgroundColor:'bisque', width:'50%'}}>
-                <TextField
-                    
-                    type="text"
-                    placeholder={placeholder}
-                    onKeyPress={handleKeyPress}
-                    inputRef={textFieldRef}
-                    style={{
-                        height: '3rem',
-                        width: '15rem',
-                        padding: '0px',
-                        margin: '0px',
-                        marginRight: '1rem',
-                    }}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start" onClick={handleAdornmentClick}>
-                                <SearchIcon className="search-icon" />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-                <div className='col' style={{backgroundColor:'green', height:'3rem', width:'50%'}}>11/09/2023</div>
-                </div> */}

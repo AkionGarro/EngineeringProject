@@ -579,28 +579,9 @@ export function DatabaseProvider({ children }) {
     }
     //recorrer el array de orders y sustituir en cada orden estado por el nombre del estado "Pendiente de confirmación", "En proceso", "Pendiente de pago", "Cancelado", "Pagado", "Enviado", "Recibido" según corresponda
     orders.forEach((order) => {
+      console.log("Estado: ", order.estado, "Tipo: ", typeof order.estado);
       switch (order.estado) {
-        case "0":
-          order.estado = "Pendiente de confirmación";
-          break;
-        case "1":
-          order.estado = "En proceso";
-          break;
-        case "2":
-          order.estado = "Pendiente de pago";
-          break;
-        case "3":
-          order.estado = "Cancelado";
-          break;
-        case "4":
-          order.estado = "Pagado";
-          break;
-        case "5":
-          order.estado = "Enviado";
-          break;
-        case "6":
-          order.estado = "Recibido";
-          break;
+      
         case 0:
           order.estado = "Pendiente de confirmación";
           break;
