@@ -259,7 +259,7 @@ const Carrito = (props) => {
 
   return (
     <Dialog
-      className="container"
+      className="containerCarrito"
       open={isOpen}
       onClose={handleClose}
       fullWidth={true}
