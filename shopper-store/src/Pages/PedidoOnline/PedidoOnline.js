@@ -279,6 +279,12 @@ const PedidoOnline = () => {
         >
           Realizar pedido
         </Button>
+
+        <h4 className="advertencia">
+          El precio final del pedido incluye gastos adicionales por servicio y
+          peso. Para obtener más detalles sobre el monto total de su pedido, no
+          dude en contactar a Veronica
+        </h4>
       </div>
     </Container>
   );

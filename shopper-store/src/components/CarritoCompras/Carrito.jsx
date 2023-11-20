@@ -183,38 +183,46 @@ const Carrito = (props) => {
           estado: "1",
         };
 
-        // Realizar la operación addDocument solo si no se lanzó una excepción
-        await addDocument(ref, data);
+        Swal.fire({
+          title: "Advertencia",
+          text: "El precio final del pedido incluye gastos adicionales por servicio y peso. Para obtener más detalles sobre el monto total de su pedido, no dude en contactar a Veronica",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Sí, quiero realizar mi pedido",
+          cancelButtonText: "No, quiero cancelar mi pedido",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await addDocument(ref, data);
 
-        // Mostrar mensaje de éxito
-        await Swal.fire({
-          icon: "success",
-          title: "¡Pedido Completado!",
-          text: "Tu pedido se ha guardado de forma correcta.",
+            // Mostrar mensaje de éxito
+            await Swal.fire({
+              icon: "success",
+              title: "¡Pedido Completado!",
+              text: "Tu pedido se ha guardado de forma correcta.",
+            });
+
+            // Limpiar el carrito y cerrar el diálogo
+            setCarrito([]);
+            localStorage.setItem("carritoCompras", JSON.stringify([]));
+
+            //===============================================================
+
+            // Construye la URL de WhatsApp
+            const url =
+              "https://wa.me/" +
+              phoneNumber +
+              "?text=" +
+              encodeURIComponent(
+                `*Pedido en Tienda*\n\n` +
+                  `*Nombre:* ${userInfo.fullName}\n\n` +
+                  `*Productos:*\n${message}\n\n` +
+                  `_[Enviado desde la página web de VeroCam Shop]_`
+              );
+
+            // Abre una nueva ventana o pestaña con la URL
+            window.open(url, "_blank").focus();
+          }
         });
-
-        // Limpiar el carrito y cerrar el diálogo
-        setCarrito([]);
-        localStorage.setItem("carritoCompras", JSON.stringify([]));
-
-        //===============================================================
-
-        // Construye la URL de WhatsApp
-        const url =
-          "https://wa.me/" +
-          phoneNumber +
-          "?text=" +
-          encodeURIComponent(
-            `*Pedido en Tienda*\n\n` +
-              `*Nombre:* ${userInfo.fullName}\n\n` +
-              `*Productos:*\n${message}\n\n` +
-              `_[Enviado desde la página web de VeroCam Shop]_`
-          );
-
-        // Abre una nueva ventana o pestaña con la URL
-        window.open(url, "_blank").focus();
-
-        //=========================================================
         handleClose();
       }
     } catch (error) {

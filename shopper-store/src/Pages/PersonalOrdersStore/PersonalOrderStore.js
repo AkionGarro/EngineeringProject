@@ -8,7 +8,11 @@ import {
   Button,
   Container,
   Grid,
-  TextField, Select, MenuItem, FormControl, InputLabel
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
@@ -26,7 +30,9 @@ function Personal_Order() {
   const [direccionSeleccionada, setDireccionSeleccionada] = useState({});
   const [label, setLabel] = useState();
   const [address, setAddress] = useState([]);
-  const [fields, setFields] = useState([{ description: "", image: null, url_file: null, url_fire: null },]);
+  const [fields, setFields] = useState([
+    { description: "", image: null, url_file: null, url_fire: null },
+  ]);
   const [imagenes, setImagenes] = useState([]);
   const [flagUpdate, setFlagUpdate] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,7 +47,7 @@ function Personal_Order() {
       const data = await firebase.getUserData(email);
       setDireccionSeleccionada(data.direccionEnvio);
 
-      const direcciones = await firebase.getUserAdress(email)
+      const direcciones = await firebase.getUserAdress(email);
       setAddress(direcciones);
     };
 
@@ -123,10 +129,9 @@ function Personal_Order() {
   };
 
   const handleSubmit = async (event) => {
-
     event.preventDefault();
 
-    if(imagenes.length !== 0){
+    if (imagenes.length !== 0) {
       for (let i = 0; i < imagenes.length; i++) {
         const foto = imagenes[i];
         if (foto === undefined) {
@@ -145,7 +150,7 @@ function Personal_Order() {
           setFields(updatedFields);
         }
       }
-    }else{
+    } else {
       Swal.fire({
         icon: "error",
         title: "Información incompleta",
@@ -153,11 +158,10 @@ function Personal_Order() {
       });
       return;
     }
-    
 
     for (var i = 0; i < fields.length; i++) {
       var objeto = fields[i];
-      if (objeto.description === '') {
+      if (objeto.description === "") {
         Swal.fire({
           icon: "error",
           title: "Información incompleta",
@@ -202,15 +206,15 @@ function Personal_Order() {
       "?text=" +
       encodeURIComponent(
         `*Pedido Personal*\n\n` +
-        `*Nombre:* ${email}\n\n` +
-        `*Productos:*\n${message}\n\n` +
-        `_[Enviado desde la página web de VeroCam Shop]_`
+          `*Nombre:* ${email}\n\n` +
+          `*Productos:*\n${message}\n\n` +
+          `_[Enviado desde la página web de VeroCam Shop]_`
       );
 
     // Abre una nueva ventana o pestaña con la URL
     window.open(url, "_blank").focus();
     //=========================================================
-    setComponentToRender(<Blog/>);
+    setComponentToRender(<Blog />);
   };
 
   const cleanData = () => {
@@ -290,13 +294,25 @@ function Personal_Order() {
               label="Direccion de envio"
               name="direccionEnvio"
               variant="outlined"
-              value={direccionSeleccionada.country + ' , ' + direccionSeleccionada.province + ' , ' + direccionSeleccionada.canton + ' , ' + direccionSeleccionada.district + ' , ' + direccionSeleccionada.address}
+              value={
+                direccionSeleccionada.country +
+                " , " +
+                direccionSeleccionada.province +
+                " , " +
+                direccionSeleccionada.canton +
+                " , " +
+                direccionSeleccionada.district +
+                " , " +
+                direccionSeleccionada.address
+              }
               disabled={true}
               fullWidth
               className="direccionEnvio"
             />
             <FormControl variant="outlined" fullWidth>
-              <InputLabel id="direccion-label">Selecciona una dirección</InputLabel>
+              <InputLabel id="direccion-label">
+                Selecciona una dirección
+              </InputLabel>
               <Select
                 labelId="direccion-label"
                 id="direccion"
@@ -311,10 +327,11 @@ function Personal_Order() {
                 ))}
               </Select>
             </FormControl>
-            <InputLabel htmlFor="direccionEnvio" className="labelDireccion">*Selecciona una dirección de envío</InputLabel>
+            <InputLabel htmlFor="direccionEnvio" className="labelDireccion">
+              *Selecciona una dirección de envío
+            </InputLabel>
           </div>
         </div>
-
 
         <div className="botones-opciones">
           <Button
@@ -325,6 +342,11 @@ function Personal_Order() {
           >
             Realizar pedido
           </Button>
+          <h4 className="advertencia">
+            El precio final del pedido incluye gastos adicionales por servicio y
+            peso. Para obtener más detalles sobre el monto total de su pedido,
+            no dude en contactar a Veronica
+          </h4>
         </div>
       </Container>
     </>
