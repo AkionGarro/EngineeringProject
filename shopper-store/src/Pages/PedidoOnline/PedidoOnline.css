@@ -37,7 +37,7 @@
   cursor: pointer;
   box-shadow: 0px 0px 10px 3px rgba(172, 14, 14, 0.763);
   border-radius: 50%;
-  color: white
+  color: white;
 }
 
 .container .opciones-direccion {
@@ -148,4 +148,11 @@
 
 .texto {
   color: rgba(69, 123, 157, 1);
+}
+
+.advertencia {
+  margin-top: 0px;
+  color: rgb(204, 0, 0);
+  background-color: #f4f4f4;
+  padding: 10px;
 }

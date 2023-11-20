@@ -24,7 +24,6 @@ import Blog from "../HomePage/HomePage.jsx";
 
 const PedidoOnline = () => {
   const api = useFirebase();
-  const [actualName, setActualName] = useState("");
   const [direccionSeleccionada, setDireccionSeleccionada] = useState({});
   const [label, setLabel] = useState();
   const [address, setAddress] = useState([]);
@@ -33,6 +32,7 @@ const PedidoOnline = () => {
   const auth = useAuth();
   const email = localStorage.getItem("currentUser");
   const { setComponentToRender } = useGlobalContext();
+  const firebase = useFirebase();
 
   const cleanData = () => {
     setLinkFields([{ url: "", comentario: "" }]);
@@ -54,14 +54,9 @@ const PedidoOnline = () => {
       const direcciones = await api.getUserAdress(email);
       setAddress(direcciones);
       //===================================================================================
-      const usuario = await api.getUserData(email);
-      setDireccionSeleccionada(usuario.direccionEnvio);
-      if (usuario == undefined) {
-        let nameUser = auth.user.displayName;
-        setActualName(nameUser);
-      } else {
-        setActualName(usuario.fullName);
-      }
+      // Obtener información del usuario
+      const userInfo = await firebase.getUserData(email);
+      setDireccionSeleccionada(userInfo.direccionEnvio);
     };
     datosUser();
   }, []);
@@ -69,7 +64,6 @@ const PedidoOnline = () => {
   const handleSubmit = async (e) => {
     //=========================================================
     e.preventDefault();
-
     for (let pedido of linkFields) {
       if (pedido.comentario === "" || pedido.url === "") {
         Swal.fire({
@@ -81,28 +75,7 @@ const PedidoOnline = () => {
       }
     }
 
-    const productos = linkFields.map((field) => {
-      return `Producto: ${field.url} -- *Comentario*: ${field.comentario} `;
-    });
-    const message = productos.join("\n");
-    const phoneNumber = "+50685045830";
-
-    // Construye la URL de WhatsApp
-    const url =
-      "https://wa.me/" +
-      phoneNumber +
-      "?text=" +
-      encodeURIComponent(
-        `*Pedido Online*\n\n` +
-          `*Nombre:* ${actualName}\n\n` +
-          `*Productos:*\n${message}\n\n` +
-          `_[Enviado desde la página web de VeroCam Shop]_`
-      );
-
-    // Abre una nueva ventana o pestaña con la URL
-    window.open(url, "_blank").focus();
-
-    //=========================================================
+    const userInfo = await firebase.getUserData(email);
 
     let data = {
       usuario: email,
@@ -111,17 +84,34 @@ const PedidoOnline = () => {
       estado: 0,
     };
 
-    try {
-      await addDocument(ref, data);
-      Swal.fire({
-        icon: "success",
-        title: "¡Pedido Completado!",
-        text: "Tu pedido se ha guardado de forma correcta.",
-      });
-      cleanData();
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+    const productos = linkFields.map((field) => {
+      return `Producto: ${field.url} -- *Comentario*: ${field.comentario} `;
+    });
+
+    const message = productos.join("\n");
+    const phoneNumber = "+50685045830";
+
+    await addDocument(ref, data);
+    Swal.fire({
+      icon: "success",
+      title: "¡Pedido Completado!",
+      text: "Tu pedido se ha guardado de forma correcta.",
+    });
+
+    cleanData();
+    // Construye la URL de WhatsApp
+    const url =
+      "https://wa.me/" +
+      phoneNumber +
+      "?text=" +
+      encodeURIComponent(
+        `*Pedido Online*\n\n` +
+          `*Nombre:* ${userInfo.fullName}\n\n` +
+          `*Productos:*\n${message}\n\n` +
+          `_[Enviado desde la página web de VeroCam Shop]_`
+      );
+    window.open(url, "_blank").focus();
+
     setComponentToRender(<Blog />);
   };
 
@@ -289,6 +279,12 @@ const PedidoOnline = () => {
         >
           Realizar pedido
         </Button>
+
+        <h4 className="advertencia">
+          El precio final del pedido incluye gastos adicionales por servicio y
+          peso. Para obtener más detalles sobre el monto total de su pedido, no
+          dude en contactar a Veronica
+        </h4>
       </div>
     </Container>
   );
