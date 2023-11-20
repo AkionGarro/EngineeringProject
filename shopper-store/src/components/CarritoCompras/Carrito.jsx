@@ -219,8 +219,12 @@ const Carrito = (props) => {
                   `_[Enviado desde la página web de VeroCam Shop]_`
               );
 
-            // Abre una nueva ventana o pestaña con la URL
-            window.open(url, "_blank").focus();
+            try {
+              // Abre una nueva ventana o pestaña con la URL
+              window.open(url, "_blank").focus();
+            } catch (error) {
+              console.log(error);
+            }
           }
         });
         handleClose();
