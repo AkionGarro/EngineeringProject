@@ -172,23 +172,6 @@ const Carrito = (props) => {
         const message = productos.join("\n");
         const phoneNumber = "+50685045830";
 
-        // Construye la URL de WhatsApp
-        const url =
-          "https://wa.me/" +
-          phoneNumber +
-          "?text=" +
-          encodeURIComponent(
-            `*Pedido en Tienda*\n\n` +
-              `*Nombre:* ${userInfo.fullName}\n\n` +
-              `*Productos:*\n${message}\n\n` +
-              `_[Enviado desde la página web de VeroCam Shop]_`
-          );
-
-        // Abre una nueva ventana o pestaña con la URL
-        window.open(url, "_blank").focus();
-
-        //=========================================================
-
         // Construir el objeto de datos
         let data = {
           usuario: email,
@@ -213,6 +196,25 @@ const Carrito = (props) => {
         // Limpiar el carrito y cerrar el diálogo
         setCarrito([]);
         localStorage.setItem("carritoCompras", JSON.stringify([]));
+
+        //===============================================================
+
+        // Construye la URL de WhatsApp
+        const url =
+          "https://wa.me/" +
+          phoneNumber +
+          "?text=" +
+          encodeURIComponent(
+            `*Pedido en Tienda*\n\n` +
+              `*Nombre:* ${userInfo.fullName}\n\n` +
+              `*Productos:*\n${message}\n\n` +
+              `_[Enviado desde la página web de VeroCam Shop]_`
+          );
+
+        // Abre una nueva ventana o pestaña con la URL
+        window.open(url, "_blank").focus();
+
+        //=========================================================
         handleClose();
       }
     } catch (error) {
