@@ -39,6 +39,7 @@ function Personal_Order() {
   const referencia = collection(firestore, "pedidosPersonales");
   const auth = useAuth();
   const email = auth.user.email;
+  const [actualName, setActualName] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,6 +47,12 @@ function Personal_Order() {
 
       const data = await firebase.getUserData(email);
       setDireccionSeleccionada(data.direccionEnvio);
+      if (data == undefined) {
+        let nameUser = auth.user.displayName;
+        setActualName(nameUser);
+      } else {
+        setActualName(data.fullName);
+      }
 
       const direcciones = await firebase.getUserAdress(email);
       setAddress(direcciones);
@@ -206,9 +213,9 @@ function Personal_Order() {
       "?text=" +
       encodeURIComponent(
         `*Pedido Personal*\n\n` +
-          `*Nombre:* ${email}\n\n` +
-          `*Productos:*\n${message}\n\n` +
-          `_[Enviado desde la página web de VeroCam Shop]_`
+        `*Nombre:* ${actualName}\n\n` +
+        `*Productos:*\n${message}\n\n` +
+        `_[Enviado desde la página web de VeroCam Shop]_`
       );
 
     // Abre una nueva ventana o pestaña con la URL

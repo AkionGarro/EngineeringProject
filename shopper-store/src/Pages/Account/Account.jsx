@@ -36,10 +36,13 @@ function Account() {
   };
 
   const handleEditClick = () => {
+    console.log("Fiorela")
+    console.log("Hola"+direccionSeleccionada)
     setIsEditing(true);
   };
 
   const handleSubmit = async (event) => {
+    console.log(direccionSeleccionada)
     event.preventDefault();
     const dataForm = new FormData(event.currentTarget);
 
@@ -50,6 +53,8 @@ function Account() {
       identification: dataForm.get("identification"),
       direccionEnvio: direccionSeleccionada,
     };
+
+    console.log("Información actualizada"+data)
 
     try {
       await firebase.updateUserData(data);
@@ -71,6 +76,7 @@ function Account() {
       setPhone(data.phone);
       setIdentification(data.identification);
       setAddressEnvio(data.direccionEnvio);
+      setDireccionSeleccionada(data.direccionEnvio);
       const direcciones = await firebase.getUserAdress(auth.user.email);
       setAddress(direcciones);
       setUpdateInfo(false);
