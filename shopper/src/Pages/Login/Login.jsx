@@ -17,6 +17,7 @@ import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
 import Swal from "sweetalert2";
 import LogoVeroShop from "../../components/Logo/Logo";
+import googleIcon from "../../googleIcon/GoogleIcon.png";
 import Register from "../Register/Register";
 import { useFirebase } from "../../context/DatabaseContext";
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -75,18 +76,17 @@ export default function Login() {
         text: "Por favor, complete todos los campos",
       });
       return;
-    }else{
+    } else {
       try {
         await auth.login(data.email, data.password).then((res) => {
           if (res.user) {
             setEmail("");
             setPassword("");
             goToHomePageAdmin();
-          }else{
+          } else {
             console.log("Usuario no encontrado");
           }
         });
-       
       } catch (e) {
         Swal.fire({
           icon: "error",
@@ -95,10 +95,7 @@ export default function Login() {
         });
         console.error("Error adding document: ", e);
       }
-
     }
-
-
   };
 
   return (
@@ -182,10 +179,7 @@ export default function Login() {
                 >
                   <div className="google-btn">
                     <div className="google-icon-wrapper">
-                      <img
-                        className="google-icon"
-                        src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-                      />
+                      <img className="google-icon" src={googleIcon} />
                     </div>
                     <p className="btn-text">
                       <b>Inicio con google</b>

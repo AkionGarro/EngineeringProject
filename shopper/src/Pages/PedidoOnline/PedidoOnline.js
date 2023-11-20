@@ -44,6 +44,17 @@ const PedidoOnline = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    for (let pedido of linkFields) {
+      if (pedido.comentario === "" || pedido.url === "") {
+        Swal.fire({
+          icon: "error",
+          title: "Información incompleta",
+          text: "Porfavor, revisar que todos los campos en sus pedidos estén completos.",
+        });
+        return;
+      }
+    }
+
     const dataUser = await api.getUserData(selectedUser.email);
     const direccion = dataUser.direccionEnvio;
 

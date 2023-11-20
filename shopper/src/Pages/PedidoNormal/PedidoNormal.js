@@ -226,6 +226,9 @@ const PedidoNormal = () => {
               className="comentario"
               disabled = {true}
               autoComplete="off"
+              InputProps={{
+                style: { color: 'red' }, // Cambia el color del texto
+              }}
               
             />
           </Grid>

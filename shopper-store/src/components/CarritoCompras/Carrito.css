@@ -110,18 +110,19 @@
   background-color: rgb(149, 148, 148);
 }
 
-@media only screen and (max-width: 600px) {
-  .carrito {
-    top: 4rem;
-    right: 1.5rem;
-    width: auto;
-    left: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-  }
+.containerCarrito {
+  top: 4rem;
+  right: 1.5rem;
+  width: auto;
+  left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+}
 
+@media only screen and (max-width: 600px) {
   .opciones-button-carrito {
     display: flex;
     align-items: center;

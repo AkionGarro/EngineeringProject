@@ -63,6 +63,7 @@ function Pedidos() {
     return order;
   };
   const verPedido = (id, estado, tabla) => {
+    
     setOrderId(id);
     setPedidoSeleccionado(firebase.getOrder(id));
     // Abre el modal de edición cuando se hace clic en el icono de editar
@@ -138,39 +139,39 @@ function Pedidos() {
         setFiltroSeleccionadoFire("Todos");
         break;
       case "Pendiente de confirmación":
-        filtro = "0";
+        filtro = 0;
         setFiltroSeleccionado("Pendiente de confirmación");
-        setFiltroSeleccionadoFire("0");
+        setFiltroSeleccionadoFire(0);
         break;
       case "En proceso":
-        filtro = "1";
+        filtro = 1;
         setFiltroSeleccionado("En proceso");
-        setFiltroSeleccionadoFire("1");
+        setFiltroSeleccionadoFire(1);
         break;
       case "Pendiente de pago":
-        filtro = "2";
+        filtro = 2;
         setFiltroSeleccionado("Pendiente de pago");
-        setFiltroSeleccionadoFire("2");
+        setFiltroSeleccionadoFire(2);
         break;
       case "Cancelado":
-        filtro = "3";
+        filtro = 3;
         setFiltroSeleccionado("Cancelado");
-        setFiltroSeleccionadoFire("3");
+        setFiltroSeleccionadoFire(3);
         break;
       case "Pagado":
-        filtro = "4";
+        filtro = 4;
         setFiltroSeleccionado("Pagado");
-        setFiltroSeleccionadoFire("4");
+        setFiltroSeleccionadoFire(4);
         break;
       case "Enviado":
-        filtro = "5";
+        filtro = 5;
         setFiltroSeleccionado("Enviado");
-        setFiltroSeleccionadoFire("5");
+        setFiltroSeleccionadoFire(5);
         break;
       case "Recibido":
-        filtro = "6";
+        filtro = 6;
         setFiltroSeleccionado("Recibido");
-        setFiltroSeleccionadoFire("6");
+        setFiltroSeleccionadoFire(6);
         break;
       default:
         filtro = "Todos";

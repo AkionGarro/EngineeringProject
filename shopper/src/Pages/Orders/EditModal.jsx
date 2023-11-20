@@ -24,25 +24,25 @@ const EditModal = ({ isOpen, onClose, idOrderModal, getIdFunc, getOrdersFunc, fi
       let filtro = null;
       try {
         switch (data.estado) {
-          case "0":
+          case 0:
             filtro = "Pendiente de confirmación";
             break;
-          case "1":
+          case 1:
             filtro = "En proceso";
             break;
-          case "2":
+          case 2:
             filtro = "Pendiente de pago";
             break;
-          case "3":
+          case 3:
             filtro = "Cancelado";
             break;
-          case "4":
+          case 4:
             filtro = "Pagado";
             break;
-          case "5":
+          case 5:
             filtro = "Enviado";
             break;
-          case "6":
+          case 6:
             filtro = "Recibido";
             break;
           default:
@@ -66,25 +66,25 @@ const EditModal = ({ isOpen, onClose, idOrderModal, getIdFunc, getOrdersFunc, fi
     let finalStatus = null;
     switch (selectedStatus) {
       case "Pendiente de confirmación":
-        finalStatus = "0";
+        finalStatus = 0;
         break;
       case "En proceso":
-        finalStatus = "1";
+        finalStatus = 1;
         break;
       case "Pendiente de pago":
-        finalStatus = "2";
+        finalStatus = 2;
         break;
       case "Cancelado":
-        finalStatus = "3";
+        finalStatus = 3;
         break;
       case "Pagado":
-        finalStatus = "4";
+        finalStatus = 4;
         break;
       case "Enviado":
-        finalStatus = "5";
+        finalStatus = 5;
         break;
       case "Recibido":
-        finalStatus = "6";
+        finalStatus = 6;
         break;
       default:
         finalStatus = null;
@@ -106,9 +106,7 @@ const EditModal = ({ isOpen, onClose, idOrderModal, getIdFunc, getOrdersFunc, fi
         <DialogTitle className="modal-title">Editar Pedido ID: {idOrderModal}</DialogTitle>
 
         <DialogContent>
-          <div className="client-name">
-            Nombre del cliente: <span className="client-name-span">{order == null ? 'Estado no disponible' : order.cliente}</span>
-          </div>
+         
           {order !== null && (
             <div className="order-status">
               Estado del pedido:
