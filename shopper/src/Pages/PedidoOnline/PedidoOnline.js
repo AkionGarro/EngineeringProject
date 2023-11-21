@@ -45,7 +45,7 @@ const PedidoOnline = () => {
     e.preventDefault();
 
     for (let pedido of linkFields) {
-      if (pedido.comentario === "" || pedido.url === "") {
+      if (pedido.comentario === "" || pedido.link === "") {
         Swal.fire({
           icon: "error",
           title: "Información incompleta",
