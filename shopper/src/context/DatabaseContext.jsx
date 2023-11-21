@@ -109,13 +109,14 @@ export function DatabaseProvider({ children }) {
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.docs.length === 0) {
-      console.log("Usuario no encontrado.");
+    
+      return false;
+
     } else {
       const userDoc = querySnapshot.docs[0];
       const userData = userDoc.data();
-      console.log("----------------");
-      console.log(userData);
-      console.log("----------------");
+  
+      
       if (
         userData.phone == "empty" ||
         userData.identification == "empty" ||
@@ -247,6 +248,26 @@ export function DatabaseProvider({ children }) {
     return order;
   };
 
+  const getAdvertenciaMessage = async (docId) => {
+    const advertenciaRef = doc(firestore, "advertencia", docId);
+  
+    try {
+      const docSnapshot = await getDoc(advertenciaRef);
+  
+      if (docSnapshot.exists()) {
+        const msgAdvertencia = docSnapshot.data().msgAdvertencia;
+        console.log("Mensaje de advertencia:", msgAdvertencia);
+        return msgAdvertencia;
+      } else {
+        console.log("Documento no encontrado en la colección 'advertencia'.");
+        return null; // Puedes manejar esto según tus necesidades
+      }
+    } catch (error) {
+      console.error("Error al obtener el mensaje de advertencia:", error);
+      return null; // Puedes manejar esto según tus necesidades
+    }
+  };
+
   const getAllUsers = async () => {
     try {
       const ref = collection(firestore, "users");
@@ -302,6 +323,20 @@ export function DatabaseProvider({ children }) {
       console.error("Error al actualizar el usuario:", error);
     }
   };
+  const updateUserMessage = async (docId, msg) => {
+    const advertenciaRef = doc(firestore, "advertencia", docId);
+  
+    try {
+      await updateDoc(advertenciaRef, {
+        msgAdvertencia: msg,
+      });
+      console.log("Mensaje de advertencia actualizado con éxito.");
+    } catch (error) {
+      console.error("Error al actualizar el mensaje de advertencia:", error);
+    }
+  };
+
+  
 
   const addNewAdmin = async (email) => {
     const ref = collection(firestore, "users");
@@ -867,9 +902,11 @@ export function DatabaseProvider({ children }) {
         activateProduct,
         updateProductData,
         addNewProduct,
+        updateUserMessage,
         uploadProductImages,
         getProductsByCategory,
-        
+        getAdvertenciaMessage,
+
       }}
     >
       {children}
