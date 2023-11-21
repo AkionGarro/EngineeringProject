@@ -84,6 +84,25 @@ export function DatabaseProvider({ children }) {
     }
   };
 
+  const checkUserIsAdmin = async (email) => {
+    const ref = collection(firestore, "users");
+    const q = query(ref, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+    
+    if (querySnapshot.docs.length === 0) {
+      console.log("Usuario no encontrado.");
+      return;
+    }else{
+      const userDoc = querySnapshot.docs[0];
+      const userRef = doc(firestore, "users", userDoc.id);
+      const userData = await getDoc(userRef);
+      const userType = userData.data().userType;
+      console.log("User type: ", userType);
+      return userType;
+    }
+    
+  };
+
   const checkCompleteUserInfo = async (email) => {
     const ref = collection(firestore, "users");
     const q = query(ref, where("email", "==", email));
@@ -864,6 +883,7 @@ export function DatabaseProvider({ children }) {
         addAddressToUser,
         userIsRegistered,
         checkCompleteUserInfo,
+        checkUserIsAdmin,
         //Categorias de productos para la Vista de Administrador
         getCategoryReference,
         getAllCategories,
@@ -886,6 +906,7 @@ export function DatabaseProvider({ children }) {
         uploadProductImages,
         getProductsByCategory,
         getAdvertenciaMessage,
+
       }}
     >
       {children}
