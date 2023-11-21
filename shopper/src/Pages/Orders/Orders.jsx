@@ -276,7 +276,7 @@ function Orders() {
     setPage(0);
   };
 
-  const deleteOrder = async (id) => {
+  const deleteOrder = async (id, tabla) => {
     console.log("ID ORDER BORRAR: ", id);
     let result = await Swal.fire({
       title: "¿Estás seguro?",
@@ -288,7 +288,7 @@ function Orders() {
     });
 
     if (result.isConfirmed) {
-      result = await firebase.deleteOrder(id);
+      result = await firebase.deleteOrder(id, tabla);
       if (result) {
         Swal.fire({
           icon: "success",
@@ -355,7 +355,7 @@ function Orders() {
         <div>
           <Stack direction="row" spacing={2}>
             <Button
-              onClick={() => deleteOrder(params.row.id)}
+              onClick={() => deleteOrder(params.row.id, params.row.tabla)}
               variant="outlined"
               startIcon={<DeleteIcon />}
             ></Button>
