@@ -25,6 +25,7 @@ const Carrito = (props) => {
   const { onClose } = props;
   const [isOpen, setOpen] = useState(true); // Agrega el estado isOpen
   const ref = collection(firestore, "pedidosTest");
+  const [msgAdvertencia, setMsgAdvertencia] = useState("");
   const [loading, setLoading] = useState(true);
   const firebase = useFirebase();
 
@@ -185,7 +186,7 @@ const Carrito = (props) => {
 
         Swal.fire({
           title: "Advertencia",
-          text: "El precio final del pedido incluye gastos adicionales por servicio y peso. Para obtener más detalles sobre el monto total de su pedido, no dude en contactar a Veronica",
+          text: msgAdvertencia,
           icon: "warning",
           showCancelButton: true,
           confirmButtonText: "Sí, quiero realizar mi pedido",
@@ -240,6 +241,11 @@ const Carrito = (props) => {
   };
 
   useEffect(() => {
+    const getAdvertenciaMessage = async () => {
+      const message = await firebase.getAdvertenciaMessage("EgGnqTxznCwhCAsXVdsk");
+      setMsgAdvertencia(message);
+    };
+    getAdvertenciaMessage();
     const fetchProducts = async () => {
       var carritoComprasJSON = localStorage.getItem("carritoCompras");
 

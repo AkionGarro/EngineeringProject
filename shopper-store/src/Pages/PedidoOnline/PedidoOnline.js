@@ -28,6 +28,7 @@ const PedidoOnline = () => {
   const [label, setLabel] = useState();
   const [address, setAddress] = useState([]);
   const ref = collection(firestore, "pedidosOnline");
+  const [msgAdvertencia, setMsgAdvertencia] = useState("Advertencia de compra");
   const [linkFields, setLinkFields] = useState([{ url: "", comentario: "" }]);
   const auth = useAuth();
   const email = localStorage.getItem("currentUser");
@@ -48,6 +49,13 @@ const PedidoOnline = () => {
   };
 
   useEffect(() => {
+    //llamar a getAdvertenciaMessage en firebase para obtener el mensaje de advertencia
+    const getAdvertenciaMessage = async () => {
+      const message = await api.getAdvertenciaMessage("EgGnqTxznCwhCAsXVdsk");
+      setMsgAdvertencia(message);
+    };
+    getAdvertenciaMessage();
+    
     const datosUser = async () => {
       const email = localStorage.getItem("currentUser");
       //Direcciones
@@ -58,6 +66,7 @@ const PedidoOnline = () => {
       const userInfo = await firebase.getUserData(email);
       setDireccionSeleccionada(userInfo.direccionEnvio);
     };
+    
     datosUser();
   }, []);
 
@@ -281,9 +290,7 @@ const PedidoOnline = () => {
         </Button>
 
         <h4 className="advertencia">
-          El precio final del pedido incluye gastos adicionales por servicio y
-          peso. Para obtener más detalles sobre el monto total de su pedido, no
-          dude en contactar a Veronica
+          { msgAdvertencia }
         </h4>
       </div>
     </Container>

@@ -11,6 +11,10 @@
     min-width: 20rem;
     width: 30rem;
 }
+.my-custom-input-class {
+    height: 300; 
+  }
+  
 
 .profileInfo__button{
     width: 30rem;
