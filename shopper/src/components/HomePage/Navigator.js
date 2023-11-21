@@ -92,12 +92,7 @@ const categories = [
         route: <NewAdmin />,
         tittle: "Administradores",
       },
-      {
-        id: "Advertencia de compra",
-        icon: <AnnouncementIcon />,
-        route: <NewAdmin />,
-        tittle: "Advertencia de compra",
-      },
+      
     ],
   },
   
