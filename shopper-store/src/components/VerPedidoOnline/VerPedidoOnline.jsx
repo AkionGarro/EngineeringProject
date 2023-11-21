@@ -55,15 +55,14 @@ function VerPedidoOnline(props) {
     };
 
     const columns = [
-        
         { field: "comentario", headerName: "Comentario", width: 600 },
         {
-            field: "url",
+            field: "link",
             headerName: "Link del producto",
             width: 600,
             renderCell: (params) => (
-                <RouterLink to={params.row.url} target="_blank">
-                    {params.row.url}
+                <RouterLink to={params.row.link} target="_blank">
+                    {params.row.link}
                 </RouterLink>
             ),
         },
