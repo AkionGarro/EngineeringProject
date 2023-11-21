@@ -428,6 +428,7 @@ export function DatabaseProvider({ children }) {
             if (userData) {
               // Transformar el campo "direccion" a un string combinado
               const direccionObj = docSnapshot.data().direccion;
+              console.log("DIRECCION OBJ: ", direccionObj)
               let direccionString = "No disponible";
               //si direccionObj es undefined, no se puede acceder a sus propiedades
               if (direccionObj !== undefined) {
@@ -458,9 +459,9 @@ export function DatabaseProvider({ children }) {
     
 
 
-  const deleteOrder = async (orderId) => {
+  const deleteOrder = async (orderId, tabla) => {
     const db = firestore; // Obtén la instancia de Firestore
-    const ordersCollectionRef = collection(db, "pedidosTest"); // Referencia a la colección
+    const ordersCollectionRef = collection(db, tabla); // Referencia a la colección
 
     try {
       // Busca el documento con el campo personalizado "id" igual a orderId

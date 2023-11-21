@@ -288,6 +288,7 @@ export function DatabaseProvider({ children }) {
             tabla: collectionName,
             ...orderDoc.data(),
           };
+          console.log("Orden encontrada: ", order);
           break; // Si encontramos la orden en una colección, salimos del bucle
         }
       } catch (error) {
