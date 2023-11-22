@@ -170,7 +170,7 @@ const Carrito = (props) => {
           return `Producto: ${producto.name} -- *Comentario*: ${producto.comentario} `;
         });
         const message = productos.join("\n");
-        const phoneNumber = "+50685045830";
+        const phoneNumber = "+16892007520";
 
         // Construir el objeto de datos
         let data = {

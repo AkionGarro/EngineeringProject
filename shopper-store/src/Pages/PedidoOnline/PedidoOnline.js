@@ -89,7 +89,7 @@ const PedidoOnline = () => {
     });
 
     const message = productos.join("\n");
-    const phoneNumber = "+50685045830";
+    const phoneNumber = "+16892007520";
 
     await addDocument(ref, data);
     Swal.fire({

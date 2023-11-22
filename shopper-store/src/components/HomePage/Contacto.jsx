@@ -10,7 +10,7 @@ const ContactForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dataForm = new FormData(e.currentTarget);
-    var phoneNumber = "+50685045830";
+    var phoneNumber = "+16892007520";
     const data = {
       nombre: dataForm.get("nombre"),
       mensaje: dataForm.get("mensaje"),
