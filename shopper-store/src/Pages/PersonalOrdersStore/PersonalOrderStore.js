@@ -30,6 +30,7 @@ function Personal_Order() {
   const [direccionSeleccionada, setDireccionSeleccionada] = useState({});
   const [label, setLabel] = useState();
   const [address, setAddress] = useState([]);
+  const [msgAdvertencia, setMsgAdvertencia] = useState("Advertencia de compra");
   const [fields, setFields] = useState([
     { description: "", image: null, url_file: null, url_fire: null },
   ]);
@@ -42,6 +43,11 @@ function Personal_Order() {
   const [actualName, setActualName] = useState("");
 
   useEffect(() => {
+    const getAdvertenciaMessage = async () => {
+      const message = await firebase.getAdvertenciaMessage("EgGnqTxznCwhCAsXVdsk");
+      setMsgAdvertencia(message);
+    };
+    getAdvertenciaMessage();
     const fetchData = async () => {
       const email = localStorage.getItem("currentUser");
 
@@ -350,9 +356,7 @@ function Personal_Order() {
             Realizar pedido
           </Button>
           <h4 className="advertencia">
-            El precio final del pedido incluye gastos adicionales por servicio y
-            peso. Para obtener más detalles sobre el monto total de su pedido,
-            no dude en contactar a Veronica
+            {msgAdvertencia}
           </h4>
         </div>
       </Container>

@@ -288,6 +288,7 @@ export function DatabaseProvider({ children }) {
             tabla: collectionName,
             ...orderDoc.data(),
           };
+          console.log("Orden encontrada: ", order);
           break; // Si encontramos la orden en una colección, salimos del bucle
         }
       } catch (error) {
@@ -305,6 +306,26 @@ export function DatabaseProvider({ children }) {
     }
 
     return order;
+  };
+
+  const getAdvertenciaMessage = async (docId) => {
+    const advertenciaRef = doc(firestore, "advertencia", docId);
+  
+    try {
+      const docSnapshot = await getDoc(advertenciaRef);
+  
+      if (docSnapshot.exists()) {
+        const msgAdvertencia = docSnapshot.data().msgAdvertencia;
+        console.log("Mensaje de advertencia:", msgAdvertencia);
+        return msgAdvertencia;
+      } else {
+        console.log("Documento no encontrado en la colección 'advertencia'.");
+        return null; // Puedes manejar esto según tus necesidades
+      }
+    } catch (error) {
+      console.error("Error al obtener el mensaje de advertencia:", error);
+      return null; // Puedes manejar esto según tus necesidades
+    }
   };
 
   const getAllUsers = async () => {
@@ -1038,6 +1059,7 @@ export function DatabaseProvider({ children }) {
         addNewProduct,
         uploadProductImages,
         getProductsByCategory,
+        getAdvertenciaMessage,
         getOrdersForUser,
         //getAddressUser,
         //Productos Para la Vista de Usuario

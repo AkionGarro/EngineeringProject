@@ -11,6 +11,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SellIcon from "@mui/icons-material/Sell";
+import AnnouncementIcon from '@mui/icons-material/Announcement';
 import LaptopIcon from "@mui/icons-material/Laptop";
 import StoreIcon from "@mui/icons-material/Store";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -91,8 +92,10 @@ const categories = [
         route: <NewAdmin />,
         tittle: "Administradores",
       },
+      
     ],
   },
+  
 ];
 
 const item = {

@@ -28,6 +28,8 @@ export default function Login() {
   const navigate = useNavigate();
   const auth = useAuth();
   const firebase = useFirebase();
+  const [userInfoFlag, setUserFlag] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const goToHomePageAdmin = () => {
     navigate("/HomePageAdmin");
@@ -49,12 +51,29 @@ export default function Login() {
 
         await firebase.userIsRegistered(userData).then((res) => {
           if (res) {
-            goToHomePageAdmin();
+            console.log("Usuario registrado");
           } else {
-            console.log("Usuario encontrado");
-            goToHomePageAdmin();
+            console.log("Usuario no registrado");
           }
+          setUserFlag(true);
         });
+
+        try {
+          await firebase.checkUserIsAdmin(userData.email).then((res) => {
+            if (res == "admin") {
+              console.log(res);
+              goToHomePageAdmin();
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "No es administrador",
+                text: "No tienes permisos para acceder, comunicarse con VeroCamShop",
+              });
+            }
+          });
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
       }
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -80,13 +99,29 @@ export default function Login() {
       try {
         await auth.login(data.email, data.password).then((res) => {
           if (res.user) {
-            setEmail("");
-            setPassword("");
-            goToHomePageAdmin();
+            console.log("Usuario encontrado");
           } else {
             console.log("Usuario no encontrado");
           }
         });
+
+        try {
+          await firebase.checkUserIsAdmin(data.email).then((res) => {
+            if (res == "admin") {
+              setEmail("");
+              setPassword("");
+              goToHomePageAdmin();
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "No es administrador",
+                text: "No tienes permisos para acceder, comunicarse con VeroCamShop",
+              });
+            }
+          });
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
       } catch (e) {
         Swal.fire({
           icon: "error",

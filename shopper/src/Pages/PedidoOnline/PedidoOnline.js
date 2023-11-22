@@ -45,7 +45,7 @@ const PedidoOnline = () => {
     e.preventDefault();
 
     for (let pedido of linkFields) {
-      if (pedido.comentario === "" || pedido.url === "") {
+      if (pedido.comentario === "" || pedido.link === "") {
         Swal.fire({
           icon: "error",
           title: "Información incompleta",
@@ -217,7 +217,6 @@ const PedidoOnline = () => {
           <Autocomplete
             options={users}
             getOptionLabel={(user) => user.email}
-            value={selectedUser}
             onChange={(event, newValue) => {
               setSelectedUser(newValue);
               console.log("Usuario seleccionado");
@@ -227,6 +226,7 @@ const PedidoOnline = () => {
               <TextField
                 {...params}
                 label="Buscar por correo electrónico"
+                placeholder="Escribe el correo electrónico del usuario"
                 variant="outlined"
                 fullWidth
                 InputProps={{
